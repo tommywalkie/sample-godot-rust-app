@@ -1,0 +1,13 @@
+[package]
+name = "sample_godot_rust_app"
+version = "0.1.0"
+authors = ["tommywalkie"]
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+gdnative = "0.8"
+
+[dev-dependencies]
+speculate = "0.1"
