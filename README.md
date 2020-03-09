@@ -3,7 +3,6 @@
 Just playing around Rust and Godot Engine for educational purposes, so I can understand how these tools work.
 
 I'm coming from a full stack JavaScript environment, I'm still very new to Rust, my main objective here is to provide a Godot Engine based project boilerplate able to display some scenes and handle signals, using properly tested Rust based logic.
-<br></br>
 
 ## Stack
 
@@ -16,7 +15,6 @@ I'm coming from a full stack JavaScript environment, I'm still very new to Rust,
 | <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Godot_icon.svg" alt="drawing" height="17"/> | Godot Engine 3.2     | The actual game engine                                  |
 | <img src="https://avatars0.githubusercontent.com/u/44036562?s=200&v=4?sanitize=true" alt="drawing" height="17"/> | Github Actions       | For CI/CD                                               |
 
-<br></br>
 
 ## Install
 
@@ -33,7 +31,6 @@ git clone https://github.com/tommywalkie/sample-godot-rust-app.git
 # Build the C++ bindings
 cargo build
 ```
-<br></br>
 
 ## Roadmap
 
