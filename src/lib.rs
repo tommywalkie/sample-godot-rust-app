@@ -18,7 +18,10 @@ impl HelloWorld {
 
     #[export]
     fn _ready(&self, _owner: gdnative::Node) {
-        godot_print!("hello, world.")
+        let result: i32 = add(1,2);
+        let result_string: String = format!("{}",result.to_string());
+        let message = format!("{}{}", "1 + 2 = ", result_string);
+        godot_print!("{}", message)
     }
 }
 
