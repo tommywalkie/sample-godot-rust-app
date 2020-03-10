@@ -1,6 +1,6 @@
 # Sample Godot Rust App
 
-I'm coming from a full stack JavaScript environment, at the time I'm making this project I'm very new to Rust and Godot Engine, my main objective here is to understand how these tools work and provide a Godot Engine based project boilerplate able to display some scenes and handle signals, using properly tested Rust based logic.
+I'm coming from a full stack JavaScript environment, my main objective here is to understand how Rust and Godot Engine work and provide a well documented Godot Engine based project boilerplate able to display some scenes and handle signals, using properly tested Rust based logic.
 
 ## Stack
 
@@ -91,18 +91,18 @@ Then, in tests files, depending of how we named the project crate in `Cargo.toml
 
 ```toml
 [package]
-name = "sample_godot_rust_app" # The name of the crate
+name = "our_crate_name" # The name of the crate
 ```
 
 ... We will be able to access and use crate methods, using `extern crate`. Assuming we want to test some `my_function` function available in `src/lib.rs`, here is the typical test file :
 
 ```rust
 // tests/some_test_file.rs
-extern crate sample_godot_rust_app;
+extern crate our_crate_name;
 extern crate speculate;
 
 use speculate::speculate;
-use sample_godot_rust_app::my_function;
+use our_crate_name::my_function;
 
 speculate! {
     describe "sample test" {
@@ -137,11 +137,9 @@ In this GDNative library declaration file, the most important fields are the GDN
 X11.64="res://target/release/sample_godot_rust_app.so"
 OSX.64="res://target/release/sample_godot_rust_app.dylib"
 Windows.64="res://target/release/sample_godot_rust_app.dll"
-
-...
 ```
 
-Once everything is binded, we can press <img src="https://img.icons8.com/carbon-copy/2x/f5-key.png" alt="F5" height="17"/> button or <img src="https://img.icons8.com/ios/2x/play.png" alt="drawing" height="17"/> "_Play_" button at the top-right of Godot Engine UI to run the app.
+Once everything is binded, we can press <img src="https://img.icons8.com/ios-glyphs/2x/f5-key.png" alt="F5" height="22"/> "_F5_" on keyboard or <img src="https://img.icons8.com/ios/2x/play.png" alt="drawing" height="17"/> "_Play_" button at the top-right of Godot Engine UI to run the app.
 
 ## Roadmap
 
