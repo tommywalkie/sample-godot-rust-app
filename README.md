@@ -15,7 +15,7 @@ I'm coming from a full stack JavaScript environment, at the time I'm making this
 
 ## Setup
 
-As far as I understand, the idea is to compile Rust scripts into libraries with proper C++ bindings that Godot Engine will be able to handle. First, we'll check if Rust is installed.
+As far as I understand, the idea is to compile Rust scripts into libraries with proper C++ bindings which Godot Engine will be able to handle. First, we'll check if Rust is installed.
 
 ```bash
 # Check Rust toolchain installer version
@@ -24,7 +24,7 @@ rustup -V
 rustc --version
 ```
 
-Depending of the OS, in order to be able to use Rust and `gdnative` crate effectively, we'll need to install Visual Studio C++ Build tools (if using Windows) and [CLang](https://rust-lang.github.io/rust-bindgen/requirements.html), so `rust-bindgen` (which is a `gdnative` dependency) can do its job properly.
+Depending of the OS, in order to be able to use Rust and `gdnative` crate effectively, we'll need to install Visual Studio C++ Build tools (if using Windows) and [CLang](https://rust-lang.github.io/rust-bindgen/requirements.html).
 
 ```bash
 # Check if CLang is installed and registered in PATH
@@ -35,7 +35,6 @@ Then, we can setup the project workspace as it follows. The goal here is to have
 
 ```
 .
-├─── ...
 ├─── src
 │   ├   ...
 │   └   lib.rs
@@ -77,7 +76,7 @@ cargo test # Build libraries then run integration tests
 
 Coming from a JavaScript environment where isolating business logic and integration tests (using Jest for example) in two different places was common practice, the above-mentioned settings should look familiar.
 
-In order to properly setup integration tests, these scripts will need to access functions in source files _somehow_. The thing is Rust doesn't have the same `import` mechanic as in JavaScript. To access functions in source files, we actually need [to compile them into a Rust crate](https://github.com/rust-lang/cargo/issues/6659#issuecomment-463335095) (_took me a long to figure it out_), hence why we previously added `lib` as one of the crate types in our `Cargo.toml`.
+In order to properly setup integration tests, these scripts will need to access functions in source files _somehow_. The thing is Rust doesn't have the same `import` mechanic as in JavaScript. To access functions in source files, we actually need [to build a Rust library](https://github.com/rust-lang/cargo/issues/6659#issuecomment-463335095), hence why we previously added `lib` as one of the crate types in our `Cargo.toml`.
 
 ```toml
 # When using "cargo build", we will need to build two crates...
@@ -95,7 +94,7 @@ Then, in tests files, depending of how we named the project crate in `Cargo.toml
 name = "sample_godot_rust_app" # The name of the crate
 ```
 
-... We will be able to access and use crate methods, using the correct namespace. Assuming we want to test some `my_function` function, here is the typical test file :
+... We will be able to access and use crate methods, using `extern crate`. Assuming we want to test some `my_function` function available in `src/lib.rs`, here is the typical test file :
 
 ```rust
 // tests/some_test_file.rs
@@ -107,7 +106,7 @@ use sample_godot_rust_app::my_function;
 
 speculate! {
     describe "sample test" {
-        it "can use my_function" {
+        it "can use my_function and return true" {
             assert_eq!(my_function(), true);
         }
     }
@@ -120,6 +119,8 @@ To run the tests, use the following Cargo command :
 cargo test
 ```
 
+Some Github Actions workflows have been set up and can be found in `/.github/workflows` folder, allowing us to automatically run tests after each push.
+
 ## Roadmap
 
 - [x] Init repo
@@ -127,7 +128,7 @@ cargo test
 - [x] Add documentation for Rust related setup steps
 - [x] Make a sample Rust library
 - [x] Setup BDD tests, using `speculate-rs`
-- [ ] Setup Github Actions for CI/CD
+- [x] Setup Github Actions for CI/CD
 - [ ] Setup Godot Engine
 - [ ] Add documentation for Godot Engine related setup steps
 - [ ] Make another sample Rust libraries, interacting with Godot Engine scenes
