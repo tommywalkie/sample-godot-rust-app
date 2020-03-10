@@ -6,14 +6,14 @@ I'm coming from a full stack JavaScript environment, at the time I'm making this
 
 |                                                              | Tool                                                         | Purpose                                        |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ---------------------------------------------- |
-| <img src="https://github.com/gilbarbara/logos/raw/master/logos/rust.svg?sanitize=true" alt="drawing" height="17"/> | Rust                                                         | The actual language we will use for game logic |
+| <img src="https://github.com/gilbarbara/logos/raw/master/logos/rust.svg?sanitize=true" alt="drawing" height="17"/> | Rust 1.41.1                                                  | The actual language we will use for game logic |
 | <img src="https://img.icons8.com/dusk/2x/package.png" alt="drawing" height="17"/> | [`gdnative`](https://github.com/GodotNativeTools/godot-rust) crate | For Rust bindings to Godot Engine              |
 | <img src="https://img.icons8.com/dusk/2x/package.png" alt="drawing" height="17"/> | [`speculate.rs`](https://github.com/utkarshkukreti/speculate.rs) crate | For Rust based BDD tests                       |
 | <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Godot_icon.svg" alt="drawing" height="17"/> | Godot Engine 3.2                                             | The actual game engine                         |
 | <img src="https://avatars0.githubusercontent.com/u/44036562?s=200&v=4?sanitize=true" alt="drawing" height="17"/> | Github Actions                                               | For CI/CD                                      |
 
 
-## Setup
+## Setup Rust
 
 As far as I understand, the idea is to compile Rust scripts into libraries with proper C++ bindings which Godot Engine will be able to handle. First, we'll check if Rust is installed.
 
@@ -68,11 +68,11 @@ speculate = "0.1" # Install and use "speculate" for integration tests only
 Now, the whole workspace should be fine. Here are the most useful Cargo commands :
 
 ```bash
-cargo build # Build libraries
-cargo test # Build libraries then run integration tests
+cargo build --release # Build libraries
+cargo test --release # Build libraries then run integration tests
 ```
 
-## Tests
+## Testing
 
 Coming from a JavaScript environment where isolating business logic and integration tests (using Jest for example) in two different places was common practice, the above-mentioned settings should look familiar.
 
@@ -116,10 +116,32 @@ speculate! {
 To run the tests, use the following Cargo command :
 
 ```bash
-cargo test
+cargo test --release
 ```
 
 Some Github Actions workflows have been set up and can be found in `/.github/workflows` folder, allowing us to automatically run tests after each push.
+
+## Usage in Godot
+
+After setting up Godot Engine project, in order to bind a Godot scene to a GDNative library, the scene file in question (take `Main.tscn` for example) must mention a GDNative library declaration file (let's say it is called `my_lib.gdnlib`). 
+
+```toml
+[ext_resource path="res://my_lib.gdnlib" type="GDNativeLibrary" id=1]
+```
+
+In this GDNative library declaration file, the most important fields are the GDNative library OS-specific path entries, so Godot Engine will be able to pick the correct library. When building via Cargo with `release` profile on Windows for example, Godot should expect to find a library with `.dll` extension in `target/release/` folder.
+
+```toml
+[entry]
+
+X11.64="res://target/release/sample_godot_rust_app.so"
+OSX.64="res://target/release/sample_godot_rust_app.dylib"
+Windows.64="res://target/release/sample_godot_rust_app.dll"
+
+...
+```
+
+Once everything is binded, we can press <img src="https://img.icons8.com/carbon-copy/2x/f5-key.png" alt="F5" height="17"/> button or <img src="https://img.icons8.com/ios/2x/play.png" alt="drawing" height="17"/> "_Play_" button at the top-right of Godot Engine UI to run the app.
 
 ## Roadmap
 
@@ -129,8 +151,8 @@ Some Github Actions workflows have been set up and can be found in `/.github/wor
 - [x] Make a sample Rust library
 - [x] Setup BDD tests, using `speculate-rs`
 - [x] Setup Github Actions for CI/CD
-- [ ] Setup Godot Engine
-- [ ] Add documentation for Godot Engine related setup steps
+- [x] Setup Godot Engine
+- [x] Add documentation for Godot Engine related setup steps
 - [ ] Make another sample Rust libraries, interacting with Godot Engine scenes
 - [ ] Try releasing a Windows executable
 - [ ] Try releasing an Android application
