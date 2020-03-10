@@ -5,6 +5,11 @@ extern crate gdnative;
 #[inherit(gdnative::Node)]
 struct HelloWorld;
 
+// Some random function that will be tested in /tests after compiled into a lib
+pub fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+
 #[gdnative::methods]
 impl HelloWorld {
     fn _init(_owner: gdnative::Node) -> Self {
