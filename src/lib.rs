@@ -17,11 +17,16 @@ impl HelloWorld {
     }
 
     #[export]
-    fn _ready(&self, _owner: gdnative::Node) {
+    unsafe fn _ready(&self, owner: gdnative::Node) {
         let result: i32 = add(1,2);
         let result_string: String = format!("{}",result.to_string());
         let message = format!("{}{}", "1 + 2 = ", result_string);
-        godot_print!("{}", message)
+        godot_print!("{}", message);
+
+        let viewport = &mut owner.get_viewport().unwrap();
+        let size = viewport.get_size();
+        godot_print!("screen width = {}", size.x);
+        godot_print!("screen height = {}", size.y);
     }
 }
 
