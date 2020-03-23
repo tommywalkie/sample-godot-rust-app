@@ -1,6 +1,6 @@
 # Sample Godot Rust App
 
-My main objective here is to understand how Rust and Godot Engine work and provide a well documented Godot Engine based project boilerplate able to display some scenes and handle signals, using properly tested Rust based logic.
+The main objective here is to understand how Rust and Godot Engine work and provide a well documented Godot Engine based project boilerplate able to display some scenes and handle signals, using properly tested Rust based logic.
 
 ## Stack
 
