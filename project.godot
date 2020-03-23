@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Godot Rust - Hello World"
-run/main_scene="res://scene/Main.tscn"
+run/main_scene="res://scenes/Main.tscn"
 config/icon="res://assets/icon.png"
 
 [display]

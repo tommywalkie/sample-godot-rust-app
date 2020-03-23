@@ -31,10 +31,14 @@ Depending of the OS, in order to be able to use Rust and `gdnative` crate effect
 clang -v
 ```
 
-Then, we can setup the project workspace as it follows. The goal here is to have a `Cargo.toml` at the root then Rust source files in a `/src` folder, Rust based integration tests in a `/tests` folder and everything else related to Godot Engine and assets in any other folder(s).
+Then, we can setup the project workspace as it follows. The goal here is to have a `Cargo.toml` and `project.godot` at the root, Rust source files in `/src` folder, Rust based integration tests in `/tests`, and finally any Godot Engine related items like scenes and assets in `/scenes` and `/assets` folders for example.
 
 ```
 .
+├─── assets
+├─── scenes
+│   ├   Main.gdlib
+│   └   Main.tscn
 ├─── src
 │   ├   ...
 │   └   lib.rs
@@ -42,7 +46,8 @@ Then, we can setup the project workspace as it follows. The goal here is to have
 │   ├   ...
 │   └   some_test_file.rs
 ├   ...
-└   Cargo.toml
+├   Cargo.toml
+└   project.godot
 ```
 
 Setup the `Cargo.toml` file as it follows. Some of these fields will be explained later.
@@ -78,21 +83,14 @@ When coming from a JavaScript environment where isolating business logic and int
 
 In order to properly setup integration tests, these scripts will need to access functions in source files _somehow_. The thing is Rust doesn't have the same `import` mechanic as in JavaScript. To access functions in source files, we actually need [to build a Rust library](https://github.com/rust-lang/cargo/issues/6659#issuecomment-463335095), hence why we previously added `lib` as one of the crate types in our `Cargo.toml`.
 
-Now, depending of how we named the project crate in `Cargo.toml`...
-
-```toml
-[package]
-name = "our_crate_name" # The name of the crate
-```
-
-... We will be able to access and use crate methods in test scripts, using `extern crate`. Assuming we want to test some `my_function` function available in `src/lib.rs`, here is the typical test file :
+Now, depending of how we named the project crate in `Cargo.toml` we will be able to access and use crate methods in test scripts, using `extern crate`. Assuming we want to test some `my_function` function available in `src/lib.rs`, here is the typical test file :
 
 ```rust
-extern crate our_crate_name; // Assuming the crate is named "our_crate_name"
+extern crate sample_godot_rust_app; // Assuming the package.name value in Cargo.toml is "sample_godot_rust_app"
 extern crate speculate;
 
 use speculate::speculate;
-use our_crate_name::my_function;
+use sample_godot_rust_app::my_function;
 
 speculate! {
     describe "sample test" {
@@ -103,7 +101,7 @@ speculate! {
 }
 ```
 
-To run the tests, use the previously mention `cargo test --release` Cargo command.
+To run the tests, use the previously mention `cargo test --release` command.
 
 Some Github Actions workflows have been set up and can be found in `/.github/workflows` folder, allowing us to automatically run tests after each push.
 
@@ -144,6 +142,7 @@ Once everything is binded, we can press <kbd>F5</kbd> on keyboard or <img src="h
 - [x] Setup Godot Engine
 - [x] Add documentation for Godot Engine related setup steps
 - [x] Create/Interact with Godot nodes from Rust
-- [ ] Switch Godot scenes from Rust
+- [ ] Switch Godot scenes via Rust
+- [ ] Interact with assets like images via Rust
 - [ ] Try releasing a Windows executable
 - [ ] Try releasing an Android application
