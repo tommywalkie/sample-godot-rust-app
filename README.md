@@ -1,6 +1,6 @@
 # Sample Godot Rust App
 
-I'm coming from a full stack JavaScript environment, my main objective here is to understand how Rust and Godot Engine work and provide a well documented Godot Engine based project boilerplate able to display some scenes and handle signals, using properly tested Rust based logic.
+My main objective here is to understand how Rust and Godot Engine work and provide a well documented Godot Engine based project boilerplate able to display some scenes and handle signals, using properly tested Rust based logic.
 
 ## Stack
 
@@ -15,7 +15,7 @@ I'm coming from a full stack JavaScript environment, my main objective here is t
 
 ## Setup Rust
 
-As far as I understand, the idea is to compile Rust scripts into libraries with proper C++ bindings which Godot Engine will be able to handle. First, we'll check if Rust is installed.
+The idea is to compile Rust scripts into libraries with proper C++ bindings which Godot Engine will be able to handle. First, we'll check if Rust is installed.
 
 ```bash
 # Check Rust toolchain installer version
@@ -54,8 +54,8 @@ name = "sample_godot_rust_app" # The name of the crate
 # When using "cargo build", we will need to build two crates...
 [lib]
 crate-type = [
-	"cdylib", # One native library for C++ bindings for Godot Engine
-	"lib" # One regular Rust library for integration tests
+  "cdylib", # One native library for C++ bindings for Godot Engine
+  "lib" # One regular Rust library for integration tests
 ] 
 
 [dependencies]
@@ -74,31 +74,21 @@ cargo test --release # Build libraries then run integration tests
 
 ## Testing
 
-Coming from a JavaScript environment where isolating business logic and integration tests (using Jest for example) in two different places was common practice, the above-mentioned settings should look familiar.
+When coming from a JavaScript environment where isolating business logic and integration tests (using Jest for example) in two different places was common practice, the above-mentioned settings should look familiar.
 
 In order to properly setup integration tests, these scripts will need to access functions in source files _somehow_. The thing is Rust doesn't have the same `import` mechanic as in JavaScript. To access functions in source files, we actually need [to build a Rust library](https://github.com/rust-lang/cargo/issues/6659#issuecomment-463335095), hence why we previously added `lib` as one of the crate types in our `Cargo.toml`.
 
-```toml
-# When using "cargo build", we will need to build two crates...
-[lib]
-crate-type = [
-	"cdylib", # One native library for C++ bindings for Godot Engine
-	"lib" # One regular Rust library for integration tests
-]
-```
-
-Then, in tests files, depending of how we named the project crate in `Cargo.toml`...
+Now, depending of how we named the project crate in `Cargo.toml`...
 
 ```toml
 [package]
 name = "our_crate_name" # The name of the crate
 ```
 
-... We will be able to access and use crate methods, using `extern crate`. Assuming we want to test some `my_function` function available in `src/lib.rs`, here is the typical test file :
+... We will be able to access and use crate methods in test scripts, using `extern crate`. Assuming we want to test some `my_function` function available in `src/lib.rs`, here is the typical test file :
 
 ```rust
-// tests/some_test_file.rs
-extern crate our_crate_name;
+extern crate our_crate_name; // Assuming the crate is named "our_crate_name"
 extern crate speculate;
 
 use speculate::speculate;
@@ -113,11 +103,7 @@ speculate! {
 }
 ```
 
-To run the tests, use the following Cargo command :
-
-```bash
-cargo test --release
-```
+To run the tests, use the previously mention `cargo test --release` Cargo command.
 
 Some Github Actions workflows have been set up and can be found in `/.github/workflows` folder, allowing us to automatically run tests after each push.
 
@@ -139,7 +125,13 @@ OSX.64="res://target/release/sample_godot_rust_app.dylib"
 Windows.64="res://target/release/sample_godot_rust_app.dll"
 ```
 
-Once everything is binded, we can press <img src="https://img.icons8.com/ios-glyphs/2x/f5-key.png" alt="F5" height="22"/> "_F5_" on keyboard or <img src="https://img.icons8.com/ios/2x/play.png" alt="drawing" height="17"/> "_Play_" button at the top-right of Godot Engine UI to run the app.
+Once everything is binded, we can press <kbd>F5</kbd> on keyboard or <img src="https://img.icons8.com/ios/2x/play.png" alt="drawing" height="17"/> "_Play_" button at the top-right of Godot Engine UI to run the app preview.
+
+## Troubleshooting
+
+- _Any Rust or `gdnative` dependency has been properly set up, but some error `error: linking with "link.exe" failed: exit code: 1104` is encountered while building libraries._
+
+> This commonly happens when editing and then re-building Rust libraries while the Godot Engine preview is still running. Stop the preview and then Cargo commands should be working fine again.
 
 ## Roadmap
 
@@ -151,6 +143,7 @@ Once everything is binded, we can press <img src="https://img.icons8.com/ios-gly
 - [x] Setup Github Actions for CI/CD
 - [x] Setup Godot Engine
 - [x] Add documentation for Godot Engine related setup steps
-- [ ] Make another sample Rust libraries, interacting with Godot Engine scenes
+- [x] Create/Interact with Godot nodes from Rust
+- [ ] Switch Godot scenes from Rust
 - [ ] Try releasing a Windows executable
 - [ ] Try releasing an Android application
