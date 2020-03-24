@@ -7,8 +7,8 @@ edition = "2018"
 # When using "cargo build", we will need to build two crates...
 [lib]
 crate-type = [
-	"cdylib", # One native library for C++ bindings for Godot Engine
-	"lib" # One regular Rust library for integration tests
+	"cdylib", # A GDNative library for Godot Engine
+	"lib" # A regular Rust library for integration tests
 ] 
 
 [dependencies]

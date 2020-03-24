@@ -2,6 +2,13 @@
 
 The main purpose of this repo is to help understanding how Rust and Godot Engine work and provide a well documented Godot Engine based project boilerplate able to display some scenes and handle signals, using properly tested Rust based logic.
 
+## Features
+
+- Sample Godot project with two scenes
+  - Each scene has a _Button_ node allowing us to switch between scenes
+  - Each scene has a node with an attached Rust/GDNative script which programmatically add a newly created colored _Panel_ node as a child node.
+- Use of [Cargo workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html) for flexibility
+
 ## Stack
 
 |                                                              | Tool                                                         | Purpose                                        |
