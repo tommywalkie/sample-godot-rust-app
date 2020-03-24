@@ -5,6 +5,20 @@ use fullscreen_colored_panel::generate_blue as generate_fullscreen_blue_panel;
 #[inherit(Node)]
 struct SceneNode;
 
+pub fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_add() {
+        assert_eq!(add(1, 2), 3);
+    }
+}
+
 #[methods]
 impl SceneNode {
     pub fn _init(_owner: Node) -> Self {
