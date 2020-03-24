@@ -12,3 +12,7 @@ Cargo.lock
 .import/
 
 *.log
+
+build/
+
+export_presets.cfg

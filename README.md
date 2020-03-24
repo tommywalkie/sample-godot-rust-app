@@ -240,7 +240,7 @@ This commonly happens when editing and then re-building Rust libraries while the
 - [ ] Send / handle signals between Rust and GDScript
 - [x] Switch Godot scenes via Rust/GDScript
 - [ ] Interact with assets like images via Rust/GDScript
-- [ ] Try releasing a Windows executable
+- [x] Try releasing a Windows executable
 - [ ] Try releasing an Android application
 - [ ] Try releasing a Windows executable via Github Actions
 - [ ] Try releasing an Android application via Github Actions
