@@ -1,8 +1,5 @@
-extern crate root_node;
-extern crate speculate;
-
 use speculate::speculate;
-use root_node::math;
+use first_scene::math;
 
 speculate! {
     describe "sample test" {

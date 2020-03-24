@@ -1,0 +1,13 @@
+[package]
+name = "fullscreen_colored_panel"
+version = "0.1.0"
+authors = ["tommywalkie <tommywalkie@gmail.com>"]
+edition = "2018"
+
+[lib]
+crate-type = [
+	"lib"
+] 
+
+[dependencies]
+gdnative = "0.8"

@@ -1,5 +1,5 @@
 [package]
-name = "root_node"
+name = "first_scene"
 version = "0.1.0"
 authors = ["tommywalkie <tommywalkie@gmail.com>"]
 edition = "2018"
@@ -13,6 +13,7 @@ crate-type = [
 
 [dependencies]
 gdnative = "0.8" # Install Rust bindings for Godot Engine
+fullscreen_colored_panel = { path = "../fullscreen_colored_panel" }
 
 [dev-dependencies]
 speculate = "0.1" # Install and use "speculate" for integration tests only

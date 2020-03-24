@@ -31,37 +31,38 @@ Depending of the OS, in order to be able to use Rust and `gdnative` crate effect
 clang -v
 ```
 
-Then, we can setup the project workspace as it follows. The goal here is to have a `Cargo.toml` and `project.godot` at the root, Rust source files in `/src` folder, Rust based integration tests in `/tests`, and finally any Godot Engine related items like scenes and assets in `/scenes` and `/assets` folders for example.
+Now we can start setting up the workspace. One convenient way to split Rust codebase into libraries with their own purposes would be using [Cargo workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html). The motivation here is to isolate Rust scripts and make them significantly smaller, more readable while still being easily testable.
+
+We only have to put at the root of the project a primary `Cargo.toml` file and a `project.godot` file so both Cargo and Godot can work properly. Then, we will need a `/tests` folder for integration tests at the root of the project so the whole thing can be tested using one command, making CI/CD steps easier. Finally, any Godot related ressource or asset can be placed in whatever adequate folder as long the main scene path is referenced in `project.godot`. 
+
+The file structure should look like :
 
 ```
 .
 ├─── assets
 ├─── scenes
-│   ├   Main.gdlib
-│   └   Main.tscn
+│   ├   my_scene.gdlib
+│   └   my_scene.tscn
 ├─── src
-│   ├   ...
-│   └   lib.rs
+│   ├   library_one
+│   │   ├   src
+│   │   │   └   lib.rs
+│   │   └   Cargo.toml
+│   ├   library_two
+│   │   ├   src
+│   │   │   └   lib.rs
+│   │   └   Cargo.toml
 ├─── tests
-│   ├   ...
 │   └   some_test_file.rs
-├   ...
 ├   Cargo.toml
 └   project.godot
 ```
 
-Setup the `Cargo.toml` file as it follows. Some of these fields will be explained later.
+Setup the primary `Cargo.toml` file as it follows. Some of these fields will be explained later.
 
 ```toml
 [package]
 name = "sample_godot_rust_app" # The name of the crate
-
-# When using "cargo build", we will need to build two crates...
-[lib]
-crate-type = [
-  "cdylib", # One native library for C++ bindings for Godot Engine
-  "lib" # One regular Rust library for integration tests
-] 
 
 [dependencies]
 gdnative = "0.8" # Install Rust bindings for Godot Engine
@@ -70,11 +71,21 @@ gdnative = "0.8" # Install Rust bindings for Godot Engine
 speculate = "0.1" # Install and use "speculate" for integration tests only
 ```
 
+```toml
+# When using "cargo build", we will need to build two crates...
+[lib]
+crate-type = [
+  "cdylib", # One native library for C++ bindings for Godot Engine
+  "lib" # One regular Rust library for integration tests
+] 
+```
+
+
 Now, the whole workspace should be fine. Here are the most useful Cargo commands :
 
 ```bash
-cargo build --release # Build libraries
-cargo test --release # Build libraries then run integration tests
+cargo build --release --tests # Build workspace libraries
+cargo test --release # Build workspace libraries then run integration tests
 ```
 
 ## Testing
@@ -142,7 +153,12 @@ Once everything is binded, we can press <kbd>F5</kbd> on keyboard or <img src="h
 - [x] Setup Godot Engine
 - [x] Add documentation for Godot Engine related setup steps
 - [x] Create/Interact with Godot nodes from Rust
-- [ ] Switch Godot scenes via Rust
-- [ ] Interact with assets like images via Rust
+- [x] Move to a Cargo workspace model
+- [ ] Consider moving to GDScript to handle Rust methods
+- [ ] Send signals via Rust and handle them via GDScript
+- [ ] Switch Godot scenes via Rust/GDScript
+- [ ] Interact with assets like images via Rust/GDScript
 - [ ] Try releasing a Windows executable
 - [ ] Try releasing an Android application
+- [ ] Try releasing a Windows executable via Github Actions
+- [ ] Try releasing an Android application via Github Actions
