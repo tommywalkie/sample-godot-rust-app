@@ -97,35 +97,38 @@ cargo new src/my_lib --lib
 A new directory `my_lib` will appear in `/src` folder, with a sample `lib.rs` file and a `Cargo.toml` file.
 
 ```
-.
-└─── src
-    └   my_lib
-        ├   src
-        │   └   lib.rs
-        └   Cargo.toml
+src
+└   my_lib
+   ├   src
+   │   └   lib.rs
+   └   Cargo.toml
 ```
 
 There are now **two** choices :
 
-- _This library is intended to be used as a native script by Godot_
+- _This library is intended to be used as a GDNative script by Godot_
 - _This library is intended to be used as an utility crate by Rust_
 
-Because yes, for example it is possible to have a custom _Button_ node with an attached native script which is also internally using a custom Rust crate for math stuff.
+For example, it is possible to have a custom _Button_ node with an attached GDNative script which is also internally using a custom Rust crate for math stuff.
 
-If creating a native script, the `lib.rs` should look like the one in `godot-rust` [example](https://github.com/GodotNativeTools/godot-rust#the-rust-source-code).
+**Rust to GDNative**
 
-The second step is telling Cargo to compile the library into a native script, there are two steps. First we need to open the `src/my_lib/Cargo.toml` file and then set the _lib.crate-type_ value as it follows.
+If creating a GDNative script, like [`first_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/first_screen) and [`second_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/second_screen) in this boilerplate codebase, the `lib.rs` should look like the [example one](https://github.com/GodotNativeTools/godot-rust#the-rust-source-code) in `godot-rust`.
+
+The second step is telling Cargo to compile the library into a GDNative script, open the `src/my_lib/Cargo.toml` file and then set the _lib.crate-type_ value as it follows.
 
 ```toml
 # When using "cargo build", two crates will be created...
 [lib]
 crate-type = [
-  "cdylib", # A Native library with C++ bindings for Godot
+  "cdylib", # A GDNative library with C++ bindings for Godot
   "lib" # A regular Rust library for integration tests
 ] 
 ```
 
-In the other hand, when we only want some utility Rust crate the only step is to tell Cargo to build a regular Rust library only.
+**Rust to Rust**
+
+In case we only want some utility Rust crate, like [`fullscreen_colored_panel`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/fullscreen_colored_panel) in this boilerplate codebase, the only step is to tell Cargo to build a regular Rust library only.
 
 ```toml
 [lib]
@@ -146,13 +149,13 @@ The build result should appear in `/target/release`. We may find our `.rlib` Rus
 
 ## Testing
 
-Theoretically, since this project is a Cargo workspace, any testing methodology is working. To run tests for the whole workspace, use the following command :
+Theoretically, since this project is a Cargo workspace, any testing methodology is fine. To run tests for the whole workspace, use the following command :
 
 ```bash
 cargo test --release
 ```
 
-For demo purposes, this boilerplate project is arbitrarily using `speculate-rs` crate in the `first_scene` library, and a basic `#[cfg(test)]` Rust attribute in the `second_scene` library. When running tests from the root of the project, Cargo is smart enough to run library-specific tests no matter how they are implemented.
+For demo purposes, this boilerplate project is arbitrarily using `speculate-rs` crate in the [`first_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/first_screen) library, and a basic `#[cfg(test)]` Rust attribute in the [`second_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/second_screen) library. When running tests from the root of the project, Cargo is smart enough to run library-specific tests no matter how they are implemented.
 
 `speculate-rs` is a crate for testing purposes with a [Jest](https://jestjs.io/)-like syntax that should be familiar for those coming from a JavaScript environment. Here is an example :
 
