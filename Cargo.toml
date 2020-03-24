@@ -2,16 +2,11 @@
 name = "sample_godot_rust_app" # The name of the crate
 version = "0.1.0"
 authors = ["tommywalkie"]
-
-# When using "cargo build", we will need to build two crates...
-[lib]
-crate-type = [
-	"cdylib", # One native library for C++ bindings for Godot Engine
-	"lib" # One regular Rust library for integration tests
-] 
+edition = "2018" 
 
 [dependencies]
 gdnative = "0.8" # Install Rust bindings for Godot Engine
+root_node = { path = "./src/root_node" }
 
 [dev-dependencies]
 speculate = "0.1" # Install and use "speculate" for integration tests only

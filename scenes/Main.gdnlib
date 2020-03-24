@@ -1,8 +1,8 @@
 [entry]
 
-X11.64="res://target/release/sample_godot_rust_app.so"
-OSX.64="res://target/release/sample_godot_rust_app.dylib"
-Windows.64="res://target/release/sample_godot_rust_app.dll"
+X11.64="res://target/release/deps/root_node.so"
+OSX.64="res://target/release/deps/root_node.dylib"
+Windows.64="res://target/release/deps/root_node.dll"
 
 [dependencies]
 

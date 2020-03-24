@@ -1,28 +1,22 @@
-#[macro_use]
-extern crate gdnative;
+use gdnative::*;
 
-use gdnative::{Panel, GodotString, Color, StyleBoxFlat};
-
-#[derive(gdnative::NativeClass)]
-#[inherit(gdnative::Node)]
-struct HelloWorld;
+#[derive(NativeClass)]
+#[inherit(Node)]
+struct RootNode;
 
 // [1] - Providing some game logic function that will be tested via speculate
-pub fn add(a: i32, b: i32) -> i32 {
-    a + b
-}
+pub mod math;
 
-#[gdnative::methods]
-impl HelloWorld {
-    fn _init(_owner: gdnative::Node) -> Self {
-        HelloWorld
+#[methods]
+impl RootNode {
+    pub fn _init(_owner: Node) -> Self {
+        RootNode
     }
 
     #[export]
-    unsafe fn _ready(&self, mut owner: gdnative::Node) {
-
+    pub unsafe fn _ready(&self, mut owner: Node) {
         // [2] - Using the imported game logic function from Godot side.
-        let result: i32 = add(1,2);
+        let result: i32 = math::add(1,2);
         let result_string: String = format!("{}",result.to_string());
         let message = format!("{}{}", "1 + 2 = ", result_string);
         godot_print!("{}", message);
@@ -58,7 +52,7 @@ impl HelloWorld {
 }
 
 fn init(handle: gdnative::init::InitHandle) {
-    handle.add_class::<HelloWorld>();
+    handle.add_class::<RootNode>();
 }
 
 godot_gdnative_init!();
