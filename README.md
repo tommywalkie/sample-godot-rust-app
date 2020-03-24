@@ -113,7 +113,7 @@ For example, it is possible to have a custom _Button_ node with an attached GDNa
 
 **Rust to GDNative**
 
-If creating a GDNative script, like [`first_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/first_screen) and [`second_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/second_screen) in this boilerplate codebase, the `lib.rs` should look like the [example one](https://github.com/GodotNativeTools/godot-rust#the-rust-source-code) in `godot-rust`.
+If creating a GDNative script, like [`first_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/first_scene) and [`second_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/second_scene) in this boilerplate codebase, the `lib.rs` should look like the [example one](https://github.com/GodotNativeTools/godot-rust#the-rust-source-code) in `godot-rust`.
 
 The second step is telling Cargo to compile the library into a GDNative script, open the `src/my_lib/Cargo.toml` file and then set the _lib.crate-type_ value as it follows.
 
@@ -155,7 +155,7 @@ Theoretically, since this project is a Cargo workspace, any testing methodology 
 cargo test --release
 ```
 
-For demo purposes, this boilerplate project is arbitrarily using `speculate-rs` crate in the [`first_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/first_screen) library, and a basic `#[cfg(test)]` Rust attribute in the [`second_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/second_screen) library. When running tests from the root of the project, Cargo is smart enough to run library-specific tests no matter how they are implemented.
+For demo purposes, this boilerplate project is arbitrarily using `speculate-rs` crate in the [`first_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/first_scene) library, and a basic `#[cfg(test)]` Rust attribute in the [`second_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/second_scene) library. When running tests from the root of the project, Cargo is smart enough to run library-specific tests no matter how they are implemented.
 
 `speculate-rs` is a crate for testing purposes with a [Jest](https://jestjs.io/)-like syntax that should be familiar for those coming from a JavaScript environment. Here is an example :
 
