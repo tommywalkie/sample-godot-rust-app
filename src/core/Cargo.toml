@@ -6,6 +6,7 @@ edition = "2018"
 
 # When using "cargo build", we will need to build two crates...
 [lib]
+doctest = false
 crate-type = [
 	"cdylib", # A GDNative library for Godot Engine
 	"lib" # A regular Rust library for integration tests

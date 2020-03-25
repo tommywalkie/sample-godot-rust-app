@@ -5,6 +5,7 @@ authors = ["tommywalkie <tommywalkie@gmail.com>"]
 edition = "2018"
 
 [lib]
+doctest = false
 crate-type = [
 	"lib"
 ] 
