@@ -59,7 +59,7 @@ After installing Godot, we can start creating a new project by using any empty d
 
 Now let's setup a Cargo workspace.
 
-####Rust
+#### Rust
 
 The idea is to compile Rust scripts into libraries with proper C++ bindings for Godot Engine. To make things easier, we will use `rustup` so the whole Rust toolchain can be installed in a few steps, including Cargo which is the Rust package (_crate_) manager.
 
@@ -106,7 +106,7 @@ The primary `Cargo.toml` file should be set up as it follows. It simply tells Ca
 members = ["src/*"]
 ```
 
-###Creating libraries
+### Creating libraries
 
 To create any new Rust library, we first need to tell Cargo to prepare a new library :
 
@@ -139,7 +139,7 @@ cargo build --release # Build workspace libraries
 
 The build result should appear in `/target/release`. We may find our Rust libraries with and `.rlib` extension and our GDNative libraries with  `.dll` (Windows), `.so` (Linux) or `.dylib ` (Mac) extension.
 
-####Rust to GDNative
+#### Rust to GDNative
 
 If creating a GDNative script, like [`first_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/first_scene) and [`second_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/second_scene) in this boilerplate codebase, the `lib.rs` should look like the [example one](https://github.com/GodotNativeTools/godot-rust#the-rust-source-code) in `godot-rust`.
 
@@ -154,7 +154,7 @@ crate-type = [
 ] 
 ```
 
-####Rust to Rust
+#### Rust to Rust
 
 In case we only want some utility Rust crate, like [`fullscreen_colored_panel`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/fullscreen_colored_panel) in this boilerplate codebase, the only requirement is to tell Cargo to build a regular Rust library only.
 
@@ -171,7 +171,7 @@ Now, we can import the library in any Cargo workspace member by using `use`.
 use my_lib::*;
 ```
 
-###Binding libraries to scenes
+### Binding libraries to scenes
 
 To bind a GDNative library to a Godot node, we first need to reference library paths in a `.gdnlib` library file so Godot can guess which file to use depending of the host OS.
 
