@@ -15,13 +15,14 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Godot Rust - Hello World"
+config/name="Sample Godot Rust App"
 run/main_scene="res://scenes/first_scene.tscn"
 config/icon="res://assets/icon.png"
 
 [display]
 
-window/size/resizable=false
+window/size/width=500
+window/size/height=500
 
 [logging]
 
