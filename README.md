@@ -42,7 +42,7 @@ The main purpose of this repo is to help understanding how Rust and Godot Engine
 
 ## Tutorial
 
-This tutorial is intended to re-create this boilerplate project from scratch and help understand how things are connected while trying to make things clear to any new guy in Godot and Rust without going too much into details. 
+This tutorial is intended to re-create this boilerplate project from scratch and help understand how things are connected while trying to make things clear for any newcomer in Godot / Rust without going too much into details. 
 
 ### Setup
 
