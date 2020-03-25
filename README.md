@@ -2,6 +2,22 @@
 
 The main purpose of this repo is to help understanding how Rust and Godot Engine work and provide a well documented Godot Engine based project boilerplate able to display some scenes and handle signals, using properly tested Rust based logic.
 
+## Summary
+
+- [Features](https://github.com/tommywalkie/sample-godot-rust-app#features)
+- [Stack](https://github.com/tommywalkie/sample-godot-rust-app#stack)
+- [Tutorial](https://github.com/tommywalkie/sample-godot-rust-app#tutorial)
+  - [Setup](https://github.com/tommywalkie/sample-godot-rust-app#setup)
+    - [Godot](https://github.com/tommywalkie/sample-godot-rust-app#godot)
+    - [Rust](https://github.com/tommywalkie/sample-godot-rust-app#rust)
+  - [Creating libraries](https://github.com/tommywalkie/sample-godot-rust-app#creating-libraries)
+    - [Rust to GDNative](https://github.com/tommywalkie/sample-godot-rust-app#rust-to-gdnative)
+    - [Rust to Rust](https://github.com/tommywalkie/sample-godot-rust-app#rust-to-rust)
+  - [Binding libraries to scenes](https://github.com/tommywalkie/sample-godot-rust-app#binding-libraries-to-scenes)
+- [Testing](https://github.com/tommywalkie/sample-godot-rust-app#testing)
+- [Troubleshooting](https://github.com/tommywalkie/sample-godot-rust-app#troubleshooting)
+- [Roadmap](https://github.com/tommywalkie/sample-godot-rust-app#roadmap)
+
 ## Features
 
 - Sample Godot project with two scenes
@@ -20,13 +36,17 @@ The main purpose of this repo is to help understanding how Rust and Godot Engine
 | <img src="https://avatars0.githubusercontent.com/u/44036562?s=200&v=4?sanitize=true" alt="drawing" height="17"/> | Github Actions                                               | For CI/CD                                      |
 
 
-## Setup
+## Tutorial
 
-### Godot
+This tutorial is intended to re-create this boilerplate project from scratch and help understand how how things are connected while trying to make things clear to any new guy in Godot and Rust without going too much into details. 
 
-First, Godot should be installed and then when creating a new project, use any empty directory, this will be the root of the project.
+### Setup
 
-After creating the Godot project, we usually end up with the following file structure, including a `project.godot` file which is the main Godot project file.
+We will need to install the proper tools first so we can start setting up our workspace.
+
+#### Godot
+
+After installing Godot, we can start creating a new project by using any empty directory, this will be the root of the project, we usually end up with the following file structure, including a `project.godot` file which is the main Godot project file.
 
 ```
 .
@@ -37,20 +57,22 @@ After creating the Godot project, we usually end up with the following file stru
 └   project.godot
 ```
 
-Now let's setup Rust and a Cargo workspace.
+Now let's setup a Cargo workspace.
 
-### Rust
+####Rust
 
-The idea is to compile Rust scripts into libraries with proper C++ bindings which Godot Engine will be able to handle. First, we'll check if Rust is installed.
+The idea is to compile Rust scripts into libraries with proper C++ bindings for Godot Engine. To make things easier, we will use `rustup` so the whole Rust toolchain can be installed in a few steps, including Cargo which is the Rust package (_crate_) manager.
 
 ```bash
 # Check Rust toolchain installer version
 rustup -V
 # Check Rust version
 rustc --version
+# Check Cargo version
+cargo -V
 ```
 
-Depending of the OS, in order to be able to use Rust and `gdnative` crate effectively, we'll need to install Visual Studio C++ Build tools (if using Windows) and [CLang](https://rust-lang.github.io/rust-bindgen/requirements.html).
+In order to be able to use Rust and `gdnative` crate effectively, we'll also need to install Visual Studio C++ Build tools (if using Windows) and [CLang](https://rust-lang.github.io/rust-bindgen/requirements.html).
 
 ```bash
 # Check if CLang is installed and registered in PATH
@@ -84,9 +106,7 @@ The primary `Cargo.toml` file should be set up as it follows. It simply tells Ca
 members = ["src/*"]
 ```
 
-
-
-## Creating libraries
+###Creating libraries
 
 To create any new Rust library, we first need to tell Cargo to prepare a new library :
 
@@ -94,7 +114,7 @@ To create any new Rust library, we first need to tell Cargo to prepare a new lib
 cargo new src/my_lib --lib
 ```
 
-A new directory `my_lib` will appear in `/src` folder, with a sample `lib.rs` file and a `Cargo.toml` file.
+A new folder `/src/my_lib` will appear, with a sample `lib.rs` file and a `Cargo.toml` file.
 
 ```
 src
@@ -107,11 +127,19 @@ src
 There are now **two** choices :
 
 - _This library is intended to be used as a GDNative script by Godot_
-- _This library is intended to be used as an utility crate by Rust_
+- _This library is intended to be used as a crate by Rust_
 
-For example, it is possible to have a custom _Button_ node with an attached GDNative script which is also internally using a custom Rust crate for math stuff.
+For example, it is possible to have a _Button_ node with an attached custom GDNative script which is also internally using a custom Rust crate for math stuff.
 
-**Rust to GDNative**
+When the whole workspace is set up. We can tell Cargo to build our libraries using this command :
+
+```bash
+cargo build --release # Build workspace libraries
+```
+
+The build result should appear in `/target/release`. We may find our Rust libraries with and `.rlib` extension and our GDNative libraries with  `.dll` (Windows), `.so` (Linux) or `.dylib ` (Mac) extension.
+
+####Rust to GDNative
 
 If creating a GDNative script, like [`first_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/first_scene) and [`second_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/second_scene) in this boilerplate codebase, the `lib.rs` should look like the [example one](https://github.com/GodotNativeTools/godot-rust#the-rust-source-code) in `godot-rust`.
 
@@ -126,9 +154,9 @@ crate-type = [
 ] 
 ```
 
-**Rust to Rust**
+####Rust to Rust
 
-In case we only want some utility Rust crate, like [`fullscreen_colored_panel`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/fullscreen_colored_panel) in this boilerplate codebase, the only step is to tell Cargo to build a regular Rust library only.
+In case we only want some utility Rust crate, like [`fullscreen_colored_panel`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/fullscreen_colored_panel) in this boilerplate codebase, the only requirement is to tell Cargo to build a regular Rust library only.
 
 ```toml
 [lib]
@@ -137,44 +165,13 @@ crate-type = [
 ] 
 ```
 
-Now, the whole workspace should be fine. We can tell Cargo to build our libraries using this command :
-
-```bash
-cargo build --release # Build workspace libraries
-```
-
-The build result should appear in `/target/release`. We may find our `.rlib` Rust libraries with and `.rlib` extension and our GDNative libraries with  `.dll` (Windows), `.so` (Linux) or `.dylib ` (Mac) file extensions.
-
-
-
-## Testing
-
-Theoretically, since this project is a Cargo workspace, any testing methodology is fine. To run tests for the whole workspace, use the following command :
-
-```bash
-cargo test --release
-```
-
-For demo purposes, this boilerplate project is arbitrarily using `speculate-rs` crate in the [`first_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/first_scene) library, and a basic `#[cfg(test)]` Rust attribute in the [`second_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/second_scene) library. When running tests from the root of the project, Cargo is smart enough to run library-specific tests no matter how they are implemented.
-
-`speculate-rs` is a crate for testing purposes with a [Jest](https://jestjs.io/)-like syntax that should be familiar for those coming from a JavaScript environment. Here is an example :
+Now, we can import the library in any Cargo workspace member by using `use`.
 
 ```rust
-use speculate::speculate;
-use my_crate::my_function;
-
-speculate! {
-    describe "sample test" {
-        it "can use my_function and return true" {
-            assert_eq!(my_function(), true);
-        }
-    }
-}
+use my_lib::*;
 ```
 
-
-
-## Binding libraries to scenes
+###Binding libraries to scenes
 
 To bind a GDNative library to a Godot node, we first need to reference library paths in a `.gdnlib` library file so Godot can guess which file to use depending of the host OS.
 
@@ -221,6 +218,35 @@ script = SubResource( 1 )
 ```
 
 Once everything is binded, we can press <kbd>F5</kbd> on keyboard or <img src="https://img.icons8.com/ios/2x/play.png" alt="drawing" height="17"/> "_Play_" button at the top-right of Godot Engine UI to run the app preview.
+
+
+
+## Testing
+
+Theoretically, since this project is a Cargo workspace, any testing methodology is fine. To run tests for the whole workspace, use the following command :
+
+```bash
+cargo test --release
+```
+
+For demo purposes, this boilerplate project is arbitrarily using `speculate-rs` crate in the [`first_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/first_scene) library, and a basic `#[cfg(test)]` Rust attribute in the [`second_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/second_scene) library. When running tests from the root of the project, Cargo is smart enough to run library-specific tests no matter how they are implemented.
+
+`speculate-rs` is a crate for testing purposes with a [Jest](https://jestjs.io/)-like syntax that should be familiar for those coming from a JavaScript environment. Here is an example :
+
+```rust
+use speculate::speculate;
+use my_crate::my_function;
+
+speculate! {
+    describe "sample test" {
+        it "can use my_function and return true" {
+            assert_eq!(my_function(), true);
+        }
+    }
+}
+```
+
+
 
 ## Troubleshooting
 
