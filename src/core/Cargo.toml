@@ -1,5 +1,5 @@
 [package]
-name = "first_scene"
+name = "core"
 version = "0.1.0"
 authors = ["tommywalkie <tommywalkie@gmail.com>"]
 edition = "2018"

@@ -38,7 +38,7 @@ The main purpose of this repo is to help understanding how Rust and Godot Engine
 
 ## Tutorial
 
-This tutorial is intended to re-create this boilerplate project from scratch and help understand how how things are connected while trying to make things clear to any new guy in Godot and Rust without going too much into details. 
+This tutorial is intended to re-create this boilerplate project from scratch and help understand how things are connected while trying to make things clear to any new guy in Godot and Rust without going too much into details. 
 
 ### Setup
 
@@ -141,15 +141,14 @@ The build result should appear in `/target/release`. We may find our Rust librar
 
 #### Rust to GDNative
 
-If creating a GDNative script, like [`first_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/first_scene) and [`second_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/second_scene) in this boilerplate codebase, the `lib.rs` should look like the [example one](https://github.com/GodotNativeTools/godot-rust#the-rust-source-code) in `godot-rust`.
+If creating a GDNative script, like [`core`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/core) in this boilerplate codebase, the `lib.rs` should look like the [example one](https://github.com/GodotNativeTools/godot-rust#the-rust-source-code) in `godot-rust`.
 
-It is possible to register multiple `NativeClass` at once using `add_class` method in the `init` function. So **theoretically, there should be only one GDNative library in a project**, to avoid a lot of duplicated code from `std` or other libraries, and making use of other convenient features like `Instance` downcasting easier.
+It is possible to register multiple `NativeClass` at once using `add_class` method in the `init` function. So **theoretically, there should be only one GDNative library in a project**, to avoid a lot of duplicated code from `std` or other libraries, and making use of convenient features like `Instance` downcasting easier.
 
 ```rust
 fn init(handle: gdnative::init::InitHandle) {
-    handle.add_class::<MyCustomClass1>();
-    handle.add_class::<MyCustomClass2>();
-    handle.add_class::<MyCustomClass3>();
+    handle.add_class::<FirstSceneNode>();
+    handle.add_class::<SecondSceneNode>();
     ...
 }
 
@@ -180,10 +179,10 @@ crate-type = [
 ] 
 ```
 
-Now, we can import the library in any Cargo workspace member by using `use`.
+Now, assuming this library is called `my_crate`, we can import it in any Cargo workspace member by using `use`.
 
 ```rust
-use my_lib::*;
+use my_crate::*;
 ```
 
 ### Binding libraries to scenes
@@ -244,7 +243,7 @@ Theoretically, since this project is a Cargo workspace, any testing methodology 
 cargo test --release
 ```
 
-For demo purposes, this boilerplate project is arbitrarily using `speculate-rs` crate in the [`first_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/first_scene) library, and a basic `#[cfg(test)]` Rust attribute in the [`second_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/second_scene) library. When running tests from the root of the project, Cargo is smart enough to run library-specific tests no matter how they are implemented.
+For demo purposes, this boilerplate project is arbitrarily using `speculate-rs` crate in the [`core`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/core) library, and a basic `#[cfg(test)]` Rust attribute in the [`fullscreen_colored_panel`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/fullscreen_colored_panel) library. When running tests from the root of the project, Cargo is smart enough to run library-specific tests no matter how they are implemented.
 
 `speculate-rs` is a crate for testing purposes with a [Jest](https://jestjs.io/)-like syntax that should be familiar for those coming from a JavaScript environment. Here is an example :
 
