@@ -143,7 +143,22 @@ The build result should appear in `/target/release`. We may find our Rust librar
 
 If creating a GDNative script, like [`first_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/first_scene) and [`second_scene`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/second_scene) in this boilerplate codebase, the `lib.rs` should look like the [example one](https://github.com/GodotNativeTools/godot-rust#the-rust-source-code) in `godot-rust`.
 
-The second step is telling Cargo to compile the library into a GDNative script, open the `src/my_lib/Cargo.toml` file and then set the _lib.crate-type_ value as it follows.
+It is possible to register multiple `NativeClass` at once using `add_class` method in the `init` function. So **theoretically, there should be only one GDNative library in a project**, to avoid a lot of duplicated code from `std` or other libraries, and making use of other convenient features like `Instance` downcasting easier.
+
+```rust
+fn init(handle: gdnative::init::InitHandle) {
+    handle.add_class::<MyCustomClass1>();
+    handle.add_class::<MyCustomClass2>();
+    handle.add_class::<MyCustomClass3>();
+    ...
+}
+
+godot_gdnative_init!();
+godot_nativescript_init!(init);
+godot_gdnative_terminate!();
+```
+
+The second step is telling Cargo to compile the library into a GDNative script, open the `src/my_lib/Cargo.toml` file and then set the `lib.crate-type` value as it follows.
 
 ```toml
 # When using "cargo build", two crates will be created...
@@ -151,7 +166,7 @@ The second step is telling Cargo to compile the library into a GDNative script, 
 crate-type = [
   "cdylib", # A GDNative library with C++ bindings for Godot
   "lib" # A regular Rust library for integration tests
-] 
+]  
 ```
 
 #### Rust to Rust
@@ -201,12 +216,12 @@ In the Godot scene file, load the `.gdnlib` library file as an external resource
 [ext_resource path="res://path/to/my_lib.gdnlib" type="GDNativeLibrary" id=1]
 ```
 
-Then, create a _sub-resource_ with an unique identifier, link the newly created external resource with its `id` and tell Godot to pick a specific class returned from the actual GDNative library.
+Then, create a _sub-resource_ with an unique identifier, link the newly created external resource with its `id` and tell Godot to pick a specific `NativeClass` registered in the actual GDNative library (read the [Rust to GDNative](https://github.com/tommywalkie/sample-godot-rust-app#rust-to-gdnative) part for explanation).
 
 ```toml
 [sub_resource type="NativeScript" id=1]
-resource_name = "MyCustomNode"
-class_name = "MyCustomNode"
+resource_name = "MyCustomClass1"
+class_name = "MyCustomClass1"
 library = ExtResource( 1 )
 ```
 
