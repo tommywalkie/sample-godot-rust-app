@@ -19,6 +19,11 @@ config/name="Sample Godot Rust App"
 run/main_scene="res://scenes/first_scene.tscn"
 config/icon="res://assets/icon.png"
 
+[display]
+
+window/size/width=500
+window/size/height=500
+
 [logging]
 
 file_logging/enable_file_logging=true

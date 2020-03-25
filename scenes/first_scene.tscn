@@ -14,10 +14,10 @@ library = ExtResource( 1 )
 script = SubResource( 1 )
 
 [node name="SwitchSceneButton" type="Button" parent="."]
-margin_left = 364.0
-margin_top = 268.0
-margin_right = 617.0
-margin_bottom = 316.0
+margin_left = 129.0
+margin_top = 229.0
+margin_right = 382.0
+margin_bottom = 277.0
 text = "To second scene"
 script = ExtResource( 2 )
 __meta__ = {

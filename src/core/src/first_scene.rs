@@ -13,7 +13,7 @@ impl FirstSceneNode {
 
     #[export]
     pub unsafe fn _ready(&self, mut owner: Node) {
-        godot_print!("I'm on the first scene !");
+        godot_print!("[RUST] I'm on the first scene !");
         let background = generate_fullscreen_green_panel(owner);
         owner.add_child(Some(background.to_node()), true);
     }
