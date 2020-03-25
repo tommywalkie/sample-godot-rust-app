@@ -23,7 +23,9 @@ The main purpose of this repo is to help understanding how Rust and Godot Engine
 ![preview](https://raw.githubusercontent.com/tommywalkie/sample-godot-rust-app/master/assets/preview_sample_godot_rust_app.png)
 
 - Sample Godot project with two scenes
-  - Each scene has a _Button_ node allowing us to switch between scenes
+  - Each scene has a _Button_ node with a script allowing us to switch between scenes 
+    - <kbd>1</kbd> ► <kbd>2</kbd> — Using GDScript ([source](https://github.com/tommywalkie/sample-godot-rust-app/blob/master/scenes/LinkToSecondScene.gd))
+    - <kbd>2</kbd> ► <kbd>1</kbd> — Using Rust/GDNative ([source](https://github.com/tommywalkie/sample-godot-rust-app/blob/master/src/core/src/link_to_first_scene.rs))
   - Each scene has a node with an attached Rust/GDNative script which programmatically add a newly created colored _Panel_ node as a child node.
 - Use of [Cargo workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html) for flexibility
 
