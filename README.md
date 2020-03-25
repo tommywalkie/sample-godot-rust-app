@@ -2,8 +2,6 @@
 
 The main purpose of this repo is to help understanding how Rust and Godot Engine work and provide a well documented Godot Engine based project boilerplate able to display some scenes and handle signals, using properly tested Rust based logic.
 
-![preview](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/assets/preview_sample_godot_app.png)
-
 ## Summary
 
 - [Features](https://github.com/tommywalkie/sample-godot-rust-app#features)
@@ -21,6 +19,8 @@ The main purpose of this repo is to help understanding how Rust and Godot Engine
 - [Roadmap](https://github.com/tommywalkie/sample-godot-rust-app#roadmap)
 
 ## Features
+
+![preview](https://raw.githubusercontent.com/tommywalkie/sample-godot-rust-app/master/assets/preview_sample_godot_rust_app.png)
 
 - Sample Godot project with two scenes
   - Each scene has a _Button_ node allowing us to switch between scenes
