@@ -16,6 +16,7 @@ jobs:
         name: gdnativelib
         path: target/release/libcore.so
   linux:
+    runs-on: ubuntu-latest
     name: Building Godot game for Linux/X11
     container: godot-ci:latest
     steps:
