@@ -1,0 +1,57 @@
+name: CI
+
+on: push
+
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    name: Building Rust source
+    steps:
+    - uses: actions/checkout@v2
+    - name: Check Rust toolchain
+      run: rustup show
+    - name: Build
+      run: cargo build --release
+    - name: Run tests
+      run: cargo test --release
+    - name: Upload GDNative library as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: release
+        path: target/release/libcore.so
+  linux:
+    runs-on: ubuntu-latest
+    needs: rust
+    name: Building Godot game for Linux/X11
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup environment
+      run: |
+        sudo apt-get install tree
+        wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_linux_headless.64.zip
+        wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_export_templates.tpz
+        mkdir ~/.cache
+        mkdir -p ~/.config/godot
+        mkdir -p ~/.local/share/godot/templates/3.2.1.stable
+        unzip Godot_v3.2.1-stable_linux_headless.64.zip
+        sudo mv Godot_v3.2.1-stable_linux_headless.64 /usr/local/bin/godot
+        unzip Godot_v3.2.1-stable_export_templates.tpz
+        sudo mv templates/* ~/.local/share/godot/templates/3.2.1.stable
+        sudo rm -f Godot_v3.2.1-stable_linux_headless.64.zip Godot_v3.2.1-stable_export_templates.tpz
+        mkdir -p ./build/linux
+    - name: Download GDNative library artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: release
+        path: target/release
+    - name: Checking project structure for troubleshooting
+      run: tree
+    - name: Building for Linux/X11
+      run: godot -v --export "Linux/X11" ./build/linux/sample_godot_rust_app.x86_64
+    - name: Checking final build structure for troubleshooting
+      run: tree ./build
+    - name: Upload Linux game as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: sample_godot_rust_app.x86_64
+        path: build/linux
