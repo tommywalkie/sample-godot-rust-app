@@ -8,6 +8,8 @@ jobs:
     name: Building Rust source
     steps:
     - uses: actions/checkout@v2
+    - name: Check Rust toolchain
+      run: rustup show
     - name: Build
       run: cargo build --release
     - name: Run tests
@@ -46,3 +48,10 @@ jobs:
       run: tree
     - name: Building for Linux/X11
       run: godot -v --export "Linux/X11" ./build/linux/sample_godot_rust_app.x86_64
+    - name: Checking final build structure for troubleshooting
+      run: tree ./build
+    - name: Upload Linux game as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: sample_godot_rust_app.x86_64
+        path: build/linux

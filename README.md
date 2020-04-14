@@ -15,6 +15,7 @@ The main purpose of this repo is to help understanding how Rust and Godot Engine
     - [Rust to Rust](https://github.com/tommywalkie/sample-godot-rust-app#rust-to-rust)
   - [Binding libraries to scenes](https://github.com/tommywalkie/sample-godot-rust-app#binding-libraries-to-scenes)
 - [Testing](https://github.com/tommywalkie/sample-godot-rust-app#testing)
+- [Exporting](https://github.com/tommywalkie/sample-godot-rust-app#exporting)
 - [Troubleshooting](https://github.com/tommywalkie/sample-godot-rust-app#troubleshooting)
 - [Roadmap](https://github.com/tommywalkie/sample-godot-rust-app#roadmap)
 
@@ -24,8 +25,8 @@ The main purpose of this repo is to help understanding how Rust and Godot Engine
 
 - Sample Godot project with two scenes
   - Each scene has a _Button_ node with a script allowing us to switch between scenes 
-    - <kbd>1</kbd> ► <kbd>2</kbd> — Using GDScript ([source](https://github.com/tommywalkie/sample-godot-rust-app/blob/master/scenes/LinkToSecondScene.gd))
-    - <kbd>2</kbd> ► <kbd>1</kbd> — Using Rust/GDNative ([source](https://github.com/tommywalkie/sample-godot-rust-app/blob/master/src/core/src/link_to_first_scene.rs))
+    - **Scene 1** ► **Scene 2** — Using GDScript ([source](https://github.com/tommywalkie/sample-godot-rust-app/blob/master/scenes/LinkToSecondScene.gd))
+    - **Scene 2** ► **Scene 1** — Using Rust/GDNative ([source](https://github.com/tommywalkie/sample-godot-rust-app/blob/master/src/core/src/link_to_first_scene.rs))
   - Each scene has a node with an attached Rust/GDNative script which programmatically add a newly created colored _Panel_ node as a child node.
 - Use of [Cargo workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html) for flexibility
 
@@ -76,9 +77,11 @@ rustc --version
 cargo -V
 ```
 
-In order to be able to use Rust and `gdnative` crate effectively, we'll also need to install Visual Studio C++ Build tools (if using Windows) and [CLang](https://rust-lang.github.io/rust-bindgen/requirements.html).
+In order to build `gdnative` and other libraries effectively using whatever Rust toolchain, we may need to install [CLang](https://rust-lang.github.io/rust-bindgen/requirements.html) which is released as part of [LLVM](https://releases.llvm.org/), depending of the OS.
 
 ```bash
+# Check if LLVM is installed and registerd in PATH
+llvm-config --version
 # Check if CLang is installed and registered in PATH
 clang -v
 ```
@@ -264,7 +267,31 @@ speculate! {
 }
 ```
 
+## Exporting
 
+Assuming `godot-rust` is cross-platform ready and we have an `export_presets.cfg` file including properly setted Godot Engine presets related settings at the root of our project, we _can_ build `sample_godot_rust_app` in whatever target using some headless Godot Engine instances running via Github Actions and release apps as artifacts ([source](https://github.com/tommywalkie/sample-godot-rust-app/blob/master/.github/workflows/ci.yml)).
+
+The following roadmap is intended to list all known supported targets and possible clues about how to support other targets.
+
+- [x] Linux (tested with `stable-x86_64-unknown-linux-gnu` toolchain)
+  - [x] Install LLVM
+- [x] Windows (tested with `stable-x86_64-pc-windows-msvc` toolchain)
+  - [x] Install LLVM
+- [ ] MacOS
+  - [ ] Install LLVM
+  - [ ] etc.
+- [ ] Android (might be possible — [godot-rust/issues/238](https://github.com/GodotNativeTools/godot-rust/issues/238))
+  - [ ] Install Android Studio
+  - [ ] Install NDK
+  - [ ] Build static libs via Cargo instead of dynamic libs ?
+  - [ ] etc.
+- [ ] iOS (might be possible — [godot-rust/issues/285](https://github.com/GodotNativeTools/godot-rust/issues/285))
+  - [ ] Install XCode
+  - [ ] Install LLVM
+  - [ ] Build static libs via Cargo instead of dynamic libs ?
+  - [ ] etc.
+
+**Important notice** : We _may be_ careful when adding `export_presets.cfg` in a Git repository, especially if there is sensitive data, like keystore related settings when building for Android. This point needs to be further developed in the future.
 
 ## Troubleshooting
 
@@ -287,7 +314,13 @@ This commonly happens when editing and then re-building Rust libraries while the
 - [ ] Send / handle signals between Rust and GDScript
 - [x] Switch Godot scenes via Rust/GDScript
 - [ ] Interact with assets like images via Rust/GDScript
-- [x] Try releasing a Windows executable
-- [ ] Try releasing an Android application
-- [ ] Try releasing a Windows executable via Github Actions
-- [ ] Try releasing an Android application via Github Actions
+- [x] Release a Windows executable
+- [x] Release a Linux executable
+- [ ] Release a MacOS executable
+- [ ] Release an Android application (_if possible_)
+- [ ] Release an iOS application (_if possible_)
+- [ ] Release a Windows executable via Github Actions
+- [x] Release a Linux executable via Github Actions
+- [ ] Release a MacOS executable via Github Actions
+- [ ] Release an Android application via Github Actions (_if possible_)
+- [ ] Release an iOS application via Github Actions (_if possible_)
