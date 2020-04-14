@@ -1,6 +1,6 @@
 [entry]
 
-X11.64="res://target/release/core.so"
+X11.64="res://target/release/libcore.so"
 OSX.64="res://target/release/core.dylib"
 Windows.64="res://target/release/core.dll"
 

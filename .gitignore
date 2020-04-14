@@ -15,5 +15,3 @@ Cargo.lock
 *.log
 
 build/
-
-export_presets.cfg
