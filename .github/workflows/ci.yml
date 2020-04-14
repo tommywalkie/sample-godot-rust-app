@@ -15,7 +15,7 @@ jobs:
     - name: Upload GDNative library as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: libcore
+        name: release
         path: target/release/libcore.so
   linux:
     runs-on: ubuntu-latest
@@ -40,8 +40,8 @@ jobs:
     - name: Download GDNative library artifact
       uses: actions/download-artifact@v1
       with:
-        name: libcore
-        path: target/release/libcore.so
+        name: release
+        path: target
     - name: Checking project structure for troubleshooting
       run: tree
     - name: Building for Linux/X11
