@@ -41,7 +41,7 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: release
-        path: target
+        path: target/release
     - name: Checking project structure for troubleshooting
       run: tree
     - name: Building for Linux/X11
