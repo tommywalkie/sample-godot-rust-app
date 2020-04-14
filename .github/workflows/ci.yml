@@ -19,6 +19,7 @@ jobs:
         path: target/release/libcore.so
   linux:
     runs-on: ubuntu-latest
+    needs: rust
     name: Building Godot game for Linux/X11
     steps:
     - name: Setup environment
