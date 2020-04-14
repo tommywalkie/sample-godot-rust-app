@@ -25,6 +25,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Setup environment
       run: |
+        sudo apt-get install tree
         wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_linux_headless.64.zip
         wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_export_templates.tpz
         mkdir ~/.cache
@@ -35,12 +36,13 @@ jobs:
         unzip Godot_v3.2.1-stable_export_templates.tpz
         sudo mv templates/* ~/.local/share/godot/templates/3.2.1.stable
         sudo rm -f Godot_v3.2.1-stable_linux_headless.64.zip Godot_v3.2.1-stable_export_templates.tpz
+        mkdir -p ./build/linux
     - name: Download GDNative library artifact
       uses: actions/download-artifact@v1
       with:
         name: libcore
         path: target/release/libcore.so
+    - name: Checking project structure for troubleshooting
+      run: tree
     - name: Building for Linux/X11
-      run: |
-        mkdir -p ./build/linux
-        godot -v --export "Linux/X11" ./build/linux/sample_godot_rust_app.x86_64
+      run: godot -v --export "Linux/X11" ./build/linux/sample_godot_rust_app.x86_64
