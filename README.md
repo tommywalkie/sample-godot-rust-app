@@ -43,7 +43,7 @@ The main purpose of this repo is to help understanding how Rust and Godot Engine
 
 ## Tutorial
 
-This tutorial is intended to re-create this boilerplate project from scratch and help understand how things are connected while trying to make things clear for any newcomer in Godot / Rust without going too much into details. 
+This tutorial is intended to re-create this boilerplate project from scratch and understand how things are connected while trying to make things clear for any newcomer in Godot / Rust without going too much into details. 
 
 ### Setup
 
@@ -77,7 +77,7 @@ rustc --version
 cargo -V
 ```
 
-In order to build `gdnative` and other libraries effectively using whatever Rust toolchain, we may need to install [CLang](https://rust-lang.github.io/rust-bindgen/requirements.html) which is released as part of [LLVM](https://releases.llvm.org/), depending of the OS.
+In order to build `gdnative` and other libraries effectively using whatever Rust toolchain, we need to install [CLang](https://rust-lang.github.io/rust-bindgen/requirements.html) which is released as part of [LLVM](https://releases.llvm.org/).
 
 ```bash
 # Check if LLVM is installed and registerd in PATH
@@ -85,6 +85,8 @@ llvm-config --version
 # Check if CLang is installed and registered in PATH
 clang -v
 ```
+
+If working on Windows, there is an additional step depending of the installed Rust toolchain. When using `stable-x86_64-pc-windows-msvc`, Visual Studio Build tools is required. Otherwise, if using `x86_64-pc-windows-gnu`, a full GNU-compatible environment is required, this can be provided by MinGW.
 
 Now we can start setting up the workspace. One convenient way to split Rust codebase into libraries with each their own purposes would be using [Cargo workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html). The motivation here is to isolate Rust scripts and make them significantly smaller, more readable while still being easily testable.
 
@@ -271,25 +273,15 @@ speculate! {
 
 Assuming `godot-rust` is cross-platform ready and we have an `export_presets.cfg` file including properly setted Godot Engine presets related settings at the root of our project, we _can_ build `sample_godot_rust_app` in whatever target using some headless Godot Engine instances running via Github Actions and release apps as artifacts ([source](https://github.com/tommywalkie/sample-godot-rust-app/blob/master/.github/workflows/ci.yml)).
 
-The following roadmap is intended to list all known supported targets and possible clues about how to support other targets.
+Here is the list of all known supported targets and possible clues about how to support other targets.
 
-- [x] Linux (tested with `stable-x86_64-unknown-linux-gnu` toolchain)
-  - [x] Install LLVM
-- [x] Windows (tested with `stable-x86_64-pc-windows-msvc` toolchain)
-  - [x] Install LLVM
-- [ ] MacOS
-  - [ ] Install LLVM
-  - [ ] etc.
-- [ ] Android (might be possible — [godot-rust/issues/238](https://github.com/GodotNativeTools/godot-rust/issues/238))
-  - [ ] Install Android Studio
-  - [ ] Install NDK
-  - [ ] Build static libs via Cargo instead of dynamic libs ?
-  - [ ] etc.
-- [ ] iOS (might be possible — [godot-rust/issues/285](https://github.com/GodotNativeTools/godot-rust/issues/285))
-  - [ ] Install XCode
-  - [ ] Install LLVM
-  - [ ] Build static libs via Cargo instead of dynamic libs ?
-  - [ ] etc.
+|                                                              | OS      | Tested toolchain(s)                                          | Support                                                      | Possible To-Dos                                              |
+| ------------------------------------------------------------ | ------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="17"/> | Windows | ✅ `stable-x86_64-pc-windows-msvc`<br />❓ `x86_64-pc-windows-gnu` | ✅                                                            | Install LLVM and Visual Build tools or MinGW                 |
+| <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="17"/> | Linux   | ✅ `stable-x86_64-unknown-linux-gnu`                          | ✅                                                            | Install LLVM                                                 |
+| <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="17"/> | MacOS   | ❓ Not tested yet                                             | ❓ Not tested yet                                             | Install LLVM                                                 |
+| <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="17"/> | Android | ❓ Not tested yet                                             | Might be possible ([godot-rust/issues/238](https://github.com/GodotNativeTools/godot-rust/issues/238)) | Install Android Studio and NDK and LLVM, then build static libs via Cargo instead of dynamic libs ? |
+| <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="17"/> | iOS     | ❓ Not tested yet                                             | Might be possible ([godot-rust/issues/285](https://github.com/GodotNativeTools/godot-rust/issues/285)) | Install XCode and LLVM, then build static libs via Cargo instead of dynamic libs ? |
 
 **Important notice** : We _may be_ careful when adding `export_presets.cfg` in a Git repository, especially if there is sensitive data, like keystore related settings when building for Android. This point needs to be further developed in the future.
 
@@ -299,7 +291,13 @@ The following roadmap is intended to list all known supported targets and possib
 
 This commonly happens when editing and then re-building Rust libraries while the Godot Engine preview is still running. Stop the preview and then Cargo commands should be working fine again.
 
+> _Cargo is correctly building `bindgen` and `clang-sys` etc. while LLVM is not in PATH. Is LLVM really needed ?_
+
+`clang-sys` is [hardcoding LLVM paths](https://github.com/KyleMayes/clang-sys/blob/master/build/common.rs#L24) for Linux, MacOS and Windows, in case LLVM is not registered on PATH.
+
 ## Roadmap
+
+**Setting up the project**
 
 - [x] Init repo
 - [x] Setup Rust
@@ -309,16 +307,26 @@ This commonly happens when editing and then re-building Rust libraries while the
 - [x] Setup Github Actions for CI/CD
 - [x] Setup Godot Engine
 - [x] Add documentation for Godot Engine related setup steps
+
+**Rust/GDNative showcase**
+
 - [x] Create/Interact with Godot nodes from Rust
-- [x] Move to a Cargo workspace model
 - [ ] Send / handle signals between Rust and GDScript
 - [x] Switch Godot scenes via Rust/GDScript
 - [ ] Interact with assets like images via Rust/GDScript
+- [ ] Make HTTP requests via Rust
+- [ ] ... etc.
+
+**Build**
+
 - [x] Release a Windows executable
 - [x] Release a Linux executable
 - [ ] Release a MacOS executable
 - [ ] Release an Android application (_if possible_)
 - [ ] Release an iOS application (_if possible_)
+
+**Automatic releases**
+
 - [ ] Release a Windows executable via Github Actions
 - [x] Release a Linux executable via Github Actions
 - [ ] Release a MacOS executable via Github Actions
