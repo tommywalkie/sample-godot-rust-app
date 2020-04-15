@@ -1,6 +1,15 @@
 name: CI
 
-on: push
+on:
+  push:
+    paths:
+    - 'assets/*'
+    - 'scenes/*'
+    - 'src/*'
+    - 'project.godot'
+    - 'default_env.tres'
+    - 'Cargo.toml'
+    - 'export_presets.cfg'
 
 jobs:
   rust:
