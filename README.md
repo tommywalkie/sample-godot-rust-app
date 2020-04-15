@@ -18,6 +18,7 @@ The main purpose of this repo is to help understanding how Rust and Godot Engine
 - [Exporting](https://github.com/tommywalkie/sample-godot-rust-app#exporting)
 - [Troubleshooting](https://github.com/tommywalkie/sample-godot-rust-app#troubleshooting)
 - [Roadmap](https://github.com/tommywalkie/sample-godot-rust-app#roadmap)
+- [License](https://github.com/tommywalkie/sample-godot-rust-app#license)
 
 ## Features
 
@@ -332,3 +333,7 @@ This commonly happens when editing and then re-building Rust libraries while the
 - [ ] Release a MacOS executable via Github Actions
 - [ ] Release an Android application via Github Actions (_if possible_)
 - [ ] Release an iOS application via Github Actions (_if possible_)
+
+## License
+
+MIT
