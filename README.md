@@ -34,11 +34,11 @@ The main purpose of this repo is to help understanding how Rust and Godot Engine
 
 |                                                              | Tool                                                         | Purpose                                        |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ---------------------------------------------- |
-| <img src="https://github.com/gilbarbara/logos/raw/master/logos/rust.svg?sanitize=true" alt="drawing" height="17"/> | Rust 1.41.1                                                  | The actual language we will use for game logic |
-| <img src="https://img.icons8.com/dusk/2x/package.png" alt="drawing" height="17"/> | [`gdnative`](https://github.com/GodotNativeTools/godot-rust) crate | For Rust bindings to Godot Engine              |
-| <img src="https://img.icons8.com/dusk/2x/package.png" alt="drawing" height="17"/> | [`speculate.rs`](https://github.com/utkarshkukreti/speculate.rs) crate | For Rust based BDD tests                       |
-| <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Godot_icon.svg" alt="drawing" height="17"/> | Godot Engine 3.2                                             | The actual game engine                         |
-| <img src="https://avatars0.githubusercontent.com/u/44036562?s=200&v=4?sanitize=true" alt="drawing" height="17"/> | Github Actions                                               | For CI/CD                                      |
+| <img src="https://github.com/gilbarbara/logos/raw/master/logos/rust.svg?sanitize=true" alt="drawing" height="22" width="28"/> | Rust 1.41.1                                                  | The actual language we will use for game logic |
+| <img src="https://img.icons8.com/dusk/2x/package.png" alt="drawing" height="22" width="28"/> | [`gdnative`](https://github.com/GodotNativeTools/godot-rust) crate | For Rust bindings to Godot Engine              |
+| <img src="https://img.icons8.com/dusk/2x/package.png" alt="drawing" height="22" width="28"/> | [`speculate.rs`](https://github.com/utkarshkukreti/speculate.rs) crate | For Rust based BDD tests                       |
+| <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Godot_icon.svg" alt="drawing" height="22" width="28"/> | Godot Engine 3.2                                             | The actual game engine                         |
+| <img src="https://avatars0.githubusercontent.com/u/44036562?s=200&v=4?sanitize=true" alt="drawing" height="22" width="28"/> | Github Actions                                               | For CI/CD                                      |
 
 
 ## Tutorial
@@ -277,11 +277,11 @@ Here is the list of all known supported targets and possible clues about how to 
 
 |                                                              | OS      | Supported toolchain(s)                                       | Possible To-Dos                                              |
 | ------------------------------------------------------------ | ------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="17" width="22"/> | Windows | ✅ `stable-x86_64-pc-windows-msvc`<br />❓ `x86_64-pc-windows-gnu` | Install LLVM and Visual Build tools or MinGW                 |
-| <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="17" width="22"/> | Linux   | ✅ `stable-x86_64-unknown-linux-gnu`                          | Install LLVM                                                 |
-| <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="17" width="22"/> | MacOS   | ❓ Not tested yet                                             | Install LLVM                                                 |
-| <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="17" width="22"/> | Android | ❓ Might be possible ([godot-rust/issues/238](https://github.com/GodotNativeTools/godot-rust/issues/238)) | Install Android Studio and NDK and LLVM, then build static libs via Cargo instead of dynamic libs ? |
-| <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="17" width="22"/> | iOS     | ❓ Might be possible ([godot-rust/issues/285](https://github.com/GodotNativeTools/godot-rust/issues/285)) | Install XCode and LLVM, then build static libs via Cargo instead of dynamic libs ? |
+| <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="22" width="28"/> | Windows | ✅ `stable-x86_64-pc-windows-msvc`<br />❓ `x86_64-pc-windows-gnu` | Install LLVM and Visual Build tools or MinGW                 |
+| <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="27" width="32"/> | Linux   | ✅ `stable-x86_64-unknown-linux-gnu`                          | Install LLVM                                                 |
+| <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="22" width="28"/> | MacOS   | ❓ Not tested yet                                             | Install LLVM                                                 |
+| <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="27" width="32"/> | Android | ❓ Might be possible ([link](https://github.com/GodotNativeTools/godot-rust/issues/238)) | Install Android Studio, NDK and LLVM, then build static libs via Cargo ? |
+| <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="22" width="28"/> | iOS     | ❓ Might be possible ([link](https://github.com/GodotNativeTools/godot-rust/issues/285)) | Install XCode and LLVM, then build static libs via Cargo ?   |
 
 **Important notice** : We _may be_ careful when adding `export_presets.cfg` in a Git repository, especially if there is sensitive data, like keystore related settings when building for Android. This point needs to be further developed in the future.
 
