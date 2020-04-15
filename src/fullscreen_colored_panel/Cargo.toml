@@ -4,11 +4,12 @@ version = "0.1.0"
 authors = ["tommywalkie <tommywalkie@gmail.com>"]
 edition = "2018"
 
+# When using "cargo build", we will need to build one crate...
 [lib]
 doctest = false
 crate-type = [
-	"lib"
+	"lib" # A regular Rust library to be included somewhere else
 ] 
 
 [dependencies]
-gdnative = "0.8"
+gdnative = "0.8" # Install Rust bindings for Godot Engine
