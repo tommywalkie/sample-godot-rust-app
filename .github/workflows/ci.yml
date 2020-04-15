@@ -3,9 +3,9 @@ name: CI
 on:
   push:
     paths:
-    - 'assets/*'
-    - 'scenes/*'
-    - 'src/*'
+    - 'assets/**'
+    - 'scenes/**'
+    - 'src/**'
     - 'project.godot'
     - 'default_env.tres'
     - 'Cargo.toml'

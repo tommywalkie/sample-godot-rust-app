@@ -1,8 +1,5 @@
 use speculate::speculate;
-
-pub fn add(a: i32, b: i32) -> i32 {
-    a + b
-}
+use core::add;
 
 speculate! {
     describe "sample test" {
