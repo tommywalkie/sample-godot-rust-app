@@ -1,16 +1,17 @@
 name: CI
 
-on:
-  push:
-    paths:
-    - '.github/**'
-    - 'assets/**'
-    - 'scenes/**'
-    - 'src/**'
-    - 'project.godot'
-    - 'default_env.tres'
-    - 'Cargo.toml'
-    - 'export_presets.cfg'
+on: push
+
+# on:
+#   push:
+#     paths:
+#     - 'assets/**'
+#     - 'scenes/**'
+#     - 'src/**'
+#     - 'project.godot'
+#     - 'default_env.tres'
+#     - 'Cargo.toml'
+#     - 'export_presets.cfg'
 
 jobs:
   rust-linux:
@@ -40,7 +41,7 @@ jobs:
     - name: Install Cross
       run: cargo install cross
     - name: Build custom Docker image for x86_64-pc-windows-gnu toolchain with LLVM
-      run: docker build -t my/x86_64-pc-windows-gnu-llvm:latest ./x86_64-pc-windows-gnu-llvm.Dockerfile
+      run: docker build -t my/x86_64-pc-windows-gnu-llvm:latest -f ./x86_64-pc-windows-gnu-llvm.Dockerfile .
     - name: Build with Cross
       run: cross build --release --target x86_64-pc-windows-gnu
     - name: Run tests with Cross
