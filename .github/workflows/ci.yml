@@ -128,7 +128,7 @@ jobs:
 
   github-release:
     runs-on: ubuntu-latest
-    needs: [rust-windows, rust-linux]
+    needs: [godot-windows, godot-linux]
     name: Release games on Github
     if: github.ref == 'refs/heads/master'
     steps:
