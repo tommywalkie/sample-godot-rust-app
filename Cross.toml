@@ -1,2 +1,2 @@
 [target.x86_64-pc-windows-gnu]
-image = "tommywalkie/x86_64-pc-windows-gnu-llvm:latest"
+image = "my/x86_64-pc-windows-gnu-llvm:latest"
