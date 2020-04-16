@@ -1,17 +1,17 @@
 name: CI
 
-on: push
+# on: push
 
-# on:
-#   push:
-#     paths:
-#     - 'assets/**'
-#     - 'scenes/**'
-#     - 'src/**'
-#     - 'project.godot'
-#     - 'default_env.tres'
-#     - 'Cargo.toml'
-#     - 'export_presets.cfg'
+on:
+  push:
+    paths:
+    - 'assets/**'
+    - 'scenes/**'
+    - 'src/**'
+    - 'project.godot'
+    - 'default_env.tres'
+    - 'Cargo.toml'
+    - 'export_presets.cfg'
 
 jobs:
   rust-linux:
@@ -28,7 +28,7 @@ jobs:
     - name: Upload GDNative library as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: release-linux
+        name: libcore.so
         path: target/release/libcore.so
 
   rust-windows:
@@ -46,18 +46,10 @@ jobs:
       run: cross build --release --target x86_64-pc-windows-gnu
     - name: Run tests with Cross
       run: cross test --release --target x86_64-pc-windows-gnu
-    - name: Check target directory
-      run: ls target
-    - name: Check target/x86_64-pc-windows-gnu directory
-      if: always()
-      run: ls target/x86_64-pc-windows-gnu
-    - name: Check target/x86_64-pc-windows-gnu/release directory
-      if: always()
-      run: ls target/x86_64-pc-windows-gnu/release
     - name: Upload GDNative library as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: release-windows
+        name: core.dll
         path: target/x86_64-pc-windows-gnu/release/core.dll
 
   godot-linux:
@@ -83,7 +75,7 @@ jobs:
     - name: Download GDNative library artifact
       uses: actions/download-artifact@v1
       with:
-        name: release-linux
+        name: libcore.so
         path: target/release
     - name: Checking project structure for troubleshooting
       run: tree
@@ -94,13 +86,13 @@ jobs:
     - name: Upload Linux game as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: sample_godot_rust_app.x86_64
+        name: sample_godot_rust_app-x86_64-unknown-linux-gnu
         path: build/linux
 
   godot-windows:
     runs-on: ubuntu-latest
     needs: rust-windows
-    name: Building Godot game for Linux/X11
+    name: Building Godot game for Windows
     steps:
     - uses: actions/checkout@v2
     - name: Setup environment
@@ -120,7 +112,7 @@ jobs:
     - name: Download GDNative library artifact
       uses: actions/download-artifact@v1
       with:
-        name: release-windows
+        name: core.dll
         path: target/release
     - name: Checking project structure for troubleshooting
       run: tree
@@ -131,5 +123,5 @@ jobs:
     - name: Upload Windows game as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: sample_godot_rust_app.exe
+        name: sample_godot_rust_app-x86_64-pc-windows-gnu
         path: build/windows
