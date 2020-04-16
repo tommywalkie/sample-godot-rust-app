@@ -1,2 +1,5 @@
+# Use a custom Docker image with LLVM installed
+# to compile for Windows from Linux
+
 [target.x86_64-pc-windows-gnu]
-image = "my/x86_64-pc-windows-gnu-llvm:latest"
+image = "my/x86_64-pc-windows-gnu:latest"

@@ -1,10 +1,13 @@
 name: CI
 
+# Uncomment if the workflow should be triggered by whatever push
 # on: push
 
+# Uncomment all these lines if the workflow should be triggered only for source code changes
 on:
   push:
     paths:
+    - 'dockerfiles/**'
     - 'assets/**'
     - 'scenes/**'
     - 'src/**'
@@ -14,6 +17,7 @@ on:
     - 'export_presets.cfg'
 
 jobs:
+  # This job is where we compile Rust source code for Linux target
   rust-linux:
     runs-on: ubuntu-latest
     name: Building Rust source for Linux
@@ -31,6 +35,7 @@ jobs:
         name: libcore.so
         path: target/release/libcore.so
 
+  # This job is where we compile Rust source code for Windows target
   rust-windows:
     runs-on: ubuntu-latest
     name: Building Rust source for Windows
@@ -41,7 +46,7 @@ jobs:
     - name: Install Cross
       run: cargo install cross
     - name: Build custom Docker image for x86_64-pc-windows-gnu toolchain with LLVM
-      run: docker build -t my/x86_64-pc-windows-gnu-llvm:latest -f ./x86_64-pc-windows-gnu-llvm.Dockerfile .
+      run: docker build -t my/x86_64-pc-windows-gnu:latest -f ./dockerfiles/x86_64-pc-windows-gnu.Dockerfile .
     - name: Build with Cross
       run: cross build --release --target x86_64-pc-windows-gnu
     - name: Run tests with Cross
@@ -51,7 +56,9 @@ jobs:
       with:
         name: core.dll
         path: target/x86_64-pc-windows-gnu/release/core.dll
-
+  
+  # This job is where we build a Godot game for Linux,
+  # using the Linux-compatible library we built in 'rust-linux'
   godot-linux:
     runs-on: ubuntu-latest
     needs: rust-linux
@@ -89,6 +96,8 @@ jobs:
         name: sample_godot_rust_app_linux
         path: build/linux
 
+  # This job is where we build a Godot game for Windows,
+  # using the Windows-compatible library we built in 'rust-windows'
   godot-windows:
     runs-on: ubuntu-latest
     needs: rust-windows
@@ -126,6 +135,9 @@ jobs:
         name: sample_godot_rust_app_windows
         path: build/windows
 
+  # This job is where we create an official release in Github repo,
+  # using the Godot games we built in 'godot-linux', 'godot-windows', etc.
+  
   # github-release:
   #   runs-on: ubuntu-latest
   #   needs: [godot-windows, godot-linux]
