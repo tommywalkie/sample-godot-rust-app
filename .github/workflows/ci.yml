@@ -60,9 +60,9 @@ jobs:
         name: release-windows
         path: target/x86_64-pc-windows-gnu/release/core.dll
 
-  godot:
+  godot-linux:
     runs-on: ubuntu-latest
-    needs: [rust-linux, rust-windows]
+    needs: rust-linux
     name: Building Godot game for Linux/X11
     steps:
     - uses: actions/checkout@v2
@@ -87,13 +87,6 @@ jobs:
         path: target/release
     - name: Checking project structure for troubleshooting
       run: tree
-    - name: Download GDNative library artifact
-      uses: actions/download-artifact@v1
-      with:
-        name: release-windows
-        path: target/release
-    - name: Checking project structure for troubleshooting
-      run: tree
     - name: Building for Linux/X11
       run: godot -v --export "Linux/X11" ./build/linux/sample_godot_rust_app.x86_64
     - name: Checking final build structure for troubleshooting
@@ -103,3 +96,40 @@ jobs:
       with:
         name: sample_godot_rust_app.x86_64
         path: build/linux
+
+  godot-windows:
+    runs-on: ubuntu-latest
+    needs: rust-windows
+    name: Building Godot game for Linux/X11
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup environment
+      run: |
+        sudo apt-get install tree
+        wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_linux_headless.64.zip
+        wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_export_templates.tpz
+        mkdir ~/.cache
+        mkdir -p ~/.config/godot
+        mkdir -p ~/.local/share/godot/templates/3.2.1.stable
+        unzip Godot_v3.2.1-stable_linux_headless.64.zip
+        sudo mv Godot_v3.2.1-stable_linux_headless.64 /usr/local/bin/godot
+        unzip Godot_v3.2.1-stable_export_templates.tpz
+        sudo mv templates/* ~/.local/share/godot/templates/3.2.1.stable
+        sudo rm -f Godot_v3.2.1-stable_linux_headless.64.zip Godot_v3.2.1-stable_export_templates.tpz
+        mkdir -p ./build/windows
+    - name: Download GDNative library artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: release-windows
+        path: target/release
+    - name: Checking project structure for troubleshooting
+      run: tree
+    - name: Building for Windows
+      run: godot -v --export "Windows Desktop" ./build/windows/sample_godot_rust_app.exe
+    - name: Checking final build structure for troubleshooting
+      run: tree ./build
+    - name: Upload Windows game as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: sample_godot_rust_app.exe
+        path: build/windows
