@@ -1,5 +1,7 @@
 # Sample Godot Rust App
 
+![CI status](https://github.com/tommywalkie/sample-godot-rust-app/workflows/CI/badge.svg) 
+
 The main purpose of this repo is to help understanding how Rust and Godot Engine work and provide a well documented project boilerplate able to display some scenes and handle signals, using properly tested Rust based logic and automatic builds via Github Actions.
 
 ## Summary
