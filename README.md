@@ -42,8 +42,6 @@ The main purpose of this repo is to help understanding how Rust and Godot Engine
 | <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Godot_icon.svg" alt="drawing" height="28" width="28"/> | Godot Engine 3.2                                             | The actual game engine                         |
 | <img src="https://avatars0.githubusercontent.com/u/44036562?s=200&v=4?sanitize=true" alt="drawing" height="28" width="28"/> | Github Actions                                               | For CI/CD                                      |
 
-Under the hood, this boilerplate is using Github Actions, Docker, [`rust-embedded/cross`](https://github.com/rust-embedded/cross) and a headless Godot Engine instance to test, build and export for multiple platforms, allowing users to focus on game development while abstracting a lot of tedious tasks.
-
 ## Tutorial
 
 This tutorial is intended to re-create this boilerplate project from scratch and understand how things are connected while trying to make things clear for any newcomer in Godot / Rust without going too much into details. 
@@ -277,6 +275,12 @@ speculate! {
 
 
 ## Exporting
+
+Under the hood, this boilerplate is using Github Actions, Docker, [`rust-embedded/cross`](https://github.com/rust-embedded/cross) and a headless Godot Engine instance to test, build and export for multiple platforms, allowing users to focus on game development while abstracting a lot of tedious tasks.
+
+Here is the current workflow :
+
+![workflow schema](https://raw.githubusercontent.com/tommywalkie/sample-godot-rust-app/master/assets/github-actions-workflow.png)
 
 Assuming `gdnative` crate is cross-platform ready and we have an `export_presets.cfg` file including export related settings at the root of our project, we _can_ build `sample_godot_rust_app` in whatever target using some headless Godot Engine instances running via Github Actions and release the app for multiple platforms ([source](https://github.com/tommywalkie/sample-godot-rust-app/blob/master/.github/workflows/ci.yml)).
 
