@@ -44,8 +44,6 @@ The main purpose of this repo is to help understanding how Rust and Godot Engine
 
 Under the hood, this boilerplate is using Github Actions, Docker, [`rust-embedded/cross`](https://github.com/rust-embedded/cross) and a headless Godot Engine instance to test, build and export for multiple platforms, allowing users to focus on game development while abstracting a lot of tedious tasks.
 
-Wants to release a Godot game on Linux while working on Windows and vice-versa ? Pick this boilerplate.
-
 ## Tutorial
 
 This tutorial is intended to re-create this boilerplate project from scratch and understand how things are connected while trying to make things clear for any newcomer in Godot / Rust without going too much into details. 
@@ -290,7 +288,7 @@ Here is the list of all known supported targets and possible clues about how to 
 | <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="35" width="34"/> | Linux   | ✅ `stable-x86_64-unknown-linux-gnu`                          |
 | <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28"/> | MacOS   | ❓ Not tested yet (See [sample-godot-rust-app#9](https://github.com/tommywalkie/sample-godot-rust-app/issues/9)) |
 | <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="27" width="32"/> | Android | ❓ Might be possible ([godot-rust#238](https://github.com/GodotNativeTools/godot-rust/issues/238)) |
-| <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28"/> | iOS     | ❓ Might be possible ([godot-rust#23](https://github.com/GodotNativeTools/godot-rust/issues/238)) |
+| <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28"/> | iOS     | ❓ Might be possible ([godot-rust#285](https://github.com/GodotNativeTools/godot-rust/issues/285)) |
 
 **Important notice** : We _may be_ careful when adding `export_presets.cfg` in a Git repository, especially if there is sensitive data, like keystore related settings when building for Android. This point needs to be further developed in the future.
 
