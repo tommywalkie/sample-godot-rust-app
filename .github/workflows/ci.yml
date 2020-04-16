@@ -86,7 +86,7 @@ jobs:
     - name: Upload Linux game as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: sample_godot_rust_app-x86_64-unknown-linux-gnu
+        name: sample_godot_rust_app_linux
         path: build/linux
 
   godot-windows:
@@ -123,5 +123,63 @@ jobs:
     - name: Upload Windows game as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: sample_godot_rust_app-x86_64-pc-windows-gnu
+        name: sample_godot_rust_app_windows
         path: build/windows
+
+  github-release:
+    runs-on: ubuntu-latest
+    needs: [rust-windows, rust-linux]
+    name: Release games on Github
+    if: github.ref == 'refs/heads/master'
+    steps:
+    - name: Setup environment
+      run: |
+        mkdir -p windows
+        mkdir -p linux
+        mkdir -p macos
+        mkdir -p android
+        mkdir -p ios
+    - name: Download Windows game
+      uses: actions/download-artifact@v1
+      with:
+        name: sample_godot_rust_app_windows
+        path: windows
+    - name: Zip Windows game
+      run: zip -r sample_godot_rust_app_windows.zip windows
+    - name: Download Linux game
+      uses: actions/download-artifact@v1
+      with:
+        name: sample_godot_rust_app_linux
+        path: linux
+    - name: Zip Linux game
+      run: zip -r sample_godot_rust_app_linux.zip linux
+    - name: Create a Github release
+      if: github.ref == 'refs/heads/master'
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: nightly
+        release_name: Nightly release
+        body: Testing the Github Releases API, ZIPs archives with Linux and Windows versions of the game should appear.
+        draft: false
+        prerelease: false
+    - name: Upload Linux game as release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./sample_godot_rust_app_linux.zip
+        asset_name: sample_godot_rust_app_linux.zip
+        asset_content_type: application/zip
+    - name: Upload Windows game as release 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./sample_godot_rust_app_windows.zip
+        asset_name: sample_godot_rust_app_windows.zip
+        asset_content_type: application/zip
