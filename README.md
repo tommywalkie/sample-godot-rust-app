@@ -30,17 +30,23 @@ The main purpose of this repo is to help understanding how Rust and Godot Engine
     - **Scene 2** ► **Scene 1** — Using Rust/GDNative ([source](https://github.com/tommywalkie/sample-godot-rust-app/blob/master/src/core/src/link_to_first_scene.rs))
   - Each scene has a node with an attached Rust/GDNative script which programmatically add a newly created colored _Panel_ node as a child node.
 - Use of [Cargo workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html) for flexibility
+- Worry-free automatic cross-platform CI/CD via Github Actions
 
 ## Stack
 
 |                                                              | Tool                                                         | Purpose                                        |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ---------------------------------------------- |
 | <img src="https://github.com/gilbarbara/logos/raw/master/logos/rust.svg?sanitize=true" alt="drawing" height="22" width="28"/> | Rust 1.41.1                                                  | The actual language we will use for game logic |
-| <img src="https://img.icons8.com/dusk/2x/package.png" alt="drawing" height="28" width="28"/> | [`gdnative`](https://github.com/GodotNativeTools/godot-rust) crate | For Rust bindings to Godot Engine              |
-| <img src="https://img.icons8.com/dusk/2x/package.png" alt="drawing" height="28" width="28"/> | [`speculate.rs`](https://github.com/utkarshkukreti/speculate.rs) crate | For Rust based BDD tests                       |
+| <img src="https://crates.io/assets/Cargo-Logo-Small-c39abeb466d747f3be442698662c5260.png" alt="drawing" height="28" width="35"/> | [`gdnative`](https://github.com/GodotNativeTools/godot-rust) crate | For Rust bindings to Godot Engine              |
+| <img src="https://crates.io/assets/Cargo-Logo-Small-c39abeb466d747f3be442698662c5260.png" alt="drawing" height="28" width="35"/> | [`speculate.rs`](https://github.com/utkarshkukreti/speculate.rs) crate | For Rust based BDD tests                       |
 | <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Godot_icon.svg" alt="drawing" height="28" width="28"/> | Godot Engine 3.2                                             | The actual game engine                         |
 | <img src="https://avatars0.githubusercontent.com/u/44036562?s=200&v=4?sanitize=true" alt="drawing" height="28" width="28"/> | Github Actions                                               | For CI/CD                                      |
 
+Under the hood, this boilerplate is using Github Actions, <img src="https://github.com/gilbarbara/logos/raw/master/logos/docker-icon.svg?sanitize=true" alt="drawing" height="22" width="28"/> Docker, [`rust-embedded/cross`](https://github.com/rust-embedded/cross) and a headless Godot Engine instance to test, build and export for multiple platforms, allowing users to focus on game development while abstracting a lot of tedious tasks.
+
+Wants to release a Godot game on Linux while working on Windows and vice-versa ? Pick this boilerplate.
+
+Having issues setting up LLVM, `gcc` when trying to build with Cargo ? Pick this boilerplate.
 
 ## Tutorial
 
@@ -87,7 +93,7 @@ llvm-config --version
 clang -v
 ```
 
-If working on Windows, there is an additional step depending of the installed Rust toolchain. When using `stable-x86_64-pc-windows-msvc`, Visual Studio Build tools is required. Otherwise, if using `x86_64-pc-windows-gnu`, a full GNU-compatible environment is required, this can be provided by MinGW (source : _[Reddit](https://www.reddit.com/r/rust/comments/bbychd/why_is_msvc_build_tools_required/ekmdzc9?utm_source=share&utm_medium=web2x)_).
+If working on Windows, there is an additional step depending of the installed Rust toolchain. When using `stable-x86_64-pc-windows-msvc`, Visual Studio Build Tools is required. Otherwise, if using `x86_64-pc-windows-gnu`, a full GNU-compatible environment is required, this can be provided by MinGW (more details can be found on _[Working with Rust on Windows](https://github.com/rust-lang/rustup#working-with-rust-on-windows)_).
 
 Now we can start setting up the workspace. One convenient way to split Rust codebase into libraries with each their own purposes would be using [Cargo workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html). The motivation here is to isolate Rust scripts and make them significantly smaller, more readable while still being easily testable.
 
@@ -197,7 +203,9 @@ use my_crate::*;
 
 ### Binding libraries to scenes
 
-To bind a GDNative library to a Godot node, we first need to reference library paths in a `.gdnlib` library file so Godot can guess which file to use depending of the host OS.
+To bind a GDNative library to a Godot node, we first need to reference library paths in a `.gdnlib` library file so Godot can guess which file to use depending of the host OS. 
+
+Remember the `.dll` , `.so` or `.dylib ` files from previous steps ? This is where we have to tell Godot how to reach them and which one to use for specific platforms. 
 
 ```toml
 [entry]
@@ -270,19 +278,21 @@ speculate! {
 }
 ```
 
+
+
 ## Exporting
 
-Assuming `godot-rust` is cross-platform ready and we have an `export_presets.cfg` file including properly setted Godot Engine presets related settings at the root of our project, we _can_ build `sample_godot_rust_app` in whatever target using some headless Godot Engine instances running via Github Actions and release apps as artifacts ([source](https://github.com/tommywalkie/sample-godot-rust-app/blob/master/.github/workflows/ci.yml)).
+Assuming `gdnative` crate is cross-platform ready and we have an `export_presets.cfg` file including export related settings at the root of our project, we _can_ build `sample_godot_rust_app` in whatever target using some headless Godot Engine instances running via Github Actions and release the app for multiple platforms ([source](https://github.com/tommywalkie/sample-godot-rust-app/blob/master/.github/workflows/ci.yml)).
 
 Here is the list of all known supported targets and possible clues about how to support other targets.
 
-|                                                              | OS      | Supported toolchain(s)                                       | Possible To-Dos                                              |
-| ------------------------------------------------------------ | ------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="28" width="28"/> | Windows | ✅ `stable-x86_64-pc-windows-msvc`<br />❓ `x86_64-pc-windows-gnu` | Install LLVM and Visual Build tools or MinGW                 |
-| <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="27" width="32"/> | Linux   | ✅ `stable-x86_64-unknown-linux-gnu`                          | Install LLVM                                                 |
-| <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28"/> | MacOS   | ❓ Not tested yet                                             | Install LLVM                                                 |
-| <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="27" width="32"/> | Android | ❓ Might be possible ([link](https://github.com/GodotNativeTools/godot-rust/issues/238)) | Install Android Studio, NDK and LLVM, then build static libs via Cargo ? |
-| <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28"/> | iOS     | ❓ Might be possible ([link](https://github.com/GodotNativeTools/godot-rust/issues/285)) | Install XCode and LLVM, then build static libs via Cargo ?   |
+|                                                              | OS      | Supported toolchain(s)                                       |
+| ------------------------------------------------------------ | ------- | ------------------------------------------------------------ |
+| <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="28" width="28"/> | Windows | ✅ `stable-x86_64-pc-windows-msvc`<br />✅ `x86_64-pc-windows-gnu` |
+| <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="27" width="32"/> | Linux   | ✅ `stable-x86_64-unknown-linux-gnu`                          |
+| <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28"/> | MacOS   | ❓ Not tested yet (See https://github.com/tommywalkie/sample-godot-rust-app/issues/9) |
+| <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="27" width="32"/> | Android | ❓ Might be possible (https://github.com/GodotNativeTools/godot-rust/issues/238) |
+| <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28"/> | iOS     | ❓ Might be possible (https://github.com/GodotNativeTools/godot-rust/issues/238) |
 
 **Important notice** : We _may be_ careful when adding `export_presets.cfg` in a Git repository, especially if there is sensitive data, like keystore related settings when building for Android. This point needs to be further developed in the future.
 
@@ -320,19 +330,19 @@ This commonly happens when editing and then re-building Rust libraries while the
 
 **Build**
 
-- [x] Release a Windows executable
-- [x] Release a Linux executable
-- [ ] Release a MacOS executable
-- [ ] Release an Android application (_if possible_)
-- [ ] Release an iOS application (_if possible_)
+- [x] Release a <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="28" width="28"/> Windows executable
+- [x] Release a <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="27" width="32"/> Linux executable
+- [ ] Release a <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28"/> MacOS executable
+- [ ] Release an <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="27" width="32"/> Android application (_if possible_)
+- [ ] Release an <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28"/> iOS application (_if possible_)
 
 **Automatic releases**
 
-- [ ] Release a Windows executable via Github Actions
-- [x] Release a Linux executable via Github Actions
-- [ ] Release a MacOS executable via Github Actions
-- [ ] Release an Android application via Github Actions (_if possible_)
-- [ ] Release an iOS application via Github Actions (_if possible_)
+- [x] Release a <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="28" width="28"/> Windows executable via Github Actions
+- [x] Release a <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="27" width="32"/> Linux executable via Github Actions
+- [ ] Release a <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28"/> MacOS executable via Github Actions
+- [ ] Release an <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="27" width="32"/> Android application via Github Actions (_if possible_)
+- [ ] Release an <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28"/> iOS application via Github Actions (_if possible_)
 
 ## License
 
