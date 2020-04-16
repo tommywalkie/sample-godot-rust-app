@@ -1,5 +1,7 @@
 name: CI
 
+# on: push
+
 on:
   push:
     paths:
@@ -12,9 +14,9 @@ on:
     - 'export_presets.cfg'
 
 jobs:
-  rust:
+  rust-linux:
     runs-on: ubuntu-latest
-    name: Building Rust source
+    name: Building Rust source for Linux
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
@@ -26,11 +28,33 @@ jobs:
     - name: Upload GDNative library as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: release
+        name: libcore.so
         path: target/release/libcore.so
-  linux:
+
+  rust-windows:
     runs-on: ubuntu-latest
-    needs: rust
+    name: Building Rust source for Windows
+    steps:
+    - uses: actions/checkout@v2
+    - name: Check Rust toolchain
+      run: rustup show
+    - name: Install Cross
+      run: cargo install cross
+    - name: Build custom Docker image for x86_64-pc-windows-gnu toolchain with LLVM
+      run: docker build -t my/x86_64-pc-windows-gnu-llvm:latest -f ./x86_64-pc-windows-gnu-llvm.Dockerfile .
+    - name: Build with Cross
+      run: cross build --release --target x86_64-pc-windows-gnu
+    - name: Run tests with Cross
+      run: cross test --release --target x86_64-pc-windows-gnu
+    - name: Upload GDNative library as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: core.dll
+        path: target/x86_64-pc-windows-gnu/release/core.dll
+
+  godot-linux:
+    runs-on: ubuntu-latest
+    needs: rust-linux
     name: Building Godot game for Linux/X11
     steps:
     - uses: actions/checkout@v2
@@ -51,7 +75,7 @@ jobs:
     - name: Download GDNative library artifact
       uses: actions/download-artifact@v1
       with:
-        name: release
+        name: libcore.so
         path: target/release
     - name: Checking project structure for troubleshooting
       run: tree
@@ -62,5 +86,42 @@ jobs:
     - name: Upload Linux game as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: sample_godot_rust_app.x86_64
+        name: sample_godot_rust_app-x86_64-unknown-linux-gnu
         path: build/linux
+
+  godot-windows:
+    runs-on: ubuntu-latest
+    needs: rust-windows
+    name: Building Godot game for Windows
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup environment
+      run: |
+        sudo apt-get install tree
+        wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_linux_headless.64.zip
+        wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_export_templates.tpz
+        mkdir ~/.cache
+        mkdir -p ~/.config/godot
+        mkdir -p ~/.local/share/godot/templates/3.2.1.stable
+        unzip Godot_v3.2.1-stable_linux_headless.64.zip
+        sudo mv Godot_v3.2.1-stable_linux_headless.64 /usr/local/bin/godot
+        unzip Godot_v3.2.1-stable_export_templates.tpz
+        sudo mv templates/* ~/.local/share/godot/templates/3.2.1.stable
+        sudo rm -f Godot_v3.2.1-stable_linux_headless.64.zip Godot_v3.2.1-stable_export_templates.tpz
+        mkdir -p ./build/windows
+    - name: Download GDNative library artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: core.dll
+        path: target/release
+    - name: Checking project structure for troubleshooting
+      run: tree
+    - name: Building for Windows
+      run: godot -v --export "Windows Desktop" ./build/windows/sample_godot_rust_app.exe
+    - name: Checking final build structure for troubleshooting
+      run: tree ./build
+    - name: Upload Windows game as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: sample_godot_rust_app-x86_64-pc-windows-gnu
+        path: build/windows
