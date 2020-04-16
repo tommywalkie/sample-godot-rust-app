@@ -37,16 +37,14 @@ The main purpose of this repo is to help understanding how Rust and Godot Engine
 |                                                              | Tool                                                         | Purpose                                        |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ---------------------------------------------- |
 | <img src="https://github.com/gilbarbara/logos/raw/master/logos/rust.svg?sanitize=true" alt="drawing" height="22" width="28"/> | Rust 1.41.1                                                  | The actual language we will use for game logic |
-| <img src="https://crates.io/assets/Cargo-Logo-Small-c39abeb466d747f3be442698662c5260.png" alt="drawing" height="28" width="35"/> | [`gdnative`](https://github.com/GodotNativeTools/godot-rust) crate | For Rust bindings to Godot Engine              |
-| <img src="https://crates.io/assets/Cargo-Logo-Small-c39abeb466d747f3be442698662c5260.png" alt="drawing" height="28" width="35"/> | [`speculate.rs`](https://github.com/utkarshkukreti/speculate.rs) crate | For Rust based BDD tests                       |
+| <img src="https://crates.io/assets/Cargo-Logo-Small-c39abeb466d747f3be442698662c5260.png" alt="drawing" height="28" width="32"/> | [`gdnative`](https://github.com/GodotNativeTools/godot-rust) crate | For Rust bindings to Godot Engine              |
+| <img src="https://crates.io/assets/Cargo-Logo-Small-c39abeb466d747f3be442698662c5260.png" alt="drawing" height="28" width="32"/> | [`speculate.rs`](https://github.com/utkarshkukreti/speculate.rs) crate | For Rust based BDD tests                       |
 | <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/Godot_icon.svg" alt="drawing" height="28" width="28"/> | Godot Engine 3.2                                             | The actual game engine                         |
 | <img src="https://avatars0.githubusercontent.com/u/44036562?s=200&v=4?sanitize=true" alt="drawing" height="28" width="28"/> | Github Actions                                               | For CI/CD                                      |
 
-Under the hood, this boilerplate is using Github Actions, <img src="https://github.com/gilbarbara/logos/raw/master/logos/docker-icon.svg?sanitize=true" alt="drawing" height="22" width="28"/> Docker, [`rust-embedded/cross`](https://github.com/rust-embedded/cross) and a headless Godot Engine instance to test, build and export for multiple platforms, allowing users to focus on game development while abstracting a lot of tedious tasks.
+Under the hood, this boilerplate is using Github Actions, Docker, [`rust-embedded/cross`](https://github.com/rust-embedded/cross) and a headless Godot Engine instance to test, build and export for multiple platforms, allowing users to focus on game development while abstracting a lot of tedious tasks.
 
 Wants to release a Godot game on Linux while working on Windows and vice-versa ? Pick this boilerplate.
-
-Having issues setting up LLVM, `gcc` when trying to build with Cargo ? Pick this boilerplate.
 
 ## Tutorial
 
@@ -289,7 +287,7 @@ Here is the list of all known supported targets and possible clues about how to 
 |                                                              | OS      | Supported toolchain(s)                                       |
 | ------------------------------------------------------------ | ------- | ------------------------------------------------------------ |
 | <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="28" width="28"/> | Windows | ✅ `stable-x86_64-pc-windows-msvc`<br />✅ `x86_64-pc-windows-gnu` |
-| <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="27" width="32"/> | Linux   | ✅ `stable-x86_64-unknown-linux-gnu`                          |
+| <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="32" width="34"/> | Linux   | ✅ `stable-x86_64-unknown-linux-gnu`                          |
 | <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28"/> | MacOS   | ❓ Not tested yet (See https://github.com/tommywalkie/sample-godot-rust-app/issues/9) |
 | <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="27" width="32"/> | Android | ❓ Might be possible (https://github.com/GodotNativeTools/godot-rust/issues/238) |
 | <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28"/> | iOS     | ❓ Might be possible (https://github.com/GodotNativeTools/godot-rust/issues/238) |
@@ -330,19 +328,19 @@ This commonly happens when editing and then re-building Rust libraries while the
 
 **Build**
 
-- [x] Release a <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="28" width="28"/> Windows executable
-- [x] Release a <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="27" width="32"/> Linux executable
-- [ ] Release a <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28"/> MacOS executable
-- [ ] Release an <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="27" width="32"/> Android application (_if possible_)
-- [ ] Release an <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28"/> iOS application (_if possible_)
+- [x] Release a <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="21" width="25"/> Windows executable
+- [x] Release a <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="21" width="25"/> Linux executable
+- [ ] Release a <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="21" width="25"/> MacOS executable
+- [ ] Release an <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="21" width="25"/> Android application (_if possible_)
+- [ ] Release an <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="21" width="25"/> iOS application (_if possible_)
 
 **Automatic releases**
 
-- [x] Release a <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="28" width="28"/> Windows executable via Github Actions
-- [x] Release a <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="27" width="32"/> Linux executable via Github Actions
-- [ ] Release a <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28"/> MacOS executable via Github Actions
-- [ ] Release an <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="27" width="32"/> Android application via Github Actions (_if possible_)
-- [ ] Release an <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28"/> iOS application via Github Actions (_if possible_)
+- [x] Release a <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="21" width="25"/> Windows executable via Github Actions
+- [x] Release a <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="21" width="25"/> Linux executable via Github Actions
+- [ ] Release a <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="21" width="25"/> MacOS executable via Github Actions
+- [ ] Release an <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="21" width="25"/> Android application via Github Actions (_if possible_)
+- [ ] Release an <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="21" width="25"/> iOS application via Github Actions (_if possible_)
 
 ## License
 
