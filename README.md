@@ -287,10 +287,10 @@ Here is the list of all known supported targets and possible clues about how to 
 |                                                              | OS      | Supported toolchain(s)                                       |
 | ------------------------------------------------------------ | ------- | ------------------------------------------------------------ |
 | <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="28" width="28"/> | Windows | ✅ `stable-x86_64-pc-windows-msvc`<br />✅ `x86_64-pc-windows-gnu` |
-| <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="32" width="34"/> | Linux   | ✅ `stable-x86_64-unknown-linux-gnu`                          |
-| <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28"/> | MacOS   | ❓ Not tested yet (See https://github.com/tommywalkie/sample-godot-rust-app/issues/9) |
-| <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="27" width="32"/> | Android | ❓ Might be possible (https://github.com/GodotNativeTools/godot-rust/issues/238) |
-| <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28"/> | iOS     | ❓ Might be possible (https://github.com/GodotNativeTools/godot-rust/issues/238) |
+| <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="35" width="34"/> | Linux   | ✅ `stable-x86_64-unknown-linux-gnu`                          |
+| <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28"/> | MacOS   | ❓ Not tested yet (See [sample-godot-rust-app#9](https://github.com/tommywalkie/sample-godot-rust-app/issues/9)) |
+| <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="27" width="32"/> | Android | ❓ Might be possible ([godot-rust#238](https://github.com/GodotNativeTools/godot-rust/issues/238)) |
+| <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28"/> | iOS     | ❓ Might be possible ([godot-rust#23](https://github.com/GodotNativeTools/godot-rust/issues/238)) |
 
 **Important notice** : We _may be_ careful when adding `export_presets.cfg` in a Git repository, especially if there is sensitive data, like keystore related settings when building for Android. This point needs to be further developed in the future.
 
@@ -328,19 +328,19 @@ This commonly happens when editing and then re-building Rust libraries while the
 
 **Build**
 
-- [x] Release a <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="21" width="25"/> Windows executable
-- [x] Release a <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="21" width="25"/> Linux executable
-- [ ] Release a <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="21" width="25"/> MacOS executable
-- [ ] Release an <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="21" width="25"/> Android application (_if possible_)
-- [ ] Release an <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="21" width="25"/> iOS application (_if possible_)
+- [x] Release a <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="21" width="21"/> Windows executable
+- [x] Release a <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="23" width="25"/> Linux executable
+- [ ] Release a <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="21" width="21"/> MacOS executable
+- [ ] Release an <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="21" width="21"/> Android application (_if possible_)
+- [ ] Release an <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="21" width="21"/> iOS application (_if possible_)
 
 **Automatic releases**
 
-- [x] Release a <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="21" width="25"/> Windows executable via Github Actions
-- [x] Release a <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="21" width="25"/> Linux executable via Github Actions
-- [ ] Release a <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="21" width="25"/> MacOS executable via Github Actions
-- [ ] Release an <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="21" width="25"/> Android application via Github Actions (_if possible_)
-- [ ] Release an <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="21" width="25"/> iOS application via Github Actions (_if possible_)
+- [x] Release a <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="21" width="21"/> Windows executable via Github Actions
+- [x] Release a <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="23" width="25"/> Linux executable via Github Actions
+- [ ] Release a <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="21" width="21"/> MacOS executable via Github Actions
+- [ ] Release an <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="21" width="21"/> Android application via Github Actions (_if possible_)
+- [ ] Release an <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="21" width="21"/> iOS application via Github Actions (_if possible_)
 
 ## License
 
