@@ -3,7 +3,7 @@
 
 FROM rustembedded/cross:armv7-linux-androideabi
 
-RUN sudo add-apt-repository ppa:kxstudio-team/builds
+RUN add-apt-repository ppa:kxstudio-team/builds
 
 RUN ls /usr/local/bin/
 
