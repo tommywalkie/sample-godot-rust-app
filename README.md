@@ -149,18 +149,20 @@ When the whole workspace is set up. We can tell Cargo to build our libraries usi
 cargo build --release # Build workspace libraries
 ```
 
-The build result should appear in `/target/release`. We may find our Rust libraries with and `.rlib` extension and our GDNative libraries with  `.dll` (Windows), `.so` (Linux) or `.dylib ` (Mac) extension.
+The build result should appear in `/target/release`. We may find our Rust libraries with and `.rlib` extension and our dynamic GDNative libraries with  `.dll` (Windows), `.so` (Linux) or `.dylib ` (Mac) extension, depending of the toolchain we use.
+
+For example, when building for Windows using a compatible toolchain like `x86_64-pc-windows-gnu`, we are expecting to find `.dll` files as output.
 
 #### Rust to GDNative
 
 If creating a GDNative script, like [`core`](https://github.com/tommywalkie/sample-godot-rust-app/tree/master/src/core) in this boilerplate codebase, the `lib.rs` should look like the [example one](https://github.com/GodotNativeTools/godot-rust#the-rust-source-code) in `godot-rust`.
 
-It is possible to register multiple `NativeClass` at once using `add_class` method in the `init` function. So **theoretically, there should be only one GDNative library in a project**, to avoid a lot of duplicated code from `std` or other libraries, and making use of convenient features like `Instance` downcasting easier.
+**It is recommended to have only one Rust/GDNative library in a project**, to avoid a lot of duplicated code from `std` or somewhere else. Fortunately, it is possible to register multiple `NativeClass` at once using `add_class` method in the `init` function. In the example below, we are providing some classes like `MyClassA` and `MyClassB` to Godot.
 
 ```rust
 fn init(handle: gdnative::init::InitHandle) {
-    handle.add_class::<FirstSceneNode>();
-    handle.add_class::<SecondSceneNode>();
+    handle.add_class::<MyClassA>();
+    handle.add_class::<MyClassB>();
     ...
 }
 
@@ -201,7 +203,7 @@ use my_crate::*;
 
 To bind a GDNative library to a Godot node, we first need to reference library paths in a `.gdnlib` library file so Godot can guess which file to use depending of the host OS. 
 
-Remember the `.dll` , `.so` or `.dylib ` files from previous steps ? This is where we have to tell Godot how to reach them and which one to use for specific platforms. 
+Remember the `.dll` , `.so` or `.dylib ` files we generated in previous steps ? This is where we have to tell Godot how to reach them and which one to use for specific platforms. 
 
 ```toml
 [entry]
@@ -223,18 +225,18 @@ symbol_prefix="godot_"
 reloadable=true
 ```
 
-In the Godot scene file, load the `.gdnlib` library file as an external resource (`ext_resource`) with an unique identifier.
+In a Godot scene file, load the `.gdnlib` library file as an external resource (`ext_resource`) with an unique identifier.
 
 ```toml
 [ext_resource path="res://path/to/my_lib.gdnlib" type="GDNativeLibrary" id=1]
 ```
 
-Then, create a _sub-resource_ with an unique identifier, link the newly created external resource with its `id` and tell Godot to pick a specific `NativeClass` registered in the actual GDNative library (read the [Rust to GDNative](https://github.com/tommywalkie/sample-godot-rust-app#rust-to-gdnative) part for explanation).
+Then, create a _sub-resource_ with an unique identifier, link the newly created external resource with its `id` and pick a specific `NativeClass` among the ones we previously registered in the "[Rust to GDNative](https://github.com/tommywalkie/sample-godot-rust-app#rust-to-gdnative)" part, like `MyClassA`.
 
 ```toml
 [sub_resource type="NativeScript" id=1]
-resource_name = "MyCustomClass1"
-class_name = "MyCustomClass1"
+resource_name = "MyClassA"
+class_name = "MyClassA"
 library = ExtResource( 1 )
 ```
 
@@ -247,7 +249,9 @@ script = SubResource( 1 )
 
 Once everything is binded, we can press <kbd>F5</kbd> on keyboard or <img src="https://img.icons8.com/ios/2x/play.png" alt="drawing" height="17"/> "_Play_" button at the top-right of Godot Engine UI to run the app preview.
 
+Here is a typical Godot scene diagram, this can be a decent summary about how things are connected.
 
+![gdnative diagram](https://raw.githubusercontent.com/tommywalkie/sample-godot-rust-app/master/assets/godot-scene-to-gdnative-to-rust.png)
 
 ## Testing
 
@@ -282,7 +286,7 @@ Under the hood, this boilerplate is using Github Actions, Docker, [`rust-embedde
 
 Here is the current workflow :
 
-![workflow schema](https://raw.githubusercontent.com/tommywalkie/sample-godot-rust-app/master/assets/github-actions-workflow.png)
+![workflow diagram](https://raw.githubusercontent.com/tommywalkie/sample-godot-rust-app/master/assets/github-actions-workflow.png)
 
 Assuming `gdnative` crate is cross-platform ready and we have an `export_presets.cfg` file including export related settings at the root of our project, we _can_ build `sample_godot_rust_app` in whatever target using some headless Godot Engine instances running via Github Actions and release the app for multiple platforms ([source](https://github.com/tommywalkie/sample-godot-rust-app/blob/master/.github/workflows/ci.yml)).
 
