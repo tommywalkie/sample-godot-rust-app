@@ -82,9 +82,9 @@ jobs:
     # - name: Copy jni_md.h into $JAVA_HOME/include
     #   run: sudo cp $JAVA_HOME/include/linux/* $JAVA_HOME/include
     - name: Build with Cargo
-      run: RUSTFLAGS="-C linker=x86_64-unknown-linux-gnu" C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target armv7-linux-androideabi
+      run: RUSTFLAGS="-C linker=/usr/bin/gcc" C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target armv7-linux-androideabi
     - name: Run tests with Cargo
-      run: RUSTFLAGS="-C linker=x86_64-unknown-linux-gnu" C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo test --release --target armv7-linux-androideabi
+      run: RUSTFLAGS="-C linker=/usr/bin/gcc" C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo test --release --target armv7-linux-androideabi
   
   # This job is where we build a Godot game for Linux,
   # using the Linux-compatible library we built in 'rust-linux'
