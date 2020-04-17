@@ -12,6 +12,8 @@ RUN apt-get install lsb-release -y
 
 RUN apt-get install software-properties-common -y
 
+RUN apt-get install apt-transport-https ca-certificates -y
+
 RUN apt-get update
 
 RUN bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
