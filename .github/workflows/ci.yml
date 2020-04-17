@@ -66,9 +66,7 @@ jobs:
     - name: Check Rust toolchain
       run: rustup show
     - name: Add Rust toolchain
-      run: rustup target add armv7-linux-androideabi
-    - name: Add another Rust toolchain
-      run: rustup target add x86_64-unknown-linux-gnu
+      run: rustup target add arm-linux-androideabi
     - name: Install tons of Clang and LLVM tools
       run: sudo apt-get install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm -y
     - name: Check if llvm-config exists
@@ -78,22 +76,22 @@ jobs:
     - name: Install glibc-devel so GDNative can use the standard C libraries
       run: sudo apt-get install g++-multilib libc6-dev-i386 -y
     - name: Try installing gcc-multilib
-      run: sudo apt-get install gcc-multilib build-essential
-    - name: armv7-linux-androideabi-gcc
-      run: sudo apt-get install armv7-linux-androideabi-gcc -y
+      run: sudo apt-get install gcc-multilib -y
+    - name: Try installing gcc-multilib
+      run: sudo apt-get install arm-linux-androideabi-gcc -y
     - name: Try setting up Cargo config for gcc linker
       run: |
         ls ~/.cargo/  
         touch ~/.cargo/config
-        echo '[target.armv7-linux-androideabi]' >> ~/.cargo/config
-        echo 'linker = "armv7-linux-androideabi-gcc"' >> ~/.cargo/config
+        echo '[target.arm-linux-androideabi]' >> ~/.cargo/config
+        echo 'linker = "arm-linux-androideabi-gcc"' >> ~/.cargo/config
         cat ~/.cargo/config
     # - name: Copy jni_md.h into $JAVA_HOME/include
     #   run: sudo cp $JAVA_HOME/include/linux/* $JAVA_HOME/include
     - name: Build with Cargo
-      run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target armv7-linux-androideabi
+      run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target arm-linux-androideabi
     - name: Run tests with Cargo
-      run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo test --release --target armv7-linux-androideabi
+      run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo test --release --target arm-linux-androideabi
   
   # This job is where we build a Godot game for Linux,
   # using the Linux-compatible library we built in 'rust-linux'

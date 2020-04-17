@@ -18,6 +18,3 @@ fullscreen_colored_panel = { path = "../fullscreen_colored_panel" }
 
 [dev-dependencies]
 speculate = "0.1" # Install and use "speculate" for integration tests only
-
-[target.armv7-linux-androideabi]
-linker = "armv7-linux-androideabi-gcc"
