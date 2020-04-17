@@ -71,8 +71,10 @@ jobs:
       run: sudo apt-get install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm -y
     - name: Check if llvm-config exists
       run: llvm-config --version
-    # - name: Install glibc-devel so GDNative can use the standard C libraries
-    #   run: sudo apt-get install g++-multilib libc6-dev-i386 -y
+    - name: Update apt-get
+      run: sudo apt-get update
+    - name: Install glibc-devel so GDNative can use the standard C libraries
+      run: sudo apt-get install g++-multilib libc6-dev-i386 -y
     - name: Build with Cargo
       run: C_INCLUDE_PATH=$JAVA_HOME/include/ cargo build --release --target armv7-linux-androideabi
     - name: Run tests with Cargo
