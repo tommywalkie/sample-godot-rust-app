@@ -81,8 +81,10 @@ jobs:
       run: sudo apt-get install gcc-multilib build-essential
     - name: Try setting up Cargo config for gcc linker
       run: |
-        echo '[target.arm-linux-androideabi]' >> .cargo/config
-        echo 'linker = "arm-linux-androideabi-gcc"' >> .cargo/config
+        ls ~/.cargo/  
+        touch ~/.cargo/config
+        echo '[target.arm-linux-androideabi]' >> ~/.cargo/config
+        echo 'linker = "arm-linux-androideabi-gcc"' >> ~/.cargo/config
     # - name: Copy jni_md.h into $JAVA_HOME/include
     #   run: sudo cp $JAVA_HOME/include/linux/* $JAVA_HOME/include
     - name: Build with Cargo
