@@ -18,4 +18,8 @@ RUN apt-get install g++-multilib libc6-dev-i386 -y
 
 RUN apt-get update
 
+RUN apt-get install default-jre
+
+RUN java -version
+
 RUN bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
