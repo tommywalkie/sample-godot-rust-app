@@ -57,7 +57,7 @@ jobs:
         name: core.dll
         path: target/x86_64-pc-windows-gnu/release/core.dll
 
-  # This job is where we compile Rust source code for Windows target
+  # This job is where we compile Rust source code for Android target
   rust-android:
     runs-on: ubuntu-latest
     name: Building Rust source for Android ARMv7
@@ -67,6 +67,14 @@ jobs:
       run: rustup show
     - name: Change Rust toolchain
       run: rustup target add armv7-linux-androideabi
+    - name: Install LLVM (again ?)
+      run: bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+    - name: Check if llvm-config exists
+      run: llvm-config --version
+    - name: Install tons of Clang and LLVM tools
+      run: apt-get install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm -y
+    - name: Check if llvm-config exists
+      run: llvm-config --version
     - name: Build with Cargo
       run: cargo build --release --target armv7-linux-androideabi
     - name: Run tests with Cargo
