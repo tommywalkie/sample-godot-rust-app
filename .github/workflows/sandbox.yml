@@ -19,6 +19,6 @@ jobs:
     steps:
     - name: Check ANDROID_HOME
       run: ls $ANDROID_HOME
-    - name: Check ANDROID_HOME/include
-      run: ls $ANDROID_HOME/include
+    - name: Check ANDROID_HOME/ndk
+      run: ls $ANDROID_HOME/ndk
 
