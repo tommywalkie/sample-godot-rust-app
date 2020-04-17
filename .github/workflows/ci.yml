@@ -75,6 +75,8 @@ jobs:
       run: sudo apt-get update
     - name: Install glibc-devel so GDNative can use the standard C libraries
       run: sudo apt-get install g++-multilib libc6-dev-i386 -y
+    - name: Copy jni_md.h into $JAVA_HOME/include
+      run: sudo cp $JAVA_HOME/include/linux/* $JAVA_HOME/include
     - name: Build with Cargo
       run: C_INCLUDE_PATH=$JAVA_HOME/include/ cargo build --release --target armv7-linux-androideabi
     - name: Run tests with Cargo
