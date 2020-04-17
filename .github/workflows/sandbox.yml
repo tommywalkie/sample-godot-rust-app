@@ -29,3 +29,5 @@ jobs:
       run: ls $JAVA_HOME/include
     - name: Check JAVA_HOME/include
       run: ls $JAVA_HOME/include/linux
+    - name: Try to find GCC
+      run: which gcc
