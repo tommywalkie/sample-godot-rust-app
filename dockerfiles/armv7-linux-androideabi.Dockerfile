@@ -18,11 +18,11 @@ RUN apt-get install g++-multilib libc6-dev-i386 -y
 
 RUN apt-get update
 
-RUN apt-get install default-jre
+RUN apt-get install default-jre -y
 
 RUN java -version
 
-RUN apt-get install default-jdk
+RUN apt-get install default-jdk -y
 
 RUN javac -version
 
