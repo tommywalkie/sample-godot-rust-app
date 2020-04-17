@@ -8,4 +8,6 @@ RUN apt-get update && \
 
 RUN apt-get install wget
 
+RUN apt-get install lsb-release
+
 RUN bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
