@@ -23,4 +23,8 @@ jobs:
       run: ls $ANDROID_HOME/ndk
     - name: Check ANDROID_HOME/ndk-bundle
       run: ls $ANDROID_HOME/ndk-bundle
+    - name: Check JAVA_HOME
+      run: ls $JAVA_HOME
+    - name: Check JAVA_HOME/include
+      run: ls $JAVA_HOME/include
 
