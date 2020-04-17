@@ -90,7 +90,7 @@ jobs:
     - name: Build with Cargo
       run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target armv7-linux-androideabi
     - name: Run tests with Cargo
-      run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo test --release --target armv7-linux-androideabi
+      run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo test --release --target armv7-linux-androideabi --lib
   
   # This job is where we build a Godot game for Linux,
   # using the Linux-compatible library we built in 'rust-linux'
