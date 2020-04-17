@@ -77,21 +77,20 @@ jobs:
       run: sudo apt-get install g++-multilib libc6-dev-i386 -y
     - name: Try installing gcc-multilib
       run: sudo apt-get install gcc-multilib -y
-    - name: Try installing gcc-multilib
-      run: sudo apt-get install arm-linux-androideabi-gcc -y
     - name: Try setting up Cargo config for gcc linker
       run: |
         ls ~/.cargo/  
         touch ~/.cargo/config
-        echo '[target.arm-linux-androideabi]' >> ~/.cargo/config
-        echo 'linker = "arm-linux-androideabi-gcc"' >> ~/.cargo/config
+        echo '[target.armv7-linux-androideabi]' >> ~/.cargo/config
+        echo 'ar = "$ANDROID_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/arm-linux-androideabi-ar"' >> ~/.cargo/config
+        echo 'linker = "$ANDROID_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi29-clang"' >> ~/.cargo/config
         cat ~/.cargo/config
     # - name: Copy jni_md.h into $JAVA_HOME/include
     #   run: sudo cp $JAVA_HOME/include/linux/* $JAVA_HOME/include
     - name: Build with Cargo
-      run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target arm-linux-androideabi
+      run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target armv7-linux-androideabi
     - name: Run tests with Cargo
-      run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo test --release --target arm-linux-androideabi
+      run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo test --release --target armv7-linux-androideabi
   
   # This job is where we build a Godot game for Linux,
   # using the Linux-compatible library we built in 'rust-linux'
