@@ -17,6 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Looking into Ubuntu environment
     steps:
+    - name: Echo ANDROID_HOME
+      run: echo $ANDROID_HOME
     - name: Check ANDROID_HOME
       run: ls $ANDROID_HOME
     - name: Check ANDROID_HOME/ndk
