@@ -3,15 +3,15 @@ name: Sandbox
 on: push
 
 jobs:
-  job1:
-    runs-on: ubuntu-latest
-    name: Just trying out some commands in CI
-    steps:
-    - uses: actions/checkout@v2
-    - name: Check Rust toolchain
-      run: rustup show
-    - name: Build custom Docker image for armv7-linux-androideabi toolchain with LLVM
-      run: docker build -t my/armv7-linux-androideabi:latest -f ./dockerfiles/armv7-linux-androideabi.Dockerfile .
+  # job1:
+  #   runs-on: ubuntu-latest
+  #   name: Just trying out some commands in CI
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Check Rust toolchain
+  #     run: rustup show
+  #   - name: Build custom Docker image for armv7-linux-androideabi toolchain with LLVM
+  #     run: docker build -t my/armv7-linux-androideabi:latest -f ./dockerfiles/armv7-linux-androideabi.Dockerfile .
 
   job2:
     runs-on: ubuntu-latest
@@ -21,4 +21,6 @@ jobs:
       run: ls $ANDROID_HOME
     - name: Check ANDROID_HOME/ndk
       run: ls $ANDROID_HOME/ndk
+    - name: Check ANDROID_HOME/ndk-bundle
+      run: ls $ANDROID_HOME/ndk-bundle
 
