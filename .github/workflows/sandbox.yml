@@ -3,13 +3,22 @@ name: Sandbox
 on: push
 
 jobs:
-  android-tryout-1:
+  job1:
     runs-on: ubuntu-latest
-    name: Building Rust source for Linux
+    name: Just trying out some commands in CI
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
       run: rustup show
     - name: Build custom Docker image for armv7-linux-androideabi toolchain with LLVM
       run: docker build -t my/armv7-linux-androideabi:latest -f ./dockerfiles/armv7-linux-androideabi.Dockerfile .
+
+  job2:
+    runs-on: ubuntu-latest
+    name: Looking into Ubuntu environment
+    steps:
+    - name: Check ANDROID_HOME
+      run: ls $ANDROID_HOME
+    - name: Check ANDROID_HOME/include
+      run: ls $ANDROID_HOME/include
 
