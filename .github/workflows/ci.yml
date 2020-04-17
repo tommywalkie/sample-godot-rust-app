@@ -68,7 +68,7 @@ jobs:
     - name: Change Rust toolchain
       run: rustup target add armv7-linux-androideabi
     - name: Install LLVM (again ?)
-      run: bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
+      run: sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
     - name: Check if llvm-config exists
       run: llvm-config --version
     - name: Install tons of Clang and LLVM tools
