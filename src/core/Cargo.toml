@@ -20,7 +20,4 @@ fullscreen_colored_panel = { path = "../fullscreen_colored_panel" }
 speculate = "0.1" # Install and use "speculate" for integration tests only
 
 [target.armv7-linux-androideabi]
-rustflags = [
-  "-C", "link-arg=-undefined",
-  "-C", "link-arg=dynamic_lookup",
-]
+linker = "armv7-linux-androideabi-gcc"
