@@ -1,20 +1,20 @@
 name: CI
 
 # Uncomment if the workflow should be triggered by whatever push
-# on: push
+on: push
 
 # Uncomment all these lines if the workflow should be triggered only for source code changes
-on:
-  push:
-    paths:
-    - 'dockerfiles/**'
-    - 'assets/**'
-    - 'scenes/**'
-    - 'src/**'
-    - 'project.godot'
-    - 'default_env.tres'
-    - 'Cargo.toml'
-    - 'export_presets.cfg'
+# on:
+#   push:
+#     paths:
+#     - 'dockerfiles/**'
+#     - 'assets/**'
+#     - 'scenes/**'
+#     - 'src/**'
+#     - 'project.godot'
+#     - 'default_env.tres'
+#     - 'Cargo.toml'
+#     - 'export_presets.cfg'
 
 jobs:
   # This job is where we compile Rust source code for Linux target
@@ -56,6 +56,23 @@ jobs:
       with:
         name: core.dll
         path: target/x86_64-pc-windows-gnu/release/core.dll
+
+  # This job is where we compile Rust source code for Windows target
+  rust-android:
+    runs-on: ubuntu-latest
+    name: Building Rust source for Android ARMv7
+    steps:
+    - uses: actions/checkout@v2
+    - name: Check Rust toolchain
+      run: rustup show
+    - name: Install Cross
+      run: cargo install cross
+    - name: Build custom Docker image for armv7-linux-androideabi toolchain with LLVM
+      run: docker build -t my/armv7-linux-androideabi:latest -f ./dockerfiles/armv7-linux-androideabi.Dockerfile .
+    - name: Build with Cross
+      run: cross build --release --target armv7-linux-androideabi
+    - name: Run tests with Cross
+      run: cross test --release --target armv7-linux-androideabi
   
   # This job is where we build a Godot game for Linux,
   # using the Linux-compatible library we built in 'rust-linux'
