@@ -82,8 +82,8 @@ jobs:
         ls ~/.cargo/  
         touch ~/.cargo/config
         echo '[target.armv7-linux-androideabi]' >> ~/.cargo/config
-        echo 'ar = "$ANDROID_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/arm-linux-androideabi-ar"' >> ~/.cargo/config
-        echo 'linker = "$ANDROID_HOME/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi29-clang"' >> ~/.cargo/config
+        echo 'ar = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/arm-linux-androideabi-ar"' >> ~/.cargo/config
+        echo 'linker = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi29-clang"' >> ~/.cargo/config
         cat ~/.cargo/config
     # - name: Copy jni_md.h into $JAVA_HOME/include
     #   run: sudo cp $JAVA_HOME/include/linux/* $JAVA_HOME/include
