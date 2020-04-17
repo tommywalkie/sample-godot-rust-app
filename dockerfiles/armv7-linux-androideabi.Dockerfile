@@ -22,4 +22,8 @@ RUN apt-get install default-jre
 
 RUN java -version
 
+RUN apt-get install default-jdk
+
+RUN javac -version
+
 RUN bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
