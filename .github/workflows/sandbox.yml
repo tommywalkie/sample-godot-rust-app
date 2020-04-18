@@ -35,6 +35,8 @@ jobs:
       run: ls $ANDROID_HOME/ndk-bundle/toolchains/arm-linux-androideabi-4.9/
     - name: Check NDK toolchains prebuilt binaries for arm-linux-androideabi-4.9
       run: ls $ANDROID_HOME/ndk-bundle/toolchains/arm-linux-androideabi-4.9/prebuilt/
+    - name: Check NDK toolchains prebuilt binaries for arm-linux-androideabi-4.9 for Linux
+      run: ls $ANDROID_HOME/ndk-bundle/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/
     - name: Check JAVA_HOME
       run: ls $JAVA_HOME
     - name: Check JAVA_HOME/include
