@@ -248,21 +248,21 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Generate debug keystore
-      run: keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
+      run: keytool -genkey -v -keystore /opt/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
     - name: Setup environment
       run: |
         sudo apt-get install tree
-        wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_linux_headless.64.zip
-        wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_export_templates.tpz
+        wget https://downloads.tuxfamily.org/godotengine/3.2/Godot_v3.2-stable_linux_headless.64.zip
+        wget https://downloads.tuxfamily.org/godotengine/3.2/Godot_v3.2-stable_export_templates.tpz
         mkdir ~/.cache
         mkdir -p ~/.config/godot
-        mkdir -p ~/.local/share/godot/templates/3.2.1.stable
-        unzip Godot_v3.2.1-stable_linux_headless.64.zip
-        sudo mv Godot_v3.2.1-stable_linux_headless.64 /usr/local/bin/godot
-        unzip Godot_v3.2.1-stable_export_templates.tpz
-        sudo mv templates/* ~/.local/share/godot/templates/3.2.1.stable
-        sudo rm -f Godot_v3.2.1-stable_linux_headless.64.zip Godot_v3.2.1-stable_export_templates.tpz
-        mkdir -p ./build/android
+        mkdir -p ~/.local/share/godot/templates/3.2.stable
+        unzip Godot_v3.2-stable_linux_headless.64.zip
+        sudo mv Godot_v3.2-stable_linux_headless.64 /usr/local/bin/godot
+        unzip Godot_v3.2-stable_export_templates.tpz
+        sudo mv templates/* ~/.local/share/godot/templates/3.2.stable
+        sudo rm -f Godot_v3.2-stable_linux_headless.64.zip Godot_v3.2-stable_export_templates.tpz templates
+        mkdir -v -p ./build/android
     - name: Download ARMv7 based GDNative library artifact
       uses: actions/download-artifact@v1
       with:
@@ -280,28 +280,34 @@ jobs:
         path: target/i686-linux-android/release
     - name: Checking project structure for troubleshooting
       run: tree
-    - name: Edit engine settings
+    - name: Initialize Godot Engine
+      run: godot -q
+    - name: Delete default Android settings
       run: |
-        touch /home/runner/.config/godot/editor_settings-3.tres
-        echo '[gd_resource type="EditorSettings" format=2]' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo '[resource]' >> ~/.config/godot/editor_settings-3.tres
-        echo 'export/android/adb = "/usr/local/lib/android/sdk/platform-tools/adb"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/jarsigner = "/usr/lib/jvm/zulu-8-azure-amd64/bin/jarsigner"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore = "/home/runner/work/sample-godot-rust-app/sample-godot-rust-app/debug.keystore"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore_user = "androiddebugkey"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore_pass = "android"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/force_system_user = false' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/custom_build_sdk_path = ""' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/timestamping_authority_url = ""' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/shutdown_adb_on_exit = true' >> /home/runner/.config/godot/editor_settings-3.tres
+        sed -i '/export\/android\/adb/d' /home/runner/.config/godot/editor_settings-3.tres
+        sed -i '/export\/android\/jarsigner/d' /home/runner/.config/godot/editor_settings-3.tres
+        sed -i '/export\/android\/debug_keystore/d' /home/runner/.config/godot/editor_settings-3.tres
+        sed -i '/export\/android\/debug_keystore_user/d' /home/runner/.config/godot/editor_settings-3.tres
+        sed -i '/export\/android\/debug_keystore_pass/d' /home/runner/.config/godot/editor_settings-3.tres
+        cat /home/runner/.config/godot/editor_settings-3.tres
+    - name: Set new Android settings
+      run: |
+        sed -i '/\[resource\]/a export\/android\/adb = "/usr/local/lib/android/sdk/platform-tools/adb"' /home/runner/.config/godot/editor_settings-3.tres
+        sed -i '/\[resource\]/a export\/android\/jarsigner = "/usr/lib/jvm/zulu-8-azure-amd64/bin/jarsigner"' /home/runner/.config/godot/editor_settings-3.tres
+        sed -i '/\[resource\]/a export\/android\/debug_keystore = "/opt/debug.keystore"' /home/runner/.config/godot/editor_settings-3.tres
+        sed -i '/\[resource\]/a export\/android\/debug_user = "androiddebugkey"' /home/runner/.config/godot/editor_settings-3.tres
+        sed -i '/\[resource\]/a export\/android\/debug_pass = "android"' /home/runner/.config/godot/editor_settings-3.tres
         cat /home/runner/.config/godot/editor_settings-3.tres
     - name: Building for Android
-      run: godot -v --export "Android" ./build/android/sample_godot_rust_app.apk
+      run: godot -v --export "Android"
     - name: Troubleshooting Android settings
+      if: always()
       run: cat /home/runner/.config/godot/editor_settings-3.tres
     - name: Checking final build structure for troubleshooting
+      if: always()
       run: tree ./build
     - name: Upload Android game as artifact
+      if: always()
       uses: actions/upload-artifact@v1
       with:
         name: sample_godot_rust_app_android
