@@ -43,4 +43,10 @@ jobs:
         sudo mv templates/* ~/.local/share/godot/templates/3.2.1.stable
         sudo rm -f Godot_v3.2.1-stable_linux_headless.64.zip Godot_v3.2.1-stable_export_templates.tpz
         mkdir -p ./build/android
+    - name: Trying to locate editor settings
+      run: ls ~/.config
+    - name: Trying to locate editor settings deeper
+      run: ls ~/.config/godot
+    - name: Read editor settings
+      run: cat ~/.config/godot/editor_settings-3.tres
         
