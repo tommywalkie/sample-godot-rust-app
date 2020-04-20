@@ -25,11 +25,11 @@ jobs:
     - name: Install tree
       run: sudo apt-get install tree
     - name: Trying to locate jarsigner
-      run: ls $ANDROID_HOME
+      run: find -name jarsigner
     - name: Trying to locate adb
       run: ls $ANDROID_HOME/platform-tools
     - name: Trying to locate debug.keystore
-      run: find $JAVA_HOME debug.keystore
+      run: find -name debug.keystore
     - name: Setup environment
       run: |
         wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_linux_headless.64.zip
