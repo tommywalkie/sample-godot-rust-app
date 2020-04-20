@@ -26,9 +26,9 @@ jobs:
     - name: Check Rust toolchain
       run: rustup show
     - name: Build
-      run: cargo build --release --target stable-x86_64-unknown-linux-gnu
+      run: cargo build --release --target x86_64-unknown-linux-gnu
     - name: Run tests
-      run: cargo test --release --target stable-x86_64-unknown-linux-gnu
+      run: cargo test --release --target x86_64-unknown-linux-gnu
     - name: Upload GDNative library as artifact
       uses: actions/upload-artifact@v1
       with:
