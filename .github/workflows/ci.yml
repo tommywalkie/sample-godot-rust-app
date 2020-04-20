@@ -20,7 +20,7 @@ jobs:
   # This job is where we test Rust source code before targetting any platform
   rust-test:
     runs-on: ubuntu-latest
-    name: Building Rust source for Linux
+    name: Testing Rust source
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
