@@ -25,9 +25,9 @@ jobs:
     - name: Install tree
       run: sudo apt-get install tree
     - name: Trying to locate jarsigner
-      run: ls $ANDROID_HOME/sdk
+      run: ls $ANDROID_HOME
     - name: Trying to locate adb
-      run: ls $ANDROID_HOME/sdk/platform-tools
+      run: ls $ANDROID_HOME/platform-tools
     - name: Trying to locate debug.keystore
       run: find $JAVA_HOME debug.keystore
     - name: Setup environment
