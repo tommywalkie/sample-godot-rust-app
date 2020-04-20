@@ -239,6 +239,55 @@ jobs:
         name: sample_godot_rust_app_windows
         path: build/windows
 
+  # This job is where we build a Godot game for Android,
+  # using the libraries we built for ARMv7, AArch64 and i686 architectures
+  # godot-android:
+  #   runs-on: ubuntu-latest
+  #   needs: [rust-android-armv7, rust-android-aarch64, rust-android-i686]
+  #   name: Building Godot game for Android
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Setup environment
+  #     run: |
+  #       sudo apt-get install tree
+  #       wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_linux_headless.64.zip
+  #       wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_export_templates.tpz
+  #       mkdir ~/.cache
+  #       mkdir -p ~/.config/godot
+  #       mkdir -p ~/.local/share/godot/templates/3.2.1.stable
+  #       unzip Godot_v3.2.1-stable_linux_headless.64.zip
+  #       sudo mv Godot_v3.2.1-stable_linux_headless.64 /usr/local/bin/godot
+  #       unzip Godot_v3.2.1-stable_export_templates.tpz
+  #       sudo mv templates/* ~/.local/share/godot/templates/3.2.1.stable
+  #       sudo rm -f Godot_v3.2.1-stable_linux_headless.64.zip Godot_v3.2.1-stable_export_templates.tpz
+  #       mkdir -p ./build/android
+  #   - name: Download ARMv7 based GDNative library artifact
+  #     uses: actions/download-artifact@v1
+  #     with:
+  #       name: libcore.armv7.so
+  #       path: target/armv7-linux-androideabi/release
+  #   - name: Download AArch64 based GDNative library artifact
+  #     uses: actions/download-artifact@v1
+  #     with:
+  #       name: libcore.aarch64.so
+  #       path: target/aarch64-linux-android/release
+  #   - name: Download i686 based GDNative library artifact
+  #     uses: actions/download-artifact@v1
+  #     with:
+  #       name: libcore.i686.so
+  #       path: target/i686-linux-android/release
+  #   - name: Checking project structure for troubleshooting
+  #     run: tree
+  #   - name: Building for Android
+  #     run: godot -v --export "Windows Desktop" ./build/windows/sample_godot_rust_app.exe
+  #   - name: Checking final build structure for troubleshooting
+  #     run: tree ./build
+  #   - name: Upload Windows game as artifact
+  #     uses: actions/upload-artifact@v1
+  #     with:
+  #       name: sample_godot_rust_app_windows
+  #       path: build/windows
+
   # This job is where we create an official release in Github repo,
   # using the Godot games we built in 'godot-linux', 'godot-windows', etc.
   
