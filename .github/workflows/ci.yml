@@ -161,7 +161,7 @@ jobs:
         touch ~/.cargo/config
         echo '[target.i686-linux-android]' >> ~/.cargo/config
         echo 'ar = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android-ar"' >> ~/.cargo/config
-        echo 'linker = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android39-clang"' >> ~/.cargo/config
+        echo 'linker = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android29-clang"' >> ~/.cargo/config
         cat ~/.cargo/config
     - name: Build with Cargo
       run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target i686-linux-android
