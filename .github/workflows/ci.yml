@@ -17,18 +17,28 @@ on: push
 #     - 'export_presets.cfg'
 
 jobs:
-  # This job is where we compile Rust source code for Linux target
-  rust-linux:
+  # This job is where we test Rust source code before targetting any platform
+  rust-test:
     runs-on: ubuntu-latest
     name: Building Rust source for Linux
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
       run: rustup show
-    - name: Build
-      run: cargo build --release
     - name: Run tests
       run: cargo test --release
+
+  # This job is where we compile Rust source code for Linux target
+  rust-linux:
+    runs-on: ubuntu-latest
+    name: Building Rust source for Linux
+    needs: rust-test
+    steps:
+    - uses: actions/checkout@v2
+    - name: Check Rust toolchain
+      run: rustup show
+    - name: Build
+      run: cargo build --release
     - name: Upload GDNative library as artifact
       uses: actions/upload-artifact@v1
       with:
@@ -39,6 +49,7 @@ jobs:
   rust-windows:
     runs-on: ubuntu-latest
     name: Building Rust source for Windows
+    needs: rust-test
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
@@ -49,8 +60,6 @@ jobs:
       run: docker build -t my/x86_64-pc-windows-gnu:latest -f ./dockerfiles/x86_64-pc-windows-gnu.Dockerfile .
     - name: Build with Cross
       run: cross build --release --target x86_64-pc-windows-gnu
-    - name: Run tests with Cross
-      run: cross test --release --target x86_64-pc-windows-gnu
     - name: Upload GDNative library as artifact
       uses: actions/upload-artifact@v1
       with:
@@ -61,6 +70,7 @@ jobs:
   rust-android-armv7:
     runs-on: ubuntu-latest
     name: Building Rust source for Android ARMv7
+    needs: rust-test
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
@@ -91,15 +101,16 @@ jobs:
         name: libcore.armv7.so
         path: target/armv7-linux-androideabi/release/libcore.so
 
-  # This job is where we compile Rust source code for Android AARCH64 target
+  # This job is where we compile Rust source code for Android AArch64 target
   rust-android-aarch64:
     runs-on: ubuntu-latest
-    name: Building Rust source for Android aarch64
+    name: Building Rust source for Android AArch64
+    needs: rust-test
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
       run: rustup show
-    - name: Add aarch64 based Rust toolchain
+    - name: Add AArch64 based Rust toolchain
       run: rustup target add aarch64-linux-android
     - name: Setting up llvm-config
       run: sudo apt-get install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm -y
