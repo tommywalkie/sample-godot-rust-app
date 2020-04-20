@@ -22,14 +22,14 @@ jobs:
     name: Trying to setup Godot Engine to support Android exports
     steps:
     - uses: actions/checkout@v2
-    - name: Install locate
-      run: sudo apt-get install locate -y
     - name: Trying to locate jarsigner
       run: ls $JAVA_HOME/bin
     - name: Trying to locate adb
       run: ls $ANDROID_HOME/platform-tools
     - name: Trying to locate debug.keystore
-      run: locate –i debug.keystore
+      run: |
+        keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
+        ls
     - name: Setup environment
       run: |
         wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_linux_headless.64.zip
