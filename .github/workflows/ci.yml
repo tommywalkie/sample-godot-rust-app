@@ -33,7 +33,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: libcore.so
-        path: target/stable-x86_64-unknown-linux-gnu/release/libcore.so
+        path: target/x86_64-unknown-linux-gnu/release/libcore.so
 
   # This job is where we compile Rust source code for Windows target
   rust-windows:
