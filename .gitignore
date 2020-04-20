@@ -15,3 +15,5 @@ Cargo.lock
 *.log
 
 build/
+
+to-be-used-later/

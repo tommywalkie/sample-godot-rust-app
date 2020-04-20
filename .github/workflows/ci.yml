@@ -26,14 +26,14 @@ jobs:
     - name: Check Rust toolchain
       run: rustup show
     - name: Build
-      run: cargo build --release
+      run: cargo build --release --target stable-x86_64-unknown-linux-gnu
     - name: Run tests
-      run: cargo test --release
+      run: cargo test --release --target stable-x86_64-unknown-linux-gnu
     - name: Upload GDNative library as artifact
       uses: actions/upload-artifact@v1
       with:
         name: libcore.so
-        path: target/release/libcore.so
+        path: target/stable-x86_64-unknown-linux-gnu/release/libcore.so
 
   # This job is where we compile Rust source code for Windows target
   rust-windows:
@@ -57,8 +57,8 @@ jobs:
         name: core.dll
         path: target/x86_64-pc-windows-gnu/release/core.dll
 
-  # This job is where we compile Rust source code for Android target
-  rust-android:
+  # This job is where we compile Rust source code for Android ARMv7 target
+  rust-android-armv7:
     runs-on: ubuntu-latest
     name: Building Rust source for Android ARMv7
     steps:
@@ -85,13 +85,45 @@ jobs:
         cat ~/.cargo/config
     - name: Build with Cargo
       run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target armv7-linux-androideabi
-    # - name: Run tests with Cargo
-    #   run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo test --release --target armv7-linux-androideabi
     - name: Upload GDNative library as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: libcore.armv7-linux-androideabi.so
+        name: libcore.armv7.so
         path: target/armv7-linux-androideabi/release/libcore.so
+
+  # This job is where we compile Rust source code for Android AARCH64 target
+  rust-android-aarch64:
+    runs-on: ubuntu-latest
+    name: Building Rust source for Android aarch64
+    steps:
+    - uses: actions/checkout@v2
+    - name: Check Rust toolchain
+      run: rustup show
+    - name: Add aarch64 based Rust toolchain
+      run: rustup target add aarch64-linux-android
+    - name: Setting up llvm-config
+      run: sudo apt-get install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm -y
+    - name: Check if llvm-config exists
+      run: llvm-config --version
+    - name: Update apt-get
+      run: sudo apt-get update
+    - name: Install glibc-devel so GDNative can use the standard C libraries
+      run: sudo apt-get install g++-multilib gcc-multilib libc6-dev-i386 -y
+    - name: Registering a NDK based Clang linker to Cargo
+      run: |
+        ls ~/.cargo/  
+        touch ~/.cargo/config
+        echo '[target.aarch64-linux-android]' >> ~/.cargo/config
+        echo 'ar = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ar"' >> ~/.cargo/config
+        echo 'linker = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android29-clang"' >> ~/.cargo/config
+        cat ~/.cargo/config
+    - name: Build with Cargo
+      run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target aarch64-linux-android
+    - name: Upload GDNative library as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: libcore.aarch64.so
+        path: target/aarch64-linux-android/release/libcore.so
 
   # This job is where we build a Godot game for Linux,
   # using the Linux-compatible library we built in 'rust-linux'
@@ -119,7 +151,7 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: libcore.so
-        path: target/release
+        path: target/x86_64-pc-windows-gnu/release
     - name: Checking project structure for troubleshooting
       run: tree
     - name: Building for Linux/X11
@@ -158,7 +190,7 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: core.dll
-        path: target/release
+        path: target/x86_64-pc-windows-gnu/release
     - name: Checking project structure for troubleshooting
       run: tree
     - name: Building for Windows
