@@ -4,12 +4,18 @@ X11.64="res://target/stable-x86_64-unknown-linux-gnu/release/libcore.so"
 OSX.64="res://target/release/core.dylib"
 Windows.64="res://target/x86_64-pc-windows-gnu/release/core.dll"
 Android.armeabi-v7a="res://target/armv7-linux-androideabi/release/libcore.so"
+Android.arm64-v8a="res://target/aarch64-linux-android/release/libcore.so"
+Android.x86="res://target/i686-linux-android/release/libcore.so"
+Android.x86_64="res://target/aarch64-linux-android/release/libcore.so"
 
 [dependencies]
 
 X11.64=[  ]
 OSX.64=[  ]
 Android.armeabi-v7a=[  ]
+Android.arm64-v8a=[  ]
+Android.x86=[  ]
+Android.x86_64=[  ]
 
 [general]
 

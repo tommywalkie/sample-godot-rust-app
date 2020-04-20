@@ -17,26 +17,16 @@ on: push
 #     - 'export_presets.cfg'
 
 jobs:
-  # This job is where we test Rust source code before targetting any platform
-  rust-test:
+  # This job is where we test Rust source code and then compile it for Linux target
+  rust-linux:
     runs-on: ubuntu-latest
-    name: Testing Rust source
+    name: Building Rust source for Linux
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
       run: rustup show
     - name: Run tests
       run: cargo test --release
-
-  # This job is where we compile Rust source code for Linux target
-  rust-linux:
-    runs-on: ubuntu-latest
-    name: Building Rust source for Linux
-    needs: rust-test
-    steps:
-    - uses: actions/checkout@v2
-    - name: Check Rust toolchain
-      run: rustup show
     - name: Build
       run: cargo build --release
     - name: Upload GDNative library as artifact
@@ -49,7 +39,7 @@ jobs:
   rust-windows:
     runs-on: ubuntu-latest
     name: Building Rust source for Windows
-    needs: rust-test
+    needs: rust-linux
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
@@ -70,7 +60,7 @@ jobs:
   rust-android-armv7:
     runs-on: ubuntu-latest
     name: Building Rust source for Android ARMv7
-    needs: rust-test
+    needs: rust-linux
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
@@ -105,7 +95,7 @@ jobs:
   rust-android-aarch64:
     runs-on: ubuntu-latest
     name: Building Rust source for Android AArch64
-    needs: rust-test
+    needs: rust-linux
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
@@ -140,7 +130,7 @@ jobs:
   rust-android-i686:
     runs-on: ubuntu-latest
     name: Building Rust source for Android i686
-    needs: rust-test
+    needs: rust-linux
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
