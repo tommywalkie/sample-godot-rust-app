@@ -136,6 +136,41 @@ jobs:
         name: libcore.aarch64.so
         path: target/aarch64-linux-android/release/libcore.so
 
+  # This job is where we compile Rust source code for Android i686 target
+  rust-android-i686:
+    runs-on: ubuntu-latest
+    name: Building Rust source for Android i686
+    needs: rust-test
+    steps:
+    - uses: actions/checkout@v2
+    - name: Check Rust toolchain
+      run: rustup show
+    - name: Add i686 based Rust toolchain
+      run: rustup target add i686-linux-android
+    - name: Setting up llvm-config
+      run: sudo apt-get install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm -y
+    - name: Check if llvm-config exists
+      run: llvm-config --version
+    - name: Update apt-get
+      run: sudo apt-get update
+    - name: Install glibc-devel so GDNative can use the standard C libraries
+      run: sudo apt-get install g++-multilib gcc-multilib libc6-dev-i386 -y
+    - name: Registering a NDK based Clang linker to Cargo
+      run: |
+        ls ~/.cargo/  
+        touch ~/.cargo/config
+        echo '[target.i686-linux-android]' >> ~/.cargo/config
+        echo 'ar = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android-ar"' >> ~/.cargo/config
+        echo 'linker = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android39-clang"' >> ~/.cargo/config
+        cat ~/.cargo/config
+    - name: Build with Cargo
+      run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target i686-linux-android
+    - name: Upload GDNative library as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: libcore.i686.so
+        path: target/i686-linux-android/release/libcore.so
+
   # This job is where we build a Godot game for Linux,
   # using the Linux-compatible library we built in 'rust-linux'
   godot-linux:
