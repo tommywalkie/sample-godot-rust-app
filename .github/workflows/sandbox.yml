@@ -1,3 +1,4 @@
+# This workflow is intended for Ubuntu environment troubleshooting and common UNIX command testing 
 name: Sandbox
 
 # Uncomment if the workflow should be triggered by whatever push
@@ -22,6 +23,10 @@ jobs:
     name: Trying to setup Godot Engine to support Android exports
     steps:
     - uses: actions/checkout@v2
+    - name: Display $JAVA_HOME
+      run: echo $JAVA_HOME
+    - name: Display $ANDROID_HOME
+      run: echo $ANDROID_HOME
     - name: Trying to locate jarsigner
       run: ls $JAVA_HOME/bin
     - name: Trying to locate adb
