@@ -151,7 +151,7 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: libcore.so
-        path: target/x86_64-pc-windows-gnu/release
+        path: target/stable-x86_64-unknown-linux-gnu/release
     - name: Checking project structure for troubleshooting
       run: tree
     - name: Building for Linux/X11
