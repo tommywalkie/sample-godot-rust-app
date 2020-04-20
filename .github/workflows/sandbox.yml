@@ -24,12 +24,10 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install tree
       run: sudo apt-get install tree
-    - name: Check $ANDROID_HOME tree
-      run: tree $ANDROID_HOME
     - name: Trying to locate jarsigner
-      run: find $ANDROID_HOME jarsigner
+      run: ls $ANDROID_HOME/sdk
     - name: Trying to locate adb
-      run: find $ANDROID_HOME adb
+      run: ls $ANDROID_HOME/sdk/platform-tools
     - name: Trying to locate debug.keystore
       run: find $JAVA_HOME debug.keystore
     - name: Setup environment
