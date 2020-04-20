@@ -298,17 +298,11 @@ jobs:
     - name: Building for Android
       run: godot -v --export "Android" ./build/android/sample_godot_rust_app.apk
     - name: Troubleshooting Android settings
-      if: always()
       run: cat /home/runner/.config/godot/editor_settings-3.tres
-    - name: Building for Android (again, just making sure)
-      if: always()
-      run: godot -v --export "Android" ./build/android/sample_godot_rust_app.apk
     - name: Checking final build structure for troubleshooting
-      if: always()
       run: tree ./build
     - name: Upload Android game as artifact
       uses: actions/upload-artifact@v1
-      if: always()
       with:
         name: sample_godot_rust_app_android
         path: build/android
