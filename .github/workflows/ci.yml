@@ -39,7 +39,6 @@ jobs:
   rust-windows:
     runs-on: ubuntu-latest
     name: Building Rust source for Windows
-    needs: rust-linux
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
@@ -60,7 +59,6 @@ jobs:
   rust-android-armv7:
     runs-on: ubuntu-latest
     name: Building Rust source for Android ARMv7
-    needs: rust-linux
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
@@ -95,7 +93,6 @@ jobs:
   rust-android-aarch64:
     runs-on: ubuntu-latest
     name: Building Rust source for Android AArch64
-    needs: rust-linux
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
@@ -130,7 +127,6 @@ jobs:
   rust-android-i686:
     runs-on: ubuntu-latest
     name: Building Rust source for Android i686
-    needs: rust-linux
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
@@ -204,7 +200,7 @@ jobs:
   # using the Windows-compatible library we built in 'rust-windows'
   godot-windows:
     runs-on: ubuntu-latest
-    needs: rust-windows
+    needs: [rust-linux, rust-windows]
     name: Building Godot game for Windows
     steps:
     - uses: actions/checkout@v2
@@ -243,7 +239,7 @@ jobs:
   # using the libraries we built for ARMv7, AArch64 and i686 architectures
   godot-android:
     runs-on: ubuntu-latest
-    needs: [rust-android-armv7, rust-android-aarch64, rust-android-i686]
+    needs: [rust-linux, rust-android-armv7, rust-android-aarch64, rust-android-i686]
     name: Building Godot game for Android
     steps:
     - uses: actions/checkout@v2
