@@ -24,11 +24,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Try to build Docker image from myood/godot-ci-android-export 
-      run: docker build -t my/godot-ci-android-export:latest -f ./dockerfiles/godot-ci-android-export.Dockerfile .
+      run: docker build -t my/godot-ci:latest -f ./dockerfiles/godot-ci.Dockerfile .
     - name: Run Docker container
-      run: docker container run -d --name my_godot my/godot-ci-android-export:latest
+      run: docker container run -d --name my_godot_ci my/godot-ci:latest
     - name: Run command in Docker container
-      run: docker exec -it my_godot pwd
+      run: docker exec -it my_godot_ci pwd
     
         
         
