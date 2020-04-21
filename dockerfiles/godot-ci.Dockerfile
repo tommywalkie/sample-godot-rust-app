@@ -2,7 +2,7 @@ FROM alvrme/alpine-android:android-29
 LABEL author="artur@barichello.me, bemyak@gmail.com"
 ENV GODOT_VERSION "3.2"
 
-COPY ..
+COPY . .
 
 RUN ls
 
