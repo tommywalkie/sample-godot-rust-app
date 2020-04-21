@@ -258,6 +258,7 @@ jobs:
         unzip Godot_v3.2-stable_export_templates.tpz
         sudo mv templates/* ~/.local/share/godot/templates/3.2.stable
         sudo rm -f Godot_v3.2-stable_linux_headless.64.zip Godot_v3.2-stable_export_templates.tpz
+        sudo rm -d templates
         mkdir -v -p ./build/android
     - name: Download ARMv7 based GDNative library artifact
       uses: actions/download-artifact@v1
@@ -298,7 +299,7 @@ jobs:
         echo 'export/android/debug_keystore_pass = "android"' >> /home/runner/.config/godot/editor_settings-3.tres
         cat /home/runner/.config/godot/editor_settings-3.tres
     - name: Building for Android
-      run: godot -q --export "Android" ./build/android/sample_godot_rust_app.apk || true
+      run: godot project.godot -q --export "Android" ./build/android/sample_godot_rust_app.apk || true
     - name: Troubleshooting Android settings
       if: always()
       run: cat /home/runner/.config/godot/editor_settings-3.tres
