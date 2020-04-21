@@ -6,6 +6,7 @@ RUN apk add python3 py3-openssl tree zip \
     && wget -q https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip \
     && wget -q https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_export_templates.tpz \
     && mkdir ~/.cache \
+    && mkdir -p /build/android \
     && mkdir -p ~/.local/share/godot/templates/${GODOT_VERSION}.stable \
     && unzip Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip \
     && mv Godot_v${GODOT_VERSION}-stable_linux_headless.64 /usr/local/bin/godot \
