@@ -28,7 +28,7 @@ jobs:
     - name: Run Docker container
       run: docker container run -d -v ${pwd}/build:/build --name my_godot_ci my/godot-ci:latest
     - name: Run command in Docker container
-      run: docker exec -it my_godot_ci ls
+      run: docker exec my_godot_ci ls
     
         
         
