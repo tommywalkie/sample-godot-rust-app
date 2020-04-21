@@ -278,6 +278,16 @@ jobs:
       with:
         name: libcore.i686.so
         path: target/i686-linux-android/release
+    - name: Download GDNative library artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: core.dll
+        path: target/x86_64-pc-windows-gnu/release
+    - name: Download GDNative library artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: libcore.so
+        path: target/stable-x86_64-unknown-linux-gnu/release
     - name: Checking project structure for troubleshooting
       run: tree
     - name: Set new editor settings for Android
