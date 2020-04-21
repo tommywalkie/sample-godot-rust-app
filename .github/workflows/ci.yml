@@ -244,7 +244,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Generate debug keystore
-      run: keytool -genkey -v -keystore /opt/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
+      run: keytool -genkey -v -keystore /opt/debug.keystore -storepass android -alias androiddebugkey -keypass android -sigalg MD5withRSA -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
     - name: Setup environment
       run: |
         sudo apt-get install tree
