@@ -298,7 +298,7 @@ jobs:
         echo 'export/android/debug_keystore_pass = "android"' >> /home/runner/.config/godot/editor_settings-3.tres
         cat /home/runner/.config/godot/editor_settings-3.tres
     - name: Building for Android
-      run: godot --export "Android" ./build/android/sample_godot_rust_app.apk || true
+      run: godot -q --export "Android" ./build/android/sample_godot_rust_app.apk || true
     - name: Troubleshooting Android settings
       if: always()
       run: cat /home/runner/.config/godot/editor_settings-3.tres
