@@ -1,6 +1,8 @@
 # Sample Godot Rust App
 
-![CI status](https://github.com/tommywalkie/sample-godot-rust-app/workflows/CI/badge.svg) 
+![Linux CI](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Linux%20CI/badge.svg?branch=master) ![Windows CI](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Windows%20CI/badge.svg?branch=master) ![Android CI](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Android%20CI/badge.svg?branch=master) 
+
+![Linux Export](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Linux%20Export/badge.svg?branch=master) ![Windows Export](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Windows%20Export/badge.svg?branch=master) ![Android Export](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Android%20Export/badge.svg?branch=master)
 
 The main purpose of this repo is to help understanding how Rust and Godot Engine work and provide a well documented project boilerplate able to display some scenes and handle signals, using properly tested Rust based logic and automatic builds via Github Actions.
 
@@ -297,7 +299,7 @@ Here is the list of all known supported targets and possible clues about how to 
 | <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="28" width="28"/> | Windows | ✅ `stable-x86_64-pc-windows-msvc`<br />✅ `x86_64-pc-windows-gnu` |
 | <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="35" width="34"/> | Linux   | ✅ `stable-x86_64-unknown-linux-gnu`                          |
 | <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28"/> | MacOS   | ❓ Not tested yet (See [sample-godot-rust-app#9](https://github.com/tommywalkie/sample-godot-rust-app/issues/9)) |
-| <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="27" width="32"/> | Android | ❓ Might be possible ([godot-rust#238](https://github.com/GodotNativeTools/godot-rust/issues/238)) |
+| <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="27" width="32"/> | Android | ✅ `armv7-linux-androideabi`<br />✅ `aarch64-linux-android `<br />✅ `i686-linux-android ` |
 | <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28"/> | iOS     | ❓ Might be possible ([godot-rust#285](https://github.com/GodotNativeTools/godot-rust/issues/285)) |
 
 **Important notice** : We _may be_ careful when adding `export_presets.cfg` in a Git repository, especially if there is sensitive data, like keystore related settings when building for Android. This point needs to be further developed in the future.
@@ -339,7 +341,7 @@ This commonly happens when editing and then re-building Rust libraries while the
 - [x] Release a <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="21" width="21"/> Windows executable
 - [x] Release a <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="23" width="25"/> Linux executable
 - [ ] Release a <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="21" width="21"/> MacOS executable
-- [ ] Release an <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="21" width="21"/> Android application (_if possible_)
+- [x] Release an <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="21" width="21"/> Android application
 - [ ] Release an <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="21" width="21"/> iOS application (_if possible_)
 
 **Automatic releases**
