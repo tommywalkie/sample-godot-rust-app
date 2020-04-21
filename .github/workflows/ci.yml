@@ -237,50 +237,50 @@ jobs:
 
   # This job is where we build a Godot game for Android,
   # using the libraries we built for ARMv7, AArch64 and i686 architectures
-  godot-android:
-    runs-on: ubuntu-latest
-    needs: [rust-linux, rust-android-armv7, rust-android-aarch64, rust-android-i686]
-    name: Building Godot game for Android
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup environment
-      run: mkdir -v -p ./build/android
-    - name: Download ARMv7 based GDNative library artifact
-      uses: actions/download-artifact@v1
-      with:
-        name: libcore.armv7.so
-        path: target/armv7-linux-androideabi/release
-    - name: Download AArch64 based GDNative library artifact
-      uses: actions/download-artifact@v1
-      with:
-        name: libcore.aarch64.so
-        path: target/aarch64-linux-android/release
-    - name: Download i686 based GDNative library artifact
-      uses: actions/download-artifact@v1
-      with:
-        name: libcore.i686.so
-        path: target/i686-linux-android/release
-    - name: Download Windows GDNative library artifact
-      uses: actions/download-artifact@v1
-      with:
-        name: core.dll
-        path: target/x86_64-pc-windows-gnu/release
-    - name: Download Linux GDNative library artifact
-      uses: actions/download-artifact@v1
-      with:
-        name: libcore.so
-        path: target/stable-x86_64-unknown-linux-gnu/release
-    - name: Try to build Docker image from myood/godot-ci-android-export 
-      run: docker build -t my/godot-ci:latest -f ./dockerfiles/godot-ci.Dockerfile .
-    - name: Run Docker container
-      run: docker container run -d -v ${pwd}/build:/build --name my_godot_ci my/godot-ci:latest
-    - name: Checking project structure for troubleshooting
-      run: tree
-    - name: Building for Android
-      run: docker exec my_godot_ci godot -q --export "Android" /build/android/sample_godot_rust_app.apk
-    - name: Checking final build structure for troubleshooting
-      if: always()
-      run: tree ./build
+  # godot-android:
+  #   runs-on: ubuntu-latest
+  #   needs: [rust-linux, rust-android-armv7, rust-android-aarch64, rust-android-i686]
+  #   name: Building Godot game for Android
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Setup environment
+  #     run: mkdir -v -p ./build/android
+  #   - name: Download ARMv7 based GDNative library artifact
+  #     uses: actions/download-artifact@v1
+  #     with:
+  #       name: libcore.armv7.so
+  #       path: target/armv7-linux-androideabi/release
+  #   - name: Download AArch64 based GDNative library artifact
+  #     uses: actions/download-artifact@v1
+  #     with:
+  #       name: libcore.aarch64.so
+  #       path: target/aarch64-linux-android/release
+  #   - name: Download i686 based GDNative library artifact
+  #     uses: actions/download-artifact@v1
+  #     with:
+  #       name: libcore.i686.so
+  #       path: target/i686-linux-android/release
+  #   - name: Download Windows GDNative library artifact
+  #     uses: actions/download-artifact@v1
+  #     with:
+  #       name: core.dll
+  #       path: target/x86_64-pc-windows-gnu/release
+  #   - name: Download Linux GDNative library artifact
+  #     uses: actions/download-artifact@v1
+  #     with:
+  #       name: libcore.so
+  #       path: target/stable-x86_64-unknown-linux-gnu/release
+  #   - name: Try to build Docker image from myood/godot-ci-android-export 
+  #     run: docker build -t my/godot-ci:latest -f ./dockerfiles/godot-ci.Dockerfile .
+  #   - name: Run Docker container
+  #     run: docker container run -d -v ${pwd}/build:/build --name my_godot_ci my/godot-ci:latest
+  #   - name: Checking project structure for troubleshooting
+  #     run: tree
+  #   - name: Building for Android
+  #     run: docker exec my_godot_ci godot -q --export "Android" /build/android/sample_godot_rust_app.apk
+  #   - name: Checking final build structure for troubleshooting
+  #     if: always()
+  #     run: tree ./build
     # - name: Upload Android game as artifact
     #   if: always()
     #   uses: actions/upload-artifact@v1
