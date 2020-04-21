@@ -243,23 +243,8 @@ jobs:
     name: Building Godot game for Android
     steps:
     - uses: actions/checkout@v2
-    - name: Generate debug keystore
-      run: keytool -genkey -v -keystore /opt/debug.keystore -storepass android -alias androiddebugkey -keypass android -sigalg MD5withRSA -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
     - name: Setup environment
-      run: |
-        sudo apt-get install tree
-        wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_linux_headless.64.zip
-        wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_export_templates.tpz
-        mkdir ~/.cache
-        mkdir -p ~/.config/godot
-        mkdir -p ~/.local/share/godot/templates/3.2.1.stable
-        unzip Godot_v3.2.1-stable_linux_headless.64.zip
-        sudo mv Godot_v3.2.1-stable_linux_headless.64 /usr/local/bin/godot
-        unzip Godot_v3.2.1-stable_export_templates.tpz
-        sudo mv templates/* ~/.local/share/godot/templates/3.2.1.stable
-        sudo rm -f Godot_v3.2.1-stable_linux_headless.64.zip Godot_v3.2.1-stable_export_templates.tpz
-        sudo rm -d templates
-        mkdir -v -p ./build/android
+      run: mkdir -v -p ./build/android
     - name: Download ARMv7 based GDNative library artifact
       uses: actions/download-artifact@v1
       with:
@@ -275,43 +260,33 @@ jobs:
       with:
         name: libcore.i686.so
         path: target/i686-linux-android/release
-    - name: Download GDNative library artifact
+    - name: Download Windows GDNative library artifact
       uses: actions/download-artifact@v1
       with:
         name: core.dll
         path: target/x86_64-pc-windows-gnu/release
-    - name: Download GDNative library artifact
+    - name: Download Linux GDNative library artifact
       uses: actions/download-artifact@v1
       with:
         name: libcore.so
         path: target/stable-x86_64-unknown-linux-gnu/release
+    - name: Try to build Docker image from myood/godot-ci-android-export 
+      run: docker build -t my/godot-ci:latest -f ./dockerfiles/godot-ci.Dockerfile .
+    - name: Run Docker container
+      run: docker container run -d --name my_godot_ci my/godot-ci:latest
     - name: Checking project structure for troubleshooting
       run: tree
-    - name: Set new editor settings for Android
-      run: |
-        touch ~/.config/godot/editor_settings-3.tres
-        echo '[gd_resource type="EditorSettings" format=2]' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo '[resource]' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/adb = "/usr/local/lib/android/sdk/platform-tools/adb"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/jarsigner = "/usr/lib/jvm/zulu-8-azure-amd64/bin/jarsigner"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore = "/opt/debug.keystore"' >> /home/runner//.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore_user = "androiddebugkey"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore_pass = "android"' >> /home/runner/.config/godot/editor_settings-3.tres
-        cat /home/runner/.config/godot/editor_settings-3.tres
     - name: Building for Android
-      run: godot project.godot -q --export "Android" ./build/android/sample_godot_rust_app.apk || true
-    - name: Troubleshooting Android settings
-      if: always()
-      run: cat /home/runner/.config/godot/editor_settings-3.tres
+      run: docker exec -it my_godot_ci godot -q --export "Android" ~/build/android/sample_godot_rust_app.apk
     - name: Checking final build structure for troubleshooting
       if: always()
       run: tree ./build
-    - name: Upload Android game as artifact
-      if: always()
-      uses: actions/upload-artifact@v1
-      with:
-        name: sample_godot_rust_app_android
-        path: build/android
+    # - name: Upload Android game as artifact
+    #   if: always()
+    #   uses: actions/upload-artifact@v1
+    #   with:
+    #     name: sample_godot_rust_app_android
+    #     path: build/android
 
   # This job is where we create an official release in Github repo,
   # using the Godot games we built in 'godot-linux', 'godot-windows', etc.
