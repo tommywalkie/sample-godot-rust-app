@@ -1,0 +1,188 @@
+name: Android Export
+
+# Uncomment if the workflow should be triggered by whatever push
+on: push
+
+# Uncomment all these lines if the workflow should be triggered only for source code changes
+# on:
+#   push:
+#     paths:
+#     - 'dockerfiles/**'
+#     - 'assets/**'
+#     - 'scenes/**'
+#     - 'src/**'
+#     - 'project.godot'
+#     - 'default_env.tres'
+#     - 'Cargo.toml'
+#     - 'export_presets.cfg'
+
+jobs:
+  # This job is where we compile Rust source code for Android ARMv7 target
+  rust-android-armv7:
+    runs-on: ubuntu-latest
+    name: Building Rust source for Android ARMv7
+    steps:
+    - uses: actions/checkout@v2
+    - name: Check Rust toolchain
+      run: rustup show
+    - name: Add ARMv7 based Rust toolchain
+      run: rustup target add armv7-linux-androideabi
+    - name: Setting up llvm-config
+      run: sudo apt-get install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm -y
+    - name: Check if llvm-config exists
+      run: llvm-config --version
+    - name: Update apt-get
+      run: sudo apt-get update
+    - name: Install glibc-devel so GDNative can use the standard C libraries
+      run: sudo apt-get install g++-multilib gcc-multilib libc6-dev-i386 -y
+    - name: Registering a NDK based Clang linker to Cargo
+      run: |
+        ls ~/.cargo/  
+        touch ~/.cargo/config
+        echo '[target.armv7-linux-androideabi]' >> ~/.cargo/config
+        echo 'ar = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/arm-linux-androideabi-ar"' >> ~/.cargo/config
+        echo 'linker = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi29-clang"' >> ~/.cargo/config
+        cat ~/.cargo/config
+    - name: Build with Cargo
+      run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target armv7-linux-androideabi
+    - name: Upload GDNative library as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: libcore.armv7.so
+        path: target/armv7-linux-androideabi/release/libcore.so
+        
+  # This job is where we compile Rust source code for Android AArch64 target
+  rust-android-aarch64:
+    runs-on: ubuntu-latest
+    name: Building Rust source for Android AArch64
+    steps:
+    - uses: actions/checkout@v2
+    - name: Check Rust toolchain
+      run: rustup show
+    - name: Add AArch64 based Rust toolchain
+      run: rustup target add aarch64-linux-android
+    - name: Setting up llvm-config
+      run: sudo apt-get install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm -y
+    - name: Check if llvm-config exists
+      run: llvm-config --version
+    - name: Update apt-get
+      run: sudo apt-get update
+    - name: Install glibc-devel so GDNative can use the standard C libraries
+      run: sudo apt-get install g++-multilib gcc-multilib libc6-dev-i386 -y
+    - name: Registering a NDK based Clang linker to Cargo
+      run: |
+        ls ~/.cargo/  
+        touch ~/.cargo/config
+        echo '[target.aarch64-linux-android]' >> ~/.cargo/config
+        echo 'ar = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ar"' >> ~/.cargo/config
+        echo 'linker = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android29-clang"' >> ~/.cargo/config
+        cat ~/.cargo/config
+    - name: Build with Cargo
+      run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target aarch64-linux-android
+    - name: Upload GDNative library as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: libcore.aarch64.so
+        path: target/aarch64-linux-android/release/libcore.so
+
+  # This job is where we compile Rust source code for Android i686 target
+  rust-android-i686:
+    runs-on: ubuntu-latest
+    name: Building Rust source for Android i686
+    steps:
+    - uses: actions/checkout@v2
+    - name: Check Rust toolchain
+      run: rustup show
+    - name: Add i686 based Rust toolchain
+      run: rustup target add i686-linux-android
+    - name: Setting up llvm-config
+      run: sudo apt-get install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm -y
+    - name: Check if llvm-config exists
+      run: llvm-config --version
+    - name: Update apt-get
+      run: sudo apt-get update
+    - name: Install glibc-devel so GDNative can use the standard C libraries
+      run: sudo apt-get install g++-multilib gcc-multilib libc6-dev-i386 -y
+    - name: Registering a NDK based Clang linker to Cargo
+      run: |
+        ls ~/.cargo/  
+        touch ~/.cargo/config
+        echo '[target.i686-linux-android]' >> ~/.cargo/config
+        echo 'ar = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android-ar"' >> ~/.cargo/config
+        echo 'linker = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android29-clang"' >> ~/.cargo/config
+        cat ~/.cargo/config
+    - name: Build with Cargo
+      run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target i686-linux-android
+    - name: Upload GDNative library as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: libcore.i686.so
+        path: target/i686-linux-android/release/libcore.so
+
+  # This job is where we build a Godot game for Android,
+  # using the libraries we built for ARMv7, AArch64 and i686 architectures
+  godot-android:
+    runs-on: ubuntu-latest
+    needs: [rust-android-armv7, rust-android-aarch64, rust-android-i686]
+    name: Building Godot game for Android
+    steps:
+    - uses: actions/checkout@v2
+    - name: Generate debug keystore
+      run: keytool -genkey -v -keystore /opt/debug.keystore -storepass android -alias androiddebugkey -keypass android -sigalg MD5withRSA -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
+    - name: Setup environment
+      run: |
+        sudo apt-get install tree
+        wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_linux_headless.64.zip
+        wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_export_templates.tpz
+        mkdir ~/.cache
+        mkdir -p ~/.config/godot
+        mkdir -p ~/.local/share/godot/templates/3.2.1.stable
+        unzip Godot_v3.2.1-stable_linux_headless.64.zip
+        sudo mv Godot_v3.2.1-stable_linux_headless.64 /usr/local/bin/godot
+        unzip Godot_v3.2.1-stable_export_templates.tpz
+        sudo mv templates/* ~/.local/share/godot/templates/3.2.1.stable
+        sudo rm -f Godot_v3.2.1-stable_linux_headless.64.zip Godot_v3.2.1-stable_export_templates.tpz
+        sudo rm -d templates
+        mkdir -v -p ./build/android
+    - name: Download ARMv7 based GDNative library artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: libcore.armv7.so
+        path: target/armv7-linux-androideabi/release
+    - name: Download AArch64 based GDNative library artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: libcore.aarch64.so
+        path: target/aarch64-linux-android/release
+    - name: Download i686 based GDNative library artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: libcore.i686.so
+        path: target/i686-linux-android/release
+    - name: Checking project structure for troubleshooting
+      run: tree
+    - name: Set new editor settings for Android
+      run: |
+        touch ~/.config/godot/editor_settings-3.tres
+        echo '[gd_resource type="EditorSettings" format=2]' >> /home/runner/.config/godot/editor_settings-3.tres
+        echo '[resource]' >> /home/runner/.config/godot/editor_settings-3.tres
+        echo 'export/android/adb = "/usr/local/lib/android/sdk/platform-tools/adb"' >> /home/runner/.config/godot/editor_settings-3.tres
+        echo 'export/android/jarsigner = "/usr/lib/jvm/zulu-8-azure-amd64/bin/jarsigner"' >> /home/runner/.config/godot/editor_settings-3.tres
+        echo 'export/android/debug_keystore = "/opt/debug.keystore"' >> /home/runner//.config/godot/editor_settings-3.tres
+        echo 'export/android/debug_keystore_user = "androiddebugkey"' >> /home/runner/.config/godot/editor_settings-3.tres
+        echo 'export/android/debug_keystore_pass = "android"' >> /home/runner/.config/godot/editor_settings-3.tres
+        cat /home/runner/.config/godot/editor_settings-3.tres
+    - name: Building for Android
+      run: godot project.godot -q --export "Android" ./build/android/sample_godot_rust_app.apk || true
+    - name: Troubleshooting Android settings
+      if: always()
+      run: cat /home/runner/.config/godot/editor_settings-3.tres
+    - name: Checking final build structure for troubleshooting
+      if: always()
+      run: tree ./build
+    - name: Upload Android game as artifact
+      if: always()
+      uses: actions/upload-artifact@v1
+      with:
+        name: sample_godot_rust_app_android
+        path: build/android
