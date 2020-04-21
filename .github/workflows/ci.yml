@@ -277,7 +277,7 @@ jobs:
     - name: Checking project structure for troubleshooting
       run: tree
     - name: Building for Android
-      run: docker exec -it my_godot_ci godot -q --export "Android" ~/build/android/sample_godot_rust_app.apk
+      run: docker exec -it my_godot_ci godot -q --export "Android" /build/android/sample_godot_rust_app.apk
     - name: Checking final build structure for troubleshooting
       if: always()
       run: tree ./build
