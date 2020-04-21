@@ -2,10 +2,6 @@ FROM alvrme/alpine-android:android-29
 LABEL author="artur@barichello.me, bemyak@gmail.com"
 ENV GODOT_VERSION "3.2"
 
-COPY . .
-
-RUN ls
-
 RUN apk add python3 py3-openssl zip \
     && wget -q https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip \
     && wget -q https://downloads.tuxfamily.org/godotengine/${GODOT_VERSION}/Godot_v${GODOT_VERSION}-stable_export_templates.tpz \
@@ -17,7 +13,7 @@ RUN apk add python3 py3-openssl zip \
     && mv templates/* ~/.local/share/godot/templates/${GODOT_VERSION}.stable \
     && rm -f Godot_v${GODOT_VERSION}-stable_export_templates.tpz Godot_v${GODOT_VERSION}-stable_linux_headless.64.zip \
     # Generate keystore
-    && keytool -keyalg RSA -genkeypair -alias androiddebugkey -keypass android -keystore /opt/debug.keystore -storepass android -dname "CN=Android Debug,O=Android,C=US" -validity 9999 \
+    && keytool -genkey -v -keystore /opt/debug.keystore -storepass android -alias androiddebugkey -keypass android -sigalg MD5withRSA -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug" \
     # First initialization
     && godot -q \
     # Delete default settings if they exist
@@ -32,3 +28,7 @@ RUN apk add python3 py3-openssl zip \
     && sed -i '/\[resource\]/a export\/android\/debug_keystore = "/opt/debug.keystore"' /root/.config/godot/editor_settings-3.tres \
     && sed -i '/\[resource\]/a export\/android\/debug_user = "androiddebugkey"' /root/.config/godot/editor_settings-3.tres \
     && sed -i '/\[resource\]/a export\/android\/debug_pass = "android"' /root/.config/godot/editor_settings-3.tres
+
+COPY . .
+
+RUN ls
