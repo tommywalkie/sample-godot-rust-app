@@ -285,9 +285,9 @@ jobs:
         touch ~/.config/godot/editor_settings-3.tres
         echo '[gd_resource type="EditorSettings" format=2]' >> /home/runner/.config/godot/editor_settings-3.tres
         echo '[resource]' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/adb = "$ANDROID_HOME/platform-tools/adb"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/jarsigner = "$JAVA_HOME/bin/jarsigner"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore = "/home/runner/debug.keystore"' >> /home/runner//.config/godot/editor_settings-3.tres
+        echo 'export/android/adb = "/usr/local/lib/android/sdk/platform-tools/adb"' >> /home/runner/.config/godot/editor_settings-3.tres
+        echo 'export/android/jarsigner = "/usr/lib/jvm/zulu-8-azure-amd64/bin/jarsigner"' >> /home/runner/.config/godot/editor_settings-3.tres
+        echo 'export/android/debug_keystore = "/opt/debug.keystore"' >> /home/runner//.config/godot/editor_settings-3.tres
         echo 'export/android/debug_keystore_user = "androiddebugkey"' >> /home/runner/.config/godot/editor_settings-3.tres
         echo 'export/android/debug_keystore_pass = "android"' >> /home/runner/.config/godot/editor_settings-3.tres
         cat /home/runner/.config/godot/editor_settings-3.tres
