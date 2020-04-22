@@ -10,8 +10,6 @@ jobs:
     name: Building Rust source for Windows
     steps:
     - uses: actions/checkout@v2
-    - name: Check Rust toolchain
-      run: rustup show
     - name: Install Cross
       run: cargo install cross
     - name: Build custom Docker image for x86_64-pc-windows-gnu toolchain with LLVM

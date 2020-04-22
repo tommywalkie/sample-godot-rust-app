@@ -169,18 +169,23 @@ jobs:
     - name: Download ARMv7 based GDNative library artifact
       uses: actions/download-artifact@v1
       with:
-        name: libcore.armv7.so
+        name: libcore.arm.so
         path: target/armv7-linux-androideabi/release
     - name: Download AArch64 based GDNative library artifact
       uses: actions/download-artifact@v1
       with:
-        name: libcore.aarch64.so
+        name: libcore.arm64.so
         path: target/aarch64-linux-android/release
     - name: Download i686 based GDNative library artifact
       uses: actions/download-artifact@v1
       with:
-        name: libcore.i686.so
+        name: libcore.x86.so
         path: target/i686-linux-android/release
+    - name: Download x86_64 based GDNative library artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: libcore.x86_64.so
+        path: target/x86_64-linux-android/release
     - name: Checking project structure for troubleshooting
       run: tree
     - name: Set new editor settings for Android

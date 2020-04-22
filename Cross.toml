@@ -3,3 +3,9 @@
 
 [target.x86_64-pc-windows-gnu]
 image = "my/x86_64-pc-windows-gnu:latest"
+
+# Use a custom Docker image with LLVM installed
+# to compile for MacOS from Linux
+
+[target.x86_64-apple-darwin]
+image = "my/x86_64-apple-darwin:latest"
