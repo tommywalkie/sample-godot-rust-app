@@ -234,8 +234,10 @@ jobs:
     #     sudo rm -f Godot_v3.2.1-stable_linux_headless.64.zip Godot_v3.2.1-stable_export_templates.tpz
     #     sudo rm -d templates
     #     mkdir -v -p ./build
-    - name: Prepare a directory for build
-      run: mkdir -v -p ./build
+    - name: Setup a few things
+      run: |
+        sudo apt-get install tree
+        mkdir -v -p ./build
     - name: Download ARMv7 based GDNative library artifact
       uses: actions/download-artifact@v1
       with:
