@@ -1,20 +1,8 @@
+# Isolated CI/CD workflow for Linux exports via Godot CLI, 
+# using GDNative/Rust libraries that need to be built.
 name: Linux Export
 
-# Uncomment if the workflow should be triggered by whatever push
 on: push
-
-# Uncomment all these lines if the workflow should be triggered only for source code changes
-# on:
-#   push:
-#     paths:
-#     - 'dockerfiles/**'
-#     - 'assets/**'
-#     - 'scenes/**'
-#     - 'src/**'
-#     - 'project.godot'
-#     - 'default_env.tres'
-#     - 'Cargo.toml'
-#     - 'export_presets.cfg'
 
 jobs:
   # This job is where we test Rust source code and then compile it for Linux target

@@ -1,0 +1,25 @@
+# Isolated CI/CD workflow for building GDNative/Rust libraries for MacOS target
+name: MacOS CI
+
+on: push
+
+jobs:
+  # This job is where we test Rust source code and then compile it for MacOS target
+  rust-macos:
+    runs-on: ubuntu-latest
+    name: Building Rust source for MacOS
+    steps:
+    - uses: actions/checkout@v2
+    - name: Check Rust toolchain
+      run: rustup show
+    - name: Add MacOS based Rust toolchain
+      run: rustup target add x86_64-apple-darwin
+    - name: Run tests
+      run: cargo test --release --target x86_64-apple-darwin
+    - name: Build
+      run: cargo build --release --target x86_64-apple-darwin
+    - name: Upload GDNative library as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: libcore.dylib
+        path: target/release/libcore.dylib

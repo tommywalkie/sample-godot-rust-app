@@ -1,3 +1,5 @@
+# This CI/CD workflow is intended to build Rust source and export Godot game
+# for multiple platforms at once, much easier to handle for releases.
 name: CI
 
 # Uncomment if the workflow should be triggered by whatever push
@@ -66,7 +68,7 @@ jobs:
         key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
 
   # This job is where we compile Rust source code for Android ARMv7 target
-  rust-android-armv7:
+  rust-android-arm:
     runs-on: ubuntu-latest
     name: Building Rust source for Android ARMv7
     steps:
@@ -96,18 +98,13 @@ jobs:
     - name: Upload GDNative library as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: libcore.armv7.so
+        name: libcore.arm.so
         path: target/armv7-linux-androideabi/release/libcore.so
-    - name: Cache cargo build
-      uses: actions/cache@v1
-      with:
-        path: target
-        key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
-
-  # This job is where we compile Rust source code for Android AArch64 target
-  rust-android-aarch64:
+        
+  # This job is where we compile Rust source code for Android ARM64 target
+  rust-android-arm64:
     runs-on: ubuntu-latest
-    name: Building Rust source for Android AArch64
+    name: Building Rust source for Android ARM64
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
@@ -135,18 +132,13 @@ jobs:
     - name: Upload GDNative library as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: libcore.aarch64.so
+        name: libcore.arm64.so
         path: target/aarch64-linux-android/release/libcore.so
-    - name: Cache cargo build
-      uses: actions/cache@v1
-      with:
-        path: target
-        key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
 
-  # This job is where we compile Rust source code for Android i686 target
-  rust-android-i686:
+  # This job is where we compile Rust source code for Android x86 target
+  rust-android-x86:
     runs-on: ubuntu-latest
-    name: Building Rust source for Android i686
+    name: Building Rust source for Android x86
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
@@ -174,13 +166,42 @@ jobs:
     - name: Upload GDNative library as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: libcore.i686.so
+        name: libcore.x86.so
         path: target/i686-linux-android/release/libcore.so
-    - name: Cache cargo build
-      uses: actions/cache@v1
+
+  # This job is where we compile Rust source code for Android x86_64 target
+  rust-android-x86_64:
+    runs-on: ubuntu-latest
+    name: Building Rust source for Android x86_64
+    steps:
+    - uses: actions/checkout@v2
+    - name: Check Rust toolchain
+      run: rustup show
+    - name: Add i686 based Rust toolchain
+      run: rustup target add x86_64-linux-android
+    - name: Setting up llvm-config
+      run: sudo apt-get install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm -y
+    - name: Check if llvm-config exists
+      run: llvm-config --version
+    - name: Update apt-get
+      run: sudo apt-get update
+    - name: Install glibc-devel so GDNative can use the standard C libraries
+      run: sudo apt-get install g++-multilib gcc-multilib libc6-dev-i386 -y
+    - name: Registering a NDK based Clang linker to Cargo
+      run: |
+        ls ~/.cargo/  
+        touch ~/.cargo/config
+        echo '[target.x86_64-linux-android]' >> ~/.cargo/config
+        echo 'ar = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/x86_64-linux-android-ar"' >> ~/.cargo/config
+        echo 'linker = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/x86_64-linux-android29-clang"' >> ~/.cargo/config
+        cat ~/.cargo/config
+    - name: Build with Cargo
+      run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target x86_64-linux-android
+    - name: Upload GDNative library as artifact
+      uses: actions/upload-artifact@v1
       with:
-        path: target
-        key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+        name: libcore.x86_64.so
+        path: target/x86_64-linux-android/release/libcore.so
 
   # This job is where we build a Godot game for Linux,
   # using the Linux-compatible library we built in 'rust-linux'
@@ -264,7 +285,7 @@ jobs:
   # using the libraries we built for ARMv7, AArch64 and i686 architectures
   # godot-android:
   #   runs-on: ubuntu-latest
-  #   needs: [rust-linux, rust-android-armv7, rust-android-aarch64, rust-android-i686]
+  #   needs: [rust-linux, rust-android-arm, rust-android-arm64, rust-android-x86, rust-android-x86_64]
   #   name: Building Godot game for Android
   #   steps:
   #   - uses: actions/checkout@v2

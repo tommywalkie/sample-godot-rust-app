@@ -1,8 +1,8 @@
 # Sample Godot Rust App
 
-![Linux CI](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Linux%20CI/badge.svg?branch=master) ![Windows CI](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Windows%20CI/badge.svg?branch=master) ![Android CI](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Android%20CI/badge.svg?branch=master) 
+![Linux CI](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Linux%20CI/badge.svg?branch=master) ![Windows CI](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Windows%20CI/badge.svg?branch=master) ![MacOS CI](https://github.com/tommywalkie/sample-godot-rust-app/workflows/MacOS%20CI/badge.svg?branch=master) ![Android CI](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Android%20CI/badge.svg?branch=master) ![iOS CI](https://github.com/tommywalkie/sample-godot-rust-app/workflows/iOS%20CI/badge.svg?branch=master) 
 
-![Linux Export](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Linux%20Export/badge.svg?branch=master) ![Windows Export](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Windows%20Export/badge.svg?branch=master) ![Android Export](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Android%20Export/badge.svg?branch=master)
+![Linux Export](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Linux%20Export/badge.svg?branch=master) ![Windows Export](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Windows%20Export/badge.svg?branch=master) ![MacOS Export](https://github.com/tommywalkie/sample-godot-rust-app/workflows/MacOS%20Export/badge.svg?branch=master) ![Android Export](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Android%20Export/badge.svg?branch=master) ![iOS Export](https://github.com/tommywalkie/sample-godot-rust-app/workflows/iOS%20Export/badge.svg?branch=master)
 
 The main purpose of this repo is to help understanding how Rust and Godot Engine work and provide a well documented project boilerplate able to display some scenes and handle signals, using properly tested Rust based logic and automatic builds via Github Actions.
 
@@ -298,7 +298,7 @@ Here is the list of all known supported targets and possible clues about how to 
 | ------------------------------------------------------------ | ------- | ------------------------------------------------------------ |
 | <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="28" width="28"/> | Windows | ✅ `stable-x86_64-pc-windows-msvc`<br />✅ `x86_64-pc-windows-gnu` |
 | <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="35" width="34"/> | Linux   | ✅ `stable-x86_64-unknown-linux-gnu`                          |
-| <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28"/> | MacOS   | ❓ Not tested yet (See [sample-godot-rust-app#9](https://github.com/tommywalkie/sample-godot-rust-app/issues/9)) |
+| <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28"/> | MacOS   | ❓ `x86_64-apple-darwin` |
 | <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="27" width="32"/> | Android | ✅ `armv7-linux-androideabi`<br />✅ `aarch64-linux-android `<br />✅ `i686-linux-android ` |
 | <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28"/> | iOS     | ❓ Might be possible ([godot-rust#285](https://github.com/GodotNativeTools/godot-rust/issues/285)) |
 
@@ -330,7 +330,7 @@ This commonly happens when editing and then re-building Rust libraries while the
 **Rust/GDNative showcase**
 
 - [x] Create/Interact with Godot nodes from Rust
-- [ ] Send / handle signals between Rust and GDScript
+- [x] Handle signals between Rust and GDScript
 - [x] Switch Godot scenes via Rust/GDScript
 - [ ] Interact with assets like images via Rust/GDScript
 - [ ] Make HTTP requests via Rust
