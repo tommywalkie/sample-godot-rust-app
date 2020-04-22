@@ -32,4 +32,4 @@ RUN apk add python3 py3-openssl tree zip \
 
 COPY . .
 
-RUN ls
+CMD tail -f /dev/null

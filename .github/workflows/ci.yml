@@ -233,7 +233,7 @@ jobs:
         sudo mv templates/* ~/.local/share/godot/templates/3.2.1.stable
         sudo rm -f Godot_v3.2.1-stable_linux_headless.64.zip Godot_v3.2.1-stable_export_templates.tpz
         sudo rm -d templates
-        mkdir -v -p ./build/android
+        mkdir -v -p ./build
     - name: Download ARMv7 based GDNative library artifact
       uses: actions/download-artifact@v1
       with:
@@ -256,25 +256,31 @@ jobs:
         path: target/x86_64-linux-android/release
     - name: Checking project structure for troubleshooting
       run: tree
-    - name: Set new editor settings for Android
-      run: |
-        touch ~/.config/godot/editor_settings-3.tres
-        echo '[gd_resource type="EditorSettings" format=2]' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo '[resource]' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/adb = "/usr/local/lib/android/sdk/platform-tools/adb"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/jarsigner = "/usr/lib/jvm/zulu-8-azure-amd64/bin/jarsigner"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore = "/opt/debug.keystore"' >> /home/runner//.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore_user = "androiddebugkey"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore_pass = "android"' >> /home/runner/.config/godot/editor_settings-3.tres
-        cat /home/runner/.config/godot/editor_settings-3.tres
-    - name: Building for Android
-      run: godot project.godot -q --export "Android" ./build/android/sample_godot_rust_app.apk
-    - name: Troubleshooting Android settings
-      if: always()
-      run: cat /home/runner/.config/godot/editor_settings-3.tres
-    - name: Checking final build structure for troubleshooting
-      if: always()
-      run: tree ./build
+    - name: Try to build Docker image from myood/godot-ci-android-export 
+      run: docker build -t my/godot-ci:latest -f ./dockerfiles/godot-ci.Dockerfile .
+    - name: Run the container
+      run: docker run -d -v ${pwd}/build:/build --name godot-ci my/godot-ci:latest
+    - name: Try to export for Android
+      run: docker exec godot-ci godot --export "Android" /build/android/sample_godot_rust_app.apk
+    # - name: Set new editor settings for Android
+    #   run: |
+    #     touch ~/.config/godot/editor_settings-3.tres
+    #     echo '[gd_resource type="EditorSettings" format=2]' >> /home/runner/.config/godot/editor_settings-3.tres
+    #     echo '[resource]' >> /home/runner/.config/godot/editor_settings-3.tres
+    #     echo 'export/android/adb = "/usr/local/lib/android/sdk/platform-tools/adb"' >> /home/runner/.config/godot/editor_settings-3.tres
+    #     echo 'export/android/jarsigner = "/usr/lib/jvm/zulu-8-azure-amd64/bin/jarsigner"' >> /home/runner/.config/godot/editor_settings-3.tres
+    #     echo 'export/android/debug_keystore = "/opt/debug.keystore"' >> /home/runner//.config/godot/editor_settings-3.tres
+    #     echo 'export/android/debug_keystore_user = "androiddebugkey"' >> /home/runner/.config/godot/editor_settings-3.tres
+    #     echo 'export/android/debug_keystore_pass = "android"' >> /home/runner/.config/godot/editor_settings-3.tres
+    #     cat /home/runner/.config/godot/editor_settings-3.tres
+    # - name: Building for Android
+    #   run: godot project.godot -q --export "Android" ./build/android/sample_godot_rust_app.apk
+    # - name: Troubleshooting Android settings
+    #   if: always()
+    #   run: cat /home/runner/.config/godot/editor_settings-3.tres
+    # - name: Checking final build structure for troubleshooting
+    #   if: always()
+    #   run: tree ./build
     - name: Upload Android game as artifact
       if: always()
       uses: actions/upload-artifact@v1
