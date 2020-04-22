@@ -10,16 +10,18 @@ jobs:
     name: Building Rust source for MacOS
     steps:
     - uses: actions/checkout@v2
-    - name: Install Cross
-      run: cargo install cross
-    - name: Build custom Docker image for x86_64-apple-darwin toolchain with LLVM
-      run: docker build -t my/x86_64-apple-darwin:latest -f ./dockerfiles/x86_64-apple-darwin.Dockerfile .
-    - name: Test with Cross
-      run: cross test --release --target x86_64-apple-darwin
-    - name: Build with Cross
-      run: cross build --release --target x86_64-apple-darwin
-    - name: Upload GDNative library as artifact
-      uses: actions/upload-artifact@v1
-      with:
-        name: libcore.dylib
-        path: target/release/libcore.dylib
+    - name: Return false
+      run: false
+    # - name: Install Cross
+    #   run: cargo install cross
+    # - name: Build custom Docker image for x86_64-apple-darwin toolchain with LLVM
+    #   run: docker build -t my/x86_64-apple-darwin:latest -f ./dockerfiles/x86_64-apple-darwin.Dockerfile .
+    # - name: Test with Cross
+    #   run: cross test --release --target x86_64-apple-darwin
+    # - name: Build with Cross
+    #   run: cross build --release --target x86_64-apple-darwin
+    # - name: Upload GDNative library as artifact
+    #   uses: actions/upload-artifact@v1
+    #   with:
+    #     name: libcore.dylib
+    #     path: target/release/libcore.dylib

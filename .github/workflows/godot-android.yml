@@ -5,16 +5,16 @@ name: Android Export
 on: push
 
 jobs:
-  # This job is where we compile Rust source code for Android ARMv7 target
-  rust-android-arm:
+  # This job is where we compile Rust source code for Android targets
+  rust-android:
     runs-on: ubuntu-latest
-    name: Building Rust source for Android ARMv7
+    name: Building Rust source for Android x86_64
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
       run: rustup show
-    - name: Add ARMv7 based Rust toolchain
-      run: rustup target add armv7-linux-androideabi
+    - name: Add i686 based Rust toolchain
+      run: rustup target add armv7-linux-androideabi aarch64-linux-android i686-linux-android x86_64-linux-android
     - name: Setting up llvm-config
       run: sudo apt-get install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm -y
     - name: Check if llvm-config exists
@@ -30,110 +30,38 @@ jobs:
         echo '[target.armv7-linux-androideabi]' >> ~/.cargo/config
         echo 'ar = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/arm-linux-androideabi-ar"' >> ~/.cargo/config
         echo 'linker = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi29-clang"' >> ~/.cargo/config
+        echo '[target.aarch64-linux-android]' >> ~/.cargo/config
+        echo 'ar = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ar"' >> ~/.cargo/config
+        echo 'linker = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android29-clang"' >> ~/.cargo/config
+        echo '[target.i686-linux-android]' >> ~/.cargo/config
+        echo 'ar = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android-ar"' >> ~/.cargo/config
+        echo 'linker = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android29-clang"' >> ~/.cargo/config
+        echo '[target.x86_64-linux-android]' >> ~/.cargo/config
+        echo 'ar = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/x86_64-linux-android-ar"' >> ~/.cargo/config
+        echo 'linker = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/x86_64-linux-android29-clang"' >> ~/.cargo/config
         cat ~/.cargo/config
-    - name: Build with Cargo
+    - name: Build with Cargo for ARMv7
       run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target armv7-linux-androideabi
     - name: Upload GDNative library as artifact
       uses: actions/upload-artifact@v1
       with:
         name: libcore.arm.so
         path: target/armv7-linux-androideabi/release/libcore.so
-        
-  # This job is where we compile Rust source code for Android ARM64 target
-  rust-android-arm64:
-    runs-on: ubuntu-latest
-    name: Building Rust source for Android ARM64
-    steps:
-    - uses: actions/checkout@v2
-    - name: Check Rust toolchain
-      run: rustup show
-    - name: Add AArch64 based Rust toolchain
-      run: rustup target add aarch64-linux-android
-    - name: Setting up llvm-config
-      run: sudo apt-get install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm -y
-    - name: Check if llvm-config exists
-      run: llvm-config --version
-    - name: Update apt-get
-      run: sudo apt-get update
-    - name: Install glibc-devel so GDNative can use the standard C libraries
-      run: sudo apt-get install g++-multilib gcc-multilib libc6-dev-i386 -y
-    - name: Registering a NDK based Clang linker to Cargo
-      run: |
-        ls ~/.cargo/  
-        touch ~/.cargo/config
-        echo '[target.aarch64-linux-android]' >> ~/.cargo/config
-        echo 'ar = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ar"' >> ~/.cargo/config
-        echo 'linker = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android29-clang"' >> ~/.cargo/config
-        cat ~/.cargo/config
-    - name: Build with Cargo
+    - name: Build with Cargo for ARM64
       run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target aarch64-linux-android
     - name: Upload GDNative library as artifact
       uses: actions/upload-artifact@v1
       with:
         name: libcore.arm64.so
         path: target/aarch64-linux-android/release/libcore.so
-
-  # This job is where we compile Rust source code for Android x86 target
-  rust-android-x86:
-    runs-on: ubuntu-latest
-    name: Building Rust source for Android x86
-    steps:
-    - uses: actions/checkout@v2
-    - name: Check Rust toolchain
-      run: rustup show
-    - name: Add i686 based Rust toolchain
-      run: rustup target add i686-linux-android
-    - name: Setting up llvm-config
-      run: sudo apt-get install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm -y
-    - name: Check if llvm-config exists
-      run: llvm-config --version
-    - name: Update apt-get
-      run: sudo apt-get update
-    - name: Install glibc-devel so GDNative can use the standard C libraries
-      run: sudo apt-get install g++-multilib gcc-multilib libc6-dev-i386 -y
-    - name: Registering a NDK based Clang linker to Cargo
-      run: |
-        ls ~/.cargo/  
-        touch ~/.cargo/config
-        echo '[target.i686-linux-android]' >> ~/.cargo/config
-        echo 'ar = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android-ar"' >> ~/.cargo/config
-        echo 'linker = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/i686-linux-android29-clang"' >> ~/.cargo/config
-        cat ~/.cargo/config
-    - name: Build with Cargo
+    - name: Build with Cargo for x86
       run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target i686-linux-android
     - name: Upload GDNative library as artifact
       uses: actions/upload-artifact@v1
       with:
         name: libcore.x86.so
         path: target/i686-linux-android/release/libcore.so
-
-  # This job is where we compile Rust source code for Android x86_64 target
-  rust-android-x86_64:
-    runs-on: ubuntu-latest
-    name: Building Rust source for Android x86_64
-    steps:
-    - uses: actions/checkout@v2
-    - name: Check Rust toolchain
-      run: rustup show
-    - name: Add i686 based Rust toolchain
-      run: rustup target add x86_64-linux-android
-    - name: Setting up llvm-config
-      run: sudo apt-get install clang-format clang-tidy clang-tools clang libc++-dev libc++1 libc++abi-dev libc++abi1 libclang-dev libclang1 libomp-dev libomp5 lld lldb llvm-dev llvm-runtime llvm -y
-    - name: Check if llvm-config exists
-      run: llvm-config --version
-    - name: Update apt-get
-      run: sudo apt-get update
-    - name: Install glibc-devel so GDNative can use the standard C libraries
-      run: sudo apt-get install g++-multilib gcc-multilib libc6-dev-i386 -y
-    - name: Registering a NDK based Clang linker to Cargo
-      run: |
-        ls ~/.cargo/  
-        touch ~/.cargo/config
-        echo '[target.x86_64-linux-android]' >> ~/.cargo/config
-        echo 'ar = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/x86_64-linux-android-ar"' >> ~/.cargo/config
-        echo 'linker = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/x86_64-linux-android29-clang"' >> ~/.cargo/config
-        cat ~/.cargo/config
-    - name: Build with Cargo
+    - name: Build with Cargo for x86_64
       run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target x86_64-linux-android
     - name: Upload GDNative library as artifact
       uses: actions/upload-artifact@v1
@@ -145,7 +73,7 @@ jobs:
   # using the libraries we built for ARMv7, AArch64 and i686 architectures
   godot-android:
     runs-on: ubuntu-latest
-    needs: [rust-android-arm, rust-android-arm64, rust-android-x86, rust-android-x86_64]
+    needs: rust-android
     name: Building Godot game for Android
     steps:
     - uses: actions/checkout@v2

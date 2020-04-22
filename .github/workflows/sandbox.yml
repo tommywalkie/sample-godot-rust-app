@@ -25,12 +25,6 @@ jobs:
     - uses: actions/checkout@v2
     - name: Try to build Docker image from myood/godot-ci-android-export 
       run: docker build -t my/godot-ci:latest -f ./dockerfiles/godot-ci.Dockerfile .
-    - name: Run Docker container
-      run: docker container run -d -v ${pwd}/build:/build --name my_godot_ci my/godot-ci:latest
-    - name: List containers
-      run: docker ps -a
-    - name: Try a single command in container
-      run: docker exec my_godot_ci "ls"
     
         
         
