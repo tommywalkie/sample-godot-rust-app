@@ -1,8 +1,6 @@
 # Sample Godot Rust App
 
-![Linux CI](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Linux%20CI/badge.svg?branch=master) ![Windows CI](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Windows%20CI/badge.svg?branch=master) ![MacOS CI](https://github.com/tommywalkie/sample-godot-rust-app/workflows/MacOS%20CI/badge.svg?branch=master) ![Android CI](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Android%20CI/badge.svg?branch=master) ![iOS CI](https://github.com/tommywalkie/sample-godot-rust-app/workflows/iOS%20CI/badge.svg?branch=master) 
-
-![Linux Export](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Linux%20Export/badge.svg?branch=master) ![Windows Export](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Windows%20Export/badge.svg?branch=master) ![MacOS Export](https://github.com/tommywalkie/sample-godot-rust-app/workflows/MacOS%20Export/badge.svg?branch=master) ![Android Export](https://github.com/tommywalkie/sample-godot-rust-app/workflows/Android%20Export/badge.svg?branch=master) ![iOS Export](https://github.com/tommywalkie/sample-godot-rust-app/workflows/iOS%20Export/badge.svg?branch=master)
+![CI](https://github.com/tommywalkie/sample-godot-rust-app/workflows/CI/badge.svg?branch=master)
 
 The main purpose of this repo is to help understanding how Rust and Godot Engine work and provide a well documented project boilerplate able to display some scenes and handle signals, using properly tested Rust based logic and automatic builds via Github Actions.
 
