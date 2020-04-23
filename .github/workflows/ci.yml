@@ -264,13 +264,19 @@ jobs:
       run: docker build -t my/godot-ci:latest -f ./dockerfiles/godot-ci.Dockerfile .
     - name: Run the container
       run: docker run -d -v ${pwd}/build:/build --name godot-ci my/godot-ci:latest
-    - name: Troubloshooting Docker container before build
+    - name: Troubleshooting Docker container before build
       run: docker exec godot-ci ls
     - name: Try to export for Android
       run: docker exec godot-ci godot --export "Android" ./sample_godot_rust_app.apk
-    - name: Troubloshooting Docker container after build
+    - name: Troubleshooting Godot game logs
+      if: always()
+      run: docker exec godot-ci cat ./output.log
+    - name: Troubleshooting Docker container after build
       if: always()
       run: docker exec godot-ci ls
+    - name: Troubleshooting Docker container after build
+      if: always()
+      run: docker exec godot-ci tree
     # - name: Set new editor settings for Android
     #   run: |
     #     touch ~/.config/godot/editor_settings-3.tres
