@@ -37,15 +37,15 @@ jobs:
         ANDROID_RELEASE_KEYSTORE_USER: ${{ secrets.ANDROID_RELEASE_KEYSTORE_USER }}
         ANDROID_RELEASE_KEYSTORE_PASS: ${{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }}
       run: |
-        touch ~/.config/godot/editor_settings-3.tres
-        echo '[gd_resource type="EditorSettings" format=2]' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo '[resource]' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/adb = "/usr/local/lib/android/sdk/platform-tools/adb"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/jarsigner = "/usr/lib/jvm/zulu-8-azure-amd64/bin/jarsigner"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore = "'$ANDROID_RELEASE_KEYSTORE'"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore_user = "'$ANDROID_RELEASE_KEYSTORE_USER'"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore_pass = "'$ANDROID_RELEASE_KEYSTORE_PASS'"' >> /home/runner/.config/godot/editor_settings-3.tres
-        cat /home/runner/.config/godot/editor_settings-3.tres
+        touch ./sample.tres
+        echo '[gd_resource type="EditorSettings" format=2]' >> ./sample.tres
+        echo '[resource]' >> ./sample.tres
+        echo 'export/android/adb = "/usr/local/lib/android/sdk/platform-tools/adb"' >> ./sample.tres
+        echo 'export/android/jarsigner = "/usr/lib/jvm/zulu-8-azure-amd64/bin/jarsigner"' >> ./sample.tres
+        echo 'export/android/debug_keystore = "'$ANDROID_RELEASE_KEYSTORE'"' >> ./sample.tres
+        echo 'export/android/debug_keystore_user = "'$ANDROID_RELEASE_KEYSTORE_USER'"' >> ./sample.tres
+        echo 'export/android/debug_keystore_pass = "'$ANDROID_RELEASE_KEYSTORE_PASS'"' >> ./sample.tres
+        cat ./sample.tres
     - name: Try to build Docker image from myood/godot-ci-android-export 
       run: docker build -t my/godot-ci:latest -f ./dockerfiles/godot-ci.Dockerfile .
     
