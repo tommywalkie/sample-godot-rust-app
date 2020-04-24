@@ -218,7 +218,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Generate keystore, using secrets
-      run: keytool -genkey -v -keystore "{{ secrets.ANDROID_RELEASE_KEYSTORE }}" -storepass "{{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }}" -alias {{ secrets.ANDROID_RELEASE_KEYSTORE_USER }}" -keypass "{{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }}" -sigalg MD5withRSA -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
+      run: keytool -genkey -v -keystore "{{ secrets.ANDROID_RELEASE_KEYSTORE }}" -storepass "{{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }}" -alias "{{ secrets.ANDROID_RELEASE_KEYSTORE_USER }}" -keypass "{{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }}" -sigalg MD5withRSA -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
     - name: Setup environment
       run: |
         sudo apt-get install tree
