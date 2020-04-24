@@ -286,9 +286,9 @@ jobs:
         ANDROID_RELEASE_KEYSTORE_USER: ${{ secrets.ANDROID_RELEASE_KEYSTORE_USER }}
         ANDROID_RELEASE_KEYSTORE_PASS: ${{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }}
       run: |
-        sed -i '/\[preset.2.options\]/a /keystore\/release/d = "$ANDROID_RELEASE_KEYSTORE"' ./export_presets.cfg
-        sed -i '/\[preset.2.options\]/a /keystore\/release_user/d = "$ANDROID_RELEASE_KEYSTORE_USER"' ./export_presets.cfg
-        sed -i '/\[preset.2.options\]/a /keystore\/release_pass/d = "$ANDROID_RELEASE_KEYSTORE_PASS"' ./export_presets.cfg
+        sed -i '/\[preset.2.options\]/a /keystore\/release = "$ANDROID_RELEASE_KEYSTORE"' ./export_presets.cfg
+        sed -i '/\[preset.2.options\]/a /keystore\/release_user = "$ANDROID_RELEASE_KEYSTORE_USER"' ./export_presets.cfg
+        sed -i '/\[preset.2.options\]/a /keystore\/release_pass = "$ANDROID_RELEASE_KEYSTORE_PASS"' ./export_presets.cfg
     - name: Building for Android
       run: godot --export "Android" ./build/android/sample_godot_rust_app.apk
     - name: Building with debug if failure
