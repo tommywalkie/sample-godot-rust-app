@@ -258,6 +258,16 @@ jobs:
       with:
         name: libcore.x86_64.so
         path: target/x86_64-linux-android/release
+    - name: Download Windows based GDNative library artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: core.dll
+        path: target/x86_64-pc-windows-gnu/release
+    - name: Download Linux based GDNative library artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: libcore.so
+        path: target/stable-x86_64-unknown-linux-gnu/release
     - name: Checking project structure for troubleshooting
       run: tree
     - name: Try to build Docker image from myood/godot-ci-android-export 
@@ -265,16 +275,27 @@ jobs:
     - name: Run the container
       run: docker run -d -v ${pwd}/build:/build --name godot-ci my/godot-ci:latest
     - name: Troubleshooting Docker container before build
-      run: docker exec godot-ci ls
+      run: docker exec godot-ci tree
+    - name: Delete unneeded files
+      run: |
+        docker exec godot-ci rm -R src
+        docker exec godot-ci rm -R dockerfiles
+        docker exec godot-ci rm Cross.toml
+        docker exec godot-ci rm Cargo.toml
+    - name: Troubleshooting Docker container before build once again
+      run: docker exec godot-ci tree
     - name: Try to export for Android
-      run: docker exec godot-ci godot --export "Android" ./sample_godot_rust_app.apk
+      run: docker exec godot-ci godot --export "Android" ./build/sample_godot_rust_app.apk
     - name: Troubleshooting Godot game logs
       if: always()
       run: docker exec godot-ci cat ./output.log
     - name: Troubleshooting Docker container after build
       if: always()
-      run: docker exec godot-ci ls
-    - name: Troubleshooting Docker container after build
+      run: docker exec godot-ci tree
+    - name: Try (again) to export for Android
+      if: always()
+      run: docker exec godot-ci godot --export "Android" ./build/sample_godot_rust_app.apk
+    - name: Troubleshooting Docker container after second build
       if: always()
       run: docker exec godot-ci tree
     # - name: Set new editor settings for Android
