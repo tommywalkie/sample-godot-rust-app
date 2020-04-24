@@ -29,6 +29,8 @@ RUN apk add python3 py3-openssl tree zip \
     && sed -i '/\[resource\]/a export\/android\/debug_keystore = "/opt/debug.keystore"' /root/.config/godot/editor_settings-3.tres \
     && sed -i '/\[resource\]/a export\/android\/debug_user = "androiddebugkey"' /root/.config/godot/editor_settings-3.tres \
     && sed -i '/\[resource\]/a export\/android\/debug_pass = "android"' /root/.config/godot/editor_settings-3.tres
+    && sed -i '/\[resource\]/a export\/android\/debug_keystore_user = "androiddebugkey"' /root/.config/godot/editor_settings-3.tres \
+    && sed -i '/\[resource\]/a export\/android\/debug_keystore_pass = "android"' /root/.config/godot/editor_settings-3.tres
 
 RUN rm -R templates
 
