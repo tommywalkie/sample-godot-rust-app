@@ -271,7 +271,7 @@ jobs:
         echo '[resource]' >> /home/runner/.config/godot/editor_settings-3.tres
         echo 'export/android/adb = "/usr/local/lib/android/sdk/platform-tools/adb"' >> /home/runner/.config/godot/editor_settings-3.tres
         echo 'export/android/jarsigner = "/usr/lib/jvm/zulu-8-azure-amd64/bin/jarsigner"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore = "$ANDROID_RELEASE_KEYSTORE"' >> /home/runner//.config/godot/editor_settings-3.tres
+        echo 'export/android/debug_keystore = "$ANDROID_RELEASE_KEYSTORE"' >> /home/runner/.config/godot/editor_settings-3.tres
         echo 'export/android/debug_keystore_user = "$ANDROID_RELEASE_KEYSTORE_USER"' >> /home/runner/.config/godot/editor_settings-3.tres
         echo 'export/android/debug_keystore_pass = "$ANDROID_RELEASE_KEYSTORE_PASS"' >> /home/runner/.config/godot/editor_settings-3.tres
         cat /home/runner/.config/godot/editor_settings-3.tres
