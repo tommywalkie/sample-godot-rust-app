@@ -292,12 +292,9 @@ jobs:
     - name: Troubleshooting Docker container after build
       if: always()
       run: docker exec godot-ci tree
-    - name: Try (again) to export for Android
+    - name: Troubleshooting Godot editor settings
       if: always()
-      run: docker exec godot-ci godot --export "Android" ./build/sample_godot_rust_app.apk
-    - name: Troubleshooting Docker container after second build
-      if: always()
-      run: docker exec godot-ci tree
+      run: docker exec godot-ci cat /root/.config/godot/editor_settings-3.tres
     # - name: Set new editor settings for Android
     #   run: |
     #     touch ~/.config/godot/editor_settings-3.tres
