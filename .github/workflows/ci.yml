@@ -264,7 +264,7 @@ jobs:
         echo 'export/android/adb = "/usr/local/lib/android/sdk/platform-tools/adb"' >> /home/runner/.config/godot/editor_settings-3.tres
         echo 'export/android/jarsigner = "/usr/lib/jvm/zulu-8-azure-amd64/bin/jarsigner"' >> /home/runner/.config/godot/editor_settings-3.tres
         echo 'export/android/debug_keystore = "/opt/debug.keystore"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore_user = "androidebugkey"' >> /home/runner/.config/godot/editor_settings-3.tres
+        echo 'export/android/debug_keystore_user = "androiddebugkey"' >> /home/runner/.config/godot/editor_settings-3.tres
         echo 'export/android/debug_keystore_pass = "android"' >> /home/runner/.config/godot/editor_settings-3.tres
         cat /home/runner/.config/godot/editor_settings-3.tres
     - name: Reset export presets for Android 
@@ -275,7 +275,7 @@ jobs:
     - name: Set new export presets for release
       run: |
         sed -i '/\[preset.2.options\]/a /keystore\/release = "/opt/debug.keystore"' ./export_presets.cfg
-        sed -i '/\[preset.2.options\]/a /keystore\/release_user = "androidebugkey"' ./export_presets.cfg
+        sed -i '/\[preset.2.options\]/a /keystore\/release_user = "androiddebugkey"' ./export_presets.cfg
         sed -i '/\[preset.2.options\]/a /keystore\/release_pass = "android"' ./export_presets.cfg
     - name: Building with debug
       run: godot --export-debug "Android" ./build/android/sample_godot_rust_app.apk
