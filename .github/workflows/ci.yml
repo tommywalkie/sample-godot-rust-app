@@ -217,10 +217,8 @@ jobs:
     name: Building Godot game for Android
     steps:
     - uses: actions/checkout@v2
-    - name: Generate debug and release keystore, using secrets
-      run: |
-        keytool -keyalg RSA -genkeypair -alias androiddebugkey -keypass android -keystore /opt/debug.keystore -storepass android -dname "CN=Android Debug,O=Android,C=US" -validity 9999
-        keytool -genkey -v -keystore {{ secrets.ANDROID_RELEASE_KEYSTORE }} -storepass {{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }} -alias {{ secrets.ANDROID_RELEASE_KEYSTORE_USER }} -keypass {{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }} -sigalg MD5withRSA -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
+    - name: Generate keystore, using secrets
+      run: keytool -genkey -v -keystore {{ secrets.ANDROID_RELEASE_KEYSTORE }} -storepass {{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }} -alias {{ secrets.ANDROID_RELEASE_KEYSTORE_USER }} -keypass {{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }} -sigalg MD5withRSA -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
     - name: Setup environment
       run: |
         sudo apt-get install tree
@@ -265,9 +263,9 @@ jobs:
         echo '[resource]' >> /home/runner/.config/godot/editor_settings-3.tres
         echo 'export/android/adb = "/usr/local/lib/android/sdk/platform-tools/adb"' >> /home/runner/.config/godot/editor_settings-3.tres
         echo 'export/android/jarsigner = "/usr/lib/jvm/zulu-8-azure-amd64/bin/jarsigner"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore = "/opt/debug.keystore"' >> /home/runner//.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore_user = "androiddebugkey"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore_pass = "android"' >> /home/runner/.config/godot/editor_settings-3.tres
+        echo 'export/android/debug_keystore = "{{ secrets.ANDROID_RELEASE_KEYSTORE }}"' >> /home/runner//.config/godot/editor_settings-3.tres
+        echo 'export/android/debug_keystore_user = "{{ secrets.ANDROID_RELEASE_KEYSTORE_USER }}"' >> /home/runner/.config/godot/editor_settings-3.tres
+        echo 'export/android/debug_keystore_pass = "{{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }}"' >> /home/runner/.config/godot/editor_settings-3.tres
         cat /home/runner/.config/godot/editor_settings-3.tres
     - name: Reset export presets for Android 
       run: |
