@@ -28,7 +28,9 @@ jobs:
         ANDROID_RELEASE_KEYSTORE: ${{ secrets.ANDROID_RELEASE_KEYSTORE }}
         ANDROID_RELEASE_KEYSTORE_USER: ${{ secrets.ANDROID_RELEASE_KEYSTORE_USER }}
         ANDROID_RELEASE_KEYSTORE_PASS: ${{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }}
-      run: keytool -genkey -v -keystore "$ANDROID_RELEASE_KEYSTORE" -storepass "$ANDROID_RELEASE_KEYSTORE_PASS" -alias "$ANDROID_RELEASE_KEYSTORE_USER" -keypass "$ANDROID_RELEASE_KEYSTORE_PASS" -sigalg MD5withRSA -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
+      run: keytool -genkey -v -keystore $ANDROID_RELEASE_KEYSTORE -storepass $ANDROID_RELEASE_KEYSTORE_PASS -alias $ANDROID_RELEASE_KEYSTORE_USER -keypass $ANDROID_RELEASE_KEYSTORE_PASS -sigalg MD5withRSA -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
+    - name: Check if debug keystore exists
+      run: ls /opt
     - name: Try to build Docker image from myood/godot-ci-android-export 
       run: docker build -t my/godot-ci:latest -f ./dockerfiles/godot-ci.Dockerfile .
     
