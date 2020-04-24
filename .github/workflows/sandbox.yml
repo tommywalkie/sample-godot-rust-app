@@ -23,10 +23,10 @@ jobs:
     name: Trying to setup Godot Engine to support Android exports
     steps:
     - uses: actions/checkout@v2
+    - name: Try to generate a keystore
+      run: keytool -genkey -v -keystore "{{ secrets.ANDROID_RELEASE_KEYSTORE }}" -storepass "{{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }}" -alias {{ secrets.ANDROID_RELEASE_KEYSTORE_USER }}" -keypass "{{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }}" -sigalg MD5withRSA -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
     - name: Try to build Docker image from myood/godot-ci-android-export 
       run: docker build -t my/godot-ci:latest -f ./dockerfiles/godot-ci.Dockerfile .
-    - name: Try to generate a keystore
-      run: keytool -genkey -v -keystore {{ secrets.ANDROID_RELEASE_KEYSTORE }} -storepass {{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }} -alias {{ secrets.ANDROID_RELEASE_KEYSTORE_USER }} -keypass {{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }} -sigalg MD5withRSA -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
     
         
         
