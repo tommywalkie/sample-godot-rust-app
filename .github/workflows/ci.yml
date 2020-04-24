@@ -291,6 +291,9 @@ jobs:
         sed -i '/\[preset.2.options\]/a /keystore\/release_pass/d = "$ANDROID_RELEASE_KEYSTORE_PASS"' ./export_presets.cfg
     - name: Building for Android
       run: godot --export "Android" ./build/android/sample_godot_rust_app.apk
+    - name: Building with debug if failure
+      if: failure()
+      run: godot --export-debug "Android" ./build/android/sample_godot_rust_app.apk
     - name: Checking final build structure for troubleshooting
       if: always()
       run: tree ./build
