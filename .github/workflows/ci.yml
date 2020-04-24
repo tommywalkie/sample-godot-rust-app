@@ -351,9 +351,9 @@ jobs:
         echo '[resource]' >> /home/runner/.config/godot/editor_settings-3.tres
         echo 'export/android/adb = "/usr/local/lib/android/sdk/platform-tools/adb"' >> /home/runner/.config/godot/editor_settings-3.tres
         echo 'export/android/jarsigner = "/usr/lib/jvm/zulu-8-azure-amd64/bin/jarsigner"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore = "$ANDROID_RELEASE_KEYSTORE"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore_user = "$ANDROID_RELEASE_KEYSTORE_USER"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore_pass = "$ANDROID_RELEASE_KEYSTORE_PASS"' >> /home/runner/.config/godot/editor_settings-3.tres
+        echo 'export/android/debug_keystore = "'$ANDROID_RELEASE_KEYSTORE'"' >> /home/runner/.config/godot/editor_settings-3.tres
+        echo 'export/android/debug_keystore_user = "'$ANDROID_RELEASE_KEYSTORE_USER'"' >> /home/runner/.config/godot/editor_settings-3.tres
+        echo 'export/android/debug_keystore_pass = "'$ANDROID_RELEASE_KEYSTORE_PASS'"' >> /home/runner/.config/godot/editor_settings-3.tres
         cat /home/runner/.config/godot/editor_settings-3.tres
     - name: Reset export presets for Android 
       run: |
@@ -366,14 +366,12 @@ jobs:
         ANDROID_RELEASE_KEYSTORE_USER: ${{ secrets.ANDROID_RELEASE_KEYSTORE_USER }}
         ANDROID_RELEASE_KEYSTORE_PASS: ${{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }}
       run: |
-        sed -i '/\[preset.2.options\]/a /keystore\/release = "$ANDROID_RELEASE_KEYSTORE"' ./export_presets.cfg
-        sed -i '/\[preset.2.options\]/a /keystore\/release_user = "$ANDROID_RELEASE_KEYSTORE_USER"' ./export_presets.cfg
-        sed -i '/\[preset.2.options\]/a /keystore\/release_pass = "$ANDROID_RELEASE_KEYSTORE_PASS"' ./export_presets.cfg
+        sed -i '/\[preset.2.options\]/a /keystore\/release = "'$ANDROID_RELEASE_KEYSTORE'"' ./export_presets.cfg
+        sed -i '/\[preset.2.options\]/a /keystore\/release_user = "'$ANDROID_RELEASE_KEYSTORE_USER'"' ./export_presets.cfg
+        sed -i '/\[preset.2.options\]/a /keystore\/release_pass = "'$ANDROID_RELEASE_KEYSTORE_PASS'"' ./export_presets.cfg
+        cat ./export_presets.cfg
     - name: Building for Android
       run: godot --export "Android" ./build/android/sample_godot_rust_app.apk
-    - name: Building with debug if failure
-      if: failure()
-      run: godot --export-debug "Android" ./build/android/sample_godot_rust_app.apk
     - name: Checking final build structure for troubleshooting
       if: always()
       run: tree ./build
