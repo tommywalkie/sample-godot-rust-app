@@ -287,27 +287,6 @@ jobs:
     name: Building Godot game for Android
     steps:
     - uses: actions/checkout@v2
-    - name: Generate keystore, using secrets
-      env:
-        ANDROID_RELEASE_KEYSTORE: ${{ secrets.ANDROID_RELEASE_KEYSTORE }}
-        ANDROID_RELEASE_KEYSTORE_USER: ${{ secrets.ANDROID_RELEASE_KEYSTORE_USER }}
-        ANDROID_RELEASE_KEYSTORE_PASS: ${{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }}
-      run: keytool -keyalg RSA -genkeypair -keystore $ANDROID_RELEASE_KEYSTORE -storepass $ANDROID_RELEASE_KEYSTORE_PASS -alias $ANDROID_RELEASE_KEYSTORE_USER -keypass $ANDROID_RELEASE_KEYSTORE_PASS -dname "CN=Android Debug,O=Android,C=US" -validity 9999
-    - name: Setup environment
-      run: |
-        sudo apt-get install tree
-        wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_linux_headless.64.zip
-        wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_export_templates.tpz
-        mkdir ~/.cache
-        mkdir -p ~/.config/godot
-        mkdir -p ~/.local/share/godot/templates/3.2.1.stable
-        unzip Godot_v3.2.1-stable_linux_headless.64.zip
-        sudo mv Godot_v3.2.1-stable_linux_headless.64 /usr/local/bin/godot
-        unzip Godot_v3.2.1-stable_export_templates.tpz
-        sudo mv templates/* ~/.local/share/godot/templates/3.2.1.stable
-        sudo rm -f Godot_v3.2.1-stable_linux_headless.64.zip Godot_v3.2.1-stable_export_templates.tpz
-        sudo rm -d templates
-        mkdir -v -p ./build/android
     - name: Download ARMv7 based GDNative library artifact
       uses: actions/download-artifact@v1
       with:
@@ -328,43 +307,53 @@ jobs:
       with:
         name: libcore.x86_64.so
         path: target/x86_64-linux-android/release
+    - name: Decrypt signing key
+      env:
+        DECRYPTION_KEY: ${{ secrets.DECRYPTION_KEY }}
+      run: |
+        gpg --quiet --batch --yes --passphrase="$DECRYPTION_KEY" --output release.keystore release.keystore.gpg
+    - name: Setup environment
+      run: |
+        sudo apt-get install tree
+        wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_linux_headless.64.zip
+        wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_export_templates.tpz
+        mkdir ~/.cache
+        mkdir -p ~/.config/godot
+        mkdir -p ~/.local/share/godot/templates/3.2.1.stable
+        unzip Godot_v3.2.1-stable_linux_headless.64.zip
+        sudo mv Godot_v3.2.1-stable_linux_headless.64 /usr/local/bin/godot
+        unzip Godot_v3.2.1-stable_export_templates.tpz
+        sudo mv templates/* ~/.local/share/godot/templates/3.2.1.stable
+        sudo rm -f Godot_v3.2.1-stable_linux_headless.64.zip Godot_v3.2.1-stable_export_templates.tpz
+        sudo rm -d templates
+        mkdir -v -p ./build/android
     - name: Checking project structure for troubleshooting
       run: tree
-    - name: Set new editor settings for Android
-      env:
-        ANDROID_RELEASE_KEYSTORE: ${{ secrets.ANDROID_RELEASE_KEYSTORE }}
-        ANDROID_RELEASE_KEYSTORE_USER: ${{ secrets.ANDROID_RELEASE_KEYSTORE_USER }}
-        ANDROID_RELEASE_KEYSTORE_PASS: ${{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }}
+    - name: Configure Godot
       run: |
-        touch ~/.config/godot/editor_settings-3.tres
-        echo '[gd_resource type="EditorSettings" format=2]' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo '[resource]' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/adb = "/usr/local/lib/android/sdk/platform-tools/adb"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/jarsigner = "/usr/bin/jarsigner"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore = "'$ANDROID_RELEASE_KEYSTORE'"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore_user = "'$ANDROID_RELEASE_KEYSTORE_USER'"' >> /home/runner/.config/godot/editor_settings-3.tres
-        echo 'export/android/debug_keystore_pass = "'$ANDROID_RELEASE_KEYSTORE_PASS'"' >> /home/runner/.config/godot/editor_settings-3.tres
-        cat /home/runner/.config/godot/editor_settings-3.tres
+        # Let godot generate editor_settings-3.tres
+        ./godot -e -q
+        # Replace custom settings
+        sed -i 's|export/android/adb.*|export/android/adb = "/usr/local/lib/android/sdk/platform-tools/adb"|' ~/.config/godot/editor_settings-3.tres;
+        sed -i 's|export/android/jarsigner.*|export/android/jarsigner = "/usr/bin/jarsigner"|' ~/.config/godot/editor_settings-3.tres;
+    - name: Insert keystore pass
+      run: sed -i 's|<SECRET-PASSWORD>|'$KEYSTORE_PASS'|' export_presets.cfg
+      env:
+        KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
     - name: Reset export presets for Android 
       run: |
         sed -i '/keystore\/release/d' ./export_presets.cfg
         sed -i '/keystore\/release_user/d' ./export_presets.cfg
         sed -i '/keystore\/release_pass/d' ./export_presets.cfg
-    - name: Set new export presets for release, using secrets
-      env:
-        ANDROID_RELEASE_KEYSTORE: ${{ secrets.ANDROID_RELEASE_KEYSTORE }}
-        ANDROID_RELEASE_KEYSTORE_USER: ${{ secrets.ANDROID_RELEASE_KEYSTORE_USER }}
-        ANDROID_RELEASE_KEYSTORE_PASS: ${{ secrets.ANDROID_RELEASE_KEYSTORE_PASS }}
-      run: |
-        sed -i '/\[preset.2.options\]/a keystore\/release = "'$ANDROID_RELEASE_KEYSTORE'"' ./export_presets.cfg
-        sed -i '/\[preset.2.options\]/a keystore\/release_user = "'$ANDROID_RELEASE_KEYSTORE_USER'"' ./export_presets.cfg
-        sed -i '/\[preset.2.options\]/a keystore\/release_pass = "'$ANDROID_RELEASE_KEYSTORE_PASS'"' ./export_presets.cfg
-        cat ./export_presets.cfg
     - name: Building for Android
-      run: godot --export "Android" ./build/android/sample_godot_rust_app.apk
+      run: godot --export "Android" ./build/android/sample_godot_rust_app_signed.apk
     - name: Checking final build structure for troubleshooting
-      if: always()
       run: tree ./build
+    - name: Upload Android game as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: sample_godot_rust_app_signed.apk
+        path: build/android/sample_godot_rust_app_signed.apk
 
   # This job is where we create an official release in Github repo,
   # using the Godot games we built in 'godot-linux', 'godot-windows', etc.
