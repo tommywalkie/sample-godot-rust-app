@@ -214,10 +214,10 @@ jobs:
   godot-android:
     runs-on: ubuntu-latest
     needs: rust-android
-    name: Building Godot game for Android
+    name: Building unsigned Godot game for Android
     steps:
     - uses: actions/checkout@v2
-    - name: Generate keystore
+    - name: Generate debug keystore
       run: keytool -keyalg RSA -genkeypair -keystore /opt/debug.keystore -storepass android -alias androiddebugkey -keypass android -dname "CN=Android Debug,O=Android,C=US" -validity 9999
     - name: Setup environment
       run: |
@@ -284,7 +284,7 @@ jobs:
   godot-android-with-secrets:
     runs-on: ubuntu-latest
     needs: rust-android
-    name: Building Godot game for Android
+    name: Building signed Godot game for Android
     steps:
     - uses: actions/checkout@v2
     - name: Download ARMv7 based GDNative library artifact
@@ -307,6 +307,8 @@ jobs:
       with:
         name: libcore.x86_64.so
         path: target/x86_64-linux-android/release
+    - name: Generate debug keystore
+      run: keytool -keyalg RSA -genkeypair -keystore /opt/debug.keystore -storepass android -alias androiddebugkey -keypass android -dname "CN=Android Debug,O=Android,C=US" -validity 9999
     - name: Decrypt signing key
       env:
         DECRYPTION_KEY: ${{ secrets.DECRYPTION_KEY }}
@@ -336,6 +338,9 @@ jobs:
         # Replace custom settings
         sed -i 's|export/android/adb.*|export/android/adb = "/usr/local/lib/android/sdk/platform-tools/adb"|' /home/runner/.config/godot/editor_settings-3.tres;
         sed -i 's|export/android/jarsigner.*|export/android/jarsigner = "/usr/bin/jarsigner"|' /home/runner/.config/godot/editor_settings-3.tres;
+        sed -i 's|export/android/debug_keystore.*|export/android/debug_keystore = "/opt/debug.keystore"|' /home/runner/.config/godot/editor_settings-3.tres;
+        sed -i 's|export/android/debug_keystore.*|export/android/debug_keystore_user = "androiddebugkey"|' /home/runner/.config/godot/editor_settings-3.tres;
+        sed -i 's|export/android/debug_keystore.*|export/android/debug_keystore_pass = "android"|' /home/runner/.config/godot/editor_settings-3.tres;
     - name: Insert keystore pass
       run: sed -i 's|<SECRET-PASSWORD>|'$KEYSTORE_PASS'|' ./export_presets.cfg
       env:
