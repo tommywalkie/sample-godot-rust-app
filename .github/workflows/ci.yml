@@ -332,7 +332,7 @@ jobs:
     - name: Configure Godot
       run: |
         # Let godot generate editor_settings-3.tres
-        ./godot -e -q
+        godot -e -q
         # Replace custom settings
         sed -i 's|export/android/adb.*|export/android/adb = "/usr/local/lib/android/sdk/platform-tools/adb"|' /home/runner/.config/godot/editor_settings-3.tres;
         sed -i 's|export/android/jarsigner.*|export/android/jarsigner = "/usr/bin/jarsigner"|' /home/runner/.config/godot/editor_settings-3.tres;
