@@ -339,17 +339,12 @@ jobs:
         sed -i 's|export/android/adb.*|export/android/adb = "/usr/local/lib/android/sdk/platform-tools/adb"|' /home/runner/.config/godot/editor_settings-3.tres;
         sed -i 's|export/android/jarsigner.*|export/android/jarsigner = "/usr/bin/jarsigner"|' /home/runner/.config/godot/editor_settings-3.tres;
         sed -i 's|export/android/debug_keystore.*|export/android/debug_keystore = "/opt/debug.keystore"|' /home/runner/.config/godot/editor_settings-3.tres;
-        sed -i 's|export/android/debug_keystore.*|export/android/debug_keystore_user = "androiddebugkey"|' /home/runner/.config/godot/editor_settings-3.tres;
-        sed -i 's|export/android/debug_keystore.*|export/android/debug_keystore_pass = "android"|' /home/runner/.config/godot/editor_settings-3.tres;
+        sed -i 's|export/android/debug_keystore_user.*|export/android/debug_keystore_user = "androiddebugkey"|' /home/runner/.config/godot/editor_settings-3.tres;
+        sed -i 's|export/android/debug_keystore_pass.*|export/android/debug_keystore_pass = "android"|' /home/runner/.config/godot/editor_settings-3.tres;
     - name: Insert keystore pass
       run: sed -i 's|<SECRET-PASSWORD>|'$KEYSTORE_PASS'|' ./export_presets.cfg
       env:
         KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
-    - name: Reset export presets for Android 
-      run: |
-        sed -i '/keystore\/release/d' ./export_presets.cfg
-        sed -i '/keystore\/release_user/d' ./export_presets.cfg
-        sed -i '/keystore\/release_pass/d' ./export_presets.cfg
     - name: Building for Android
       run: godot --export "Android" ./build/android/sample_godot_rust_app_signed.apk
     - name: Checking final build structure for troubleshooting
