@@ -2,7 +2,7 @@
 
 ![CI](https://github.com/tommywalkie/sample-godot-rust-app/workflows/CI/badge.svg?branch=master)
 
-The main purpose of this repo is to help understanding how Rust and Godot Engine work and provide a well documented project boilerplate able to display some scenes and handle signals, using properly tested Rust based logic and automatic builds via Github Actions.
+The main purpose of this repo is to help understanding how Rust and Godot Engine work and provide a well documented project boilerplate able to display some scenes and handle signals, using properly tested Rust based logic and automatic multi-platform builds via Github Actions.
 
 ## Summary
 
@@ -18,6 +18,7 @@ The main purpose of this repo is to help understanding how Rust and Godot Engine
   - [Binding libraries to scenes](https://github.com/tommywalkie/sample-godot-rust-app#binding-libraries-to-scenes)
 - [Testing](https://github.com/tommywalkie/sample-godot-rust-app#testing)
 - [Exporting](https://github.com/tommywalkie/sample-godot-rust-app#exporting)
+  - [Exporting for Android](https://github.com/tommywalkie/sample-godot-rust-app#exporting-for-android)
 - [Troubleshooting](https://github.com/tommywalkie/sample-godot-rust-app#troubleshooting)
 - [Roadmap](https://github.com/tommywalkie/sample-godot-rust-app#roadmap)
 - [License](https://github.com/tommywalkie/sample-godot-rust-app#license)
@@ -30,9 +31,9 @@ The main purpose of this repo is to help understanding how Rust and Godot Engine
   - Each scene has a _Button_ node with a script allowing us to switch between scenes 
     - **Scene 1** ► **Scene 2** — Using GDScript ([source](https://github.com/tommywalkie/sample-godot-rust-app/blob/master/scenes/LinkToSecondScene.gd))
     - **Scene 2** ► **Scene 1** — Using Rust/GDNative ([source](https://github.com/tommywalkie/sample-godot-rust-app/blob/master/src/core/src/link_to_first_scene.rs))
-  - Each scene has a node with an attached Rust/GDNative script which programmatically add a newly created colored _Panel_ node as a child node.
+  - Each scene has a node with an attached Rust/GDNative script which programmatically add a newly created colored _Panel_ child node, acting as a full-screen background.
 - Use of [Cargo workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html) for flexibility
-- Worry-free automatic cross-platform CI/CD via Github Actions
+- Worry-free automatic multi-platform builds via Github Actions
 
 ## Stack
 
@@ -282,15 +283,13 @@ speculate! {
 
 ## Exporting
 
-Under the hood, this boilerplate is using Github Actions, Docker, [`rust-embedded/cross`](https://github.com/rust-embedded/cross) and a headless Godot Engine instance to test, build and export for multiple platforms, allowing users to focus on game development while abstracting a lot of tedious tasks.
+Under the hood, this boilerplate is using Github Actions, Docker, [`rust-embedded/cross`](https://github.com/rust-embedded/cross) and a headless Godot Engine instance to test, build and export for multiple platforms, allowing users to focus on game development while abstracting a lot of tedious tasks, using a `export_presets.cfg` file at the root of the project.
 
 Here is the current workflow :
 
 ![workflow diagram](https://raw.githubusercontent.com/tommywalkie/sample-godot-rust-app/master/assets/github-actions-workflow.png)
 
-Assuming `gdnative` crate is cross-platform ready and we have an `export_presets.cfg` file including export related settings at the root of our project, we _can_ build `sample_godot_rust_app` in whatever target using some headless Godot Engine instances running via Github Actions and release the app for multiple platforms ([source](https://github.com/tommywalkie/sample-godot-rust-app/blob/master/.github/workflows/ci.yml)).
-
-Here is the list of all known supported targets and possible clues about how to support other targets.
+Here is the list of all known supported and tested targets :
 
 |                                                              | OS      | Supported toolchain(s)                                       |
 | ------------------------------------------------------------ | ------- | ------------------------------------------------------------ |
@@ -300,17 +299,79 @@ Here is the list of all known supported targets and possible clues about how to 
 | <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="27" width="32"/> | Android | ✅ `armv7-linux-androideabi`<br />✅ `aarch64-linux-android `<br />✅ `i686-linux-android `<br />✅ `x86_64-linux-android ` |
 | <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28"/> | iOS     | ❓ Might be possible ([godot-rust#285](https://github.com/GodotNativeTools/godot-rust/issues/285)) |
 
-**Important notice** : We _may be_ careful when adding `export_presets.cfg` in a Git repository, especially if there is sensitive data, like keystore related settings when building for Android. This point needs to be further developed in the future.
+The `export_presets.cfg` file keeps track of the specific export presets for each platform. For some targets, **this file may also contain sensitive data** that must be properly handled if committed into VCS. Android is one of them.
+
+#### Exporting for Android
+
+While the CI workflow is providing a simple way to build Rust source and a Godot game for Android by itself without worrying too much about how to properly setup Cargo and Android Studio, but there are still some additional steps to do.
+
+The way Android/Java is designed, it requires to do some things by ourselves :
+
+- To explicitly tell which permissions we need
+- To properly sign the app (unless releasing for debugging purposes)
+
+Permissions are found in `export_presets.cfg` file, under Android related presets, there should be boolean fields with `permissions/*=true|false` pattern we shall edit at our convenience.
+
+The hardest part is signing the app. If not properly handled, Play Protect might consider the APK as unsecured or worse, Godot Engine will fail to export our game. Usually, when exporting for Android, Godot Engine is requiring us to set up **JAR Signing and Verification Tool** (`jarsigner`) executable path, **Android Debug Bridge** (`adb`) executable path and a **Java keystore** path.
+
+![](https://user-images.githubusercontent.com/16148332/79728319-0a9b5200-82ee-11ea-9c3a-dd4be1eebe35.png)
+
+What we need to do on our side is :
+
+- Install **Android SDK**, it usually comes up with `adb`, a debug Java keystore (`debug.keystore`), and a **JRE** which comes up with `jarsigner` and a **Java Keytool** (`keytool`)
+- Register `adb` and `jarsigner` paths in _Editor > Editor Settings_ in the GUI, it can also be done while editing the `editor-settings-3.tres` file which can be located in `AppData\Roaming\Godot` (Windows) or in `~/.config/godot/` (Ubuntu)
+
+_The following three steps are mandatory for officially signed releases and CI/CD._
+
+- Make sure **GNU Privacy Guard** (`gpg`) is installed, it is usually available in most Linux distributions, otherwise, if using Windows, install it from [GnuPG Binary Releases](https://gnupg.org/download/)
+- Use `keytool` to create a Java keystore and choose an alias (using `-alias` option), it will ask us some questions and to enter and confirm a password for the keystore that will be located in the relative path we set as `-keystore` option value
+
+```bash
+keytool -genkeypair -v -keystore ./my.keystore -alias some-alias -keyalg RSA -keysize 2048 -validity 10000
+```
+
+- To protect our keystore under symmetric encryption, use `gpg` to create a GPG key that also needs to be protected with another password we will be asked to enter and confirm, this will create a `.gpg` file
+
+```bash
+gpg -c .\my.keystore
+```
+
+- Finally, register the release (or debug) keystore and the alias in `export_presets.cfg` under the proper `keystore/*` fields
+
+```
+keystore/debug=""
+keystore/debug_user=""
+keystore/debug_password=""
+keystore/release="my.keystore"
+keystore/release_user="some-alias"
+keystore/release_password="<SECRET-PASSWORD>"
+```
+
+As mentioned before, **it is highly recommended to not commit any keystore password into VCS**. We just need to leave it as `<SECRET-PASSWORD>` and then set up a [Github secret](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets) (`$KEYSTORE_PASS`) for the keystore password so it can be passed to `export_presets.cfg` using simple `sed` commands during the CI workflow.
+
+For our interest, when we want to decrypt `my.keystore.gpg`, we would be using the following `gpg` command without forgetting to set up `--output` option value.
+
+```bash
+gpg --quiet --batch --yes --passphrase="$DECRYPTION_KEY" --output my.keystore my.keystore.gpg
+```
+
+This is also done during the CI workflow, so we just need to set up a second [Github secret](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets) (`$DECRYPTION_KEY`) to pass the decryption key password.
+
+![ci workflow for android](https://raw.githubusercontent.com/tommywalkie/sample-godot-rust-app/master/assets/rust-to-android-workflow.png)
 
 ## Troubleshooting
 
->  _Everything has been properly set up, but some error `error: linking with "link.exe" failed: exit code: 1104` is encountered while building libraries._
+>  _Everything has been properly set up, but some error `error: linking with "link.exe" failed: exit code: 1104` is encountered while re-building libraries._
 
 This commonly happens when editing and then re-building Rust libraries while the Godot Engine preview is still running. Stop the preview and then Cargo commands should be working fine again.
 
 > _Cargo is correctly building `bindgen` and `clang-sys` etc. while LLVM is not in PATH. Is LLVM really needed ?_
 
 `clang-sys` is [hardcoding LLVM paths](https://github.com/KyleMayes/clang-sys/blob/master/build/common.rs#L24) for Linux, MacOS and Windows, in case LLVM is not registered on PATH.
+
+> After we set up everything that is needed for Android exports, do we really need to keep Android SDK tools in our machine ?
+
+The only purpose of the CI workflow is to abstract the Rust source compilation and Android export processes. We may still use `keytool` and `gpg` for future projects, and use `adb` and **Android Virtual Device** (AVD) for quick debugging.
 
 ## Roadmap
 
@@ -347,7 +408,7 @@ This commonly happens when editing and then re-building Rust libraries while the
 - [x] Release a <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="21" width="21"/> Windows executable via Github Actions
 - [x] Release a <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="23" width="25"/> Linux executable via Github Actions
 - [ ] Release a <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="21" width="21"/> MacOS executable via Github Actions
-- [ ] Release an <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="21" width="21"/> Android application via Github Actions (_if possible_)
+- [x] Release an <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="21" width="21"/> Android application via Github Actions
 - [ ] Release an <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="21" width="21"/> iOS application via Github Actions (_if possible_)
 
 ## License

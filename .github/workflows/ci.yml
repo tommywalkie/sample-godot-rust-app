@@ -255,12 +255,12 @@ jobs:
         echo 'export/android/debug_keystore_pass = "android"' >> /home/runner/.config/godot/editor_settings-3.tres
         cat /home/runner/.config/godot/editor_settings-3.tres
     - name: Building with debug
-      run: godot --export-debug "Android" ./build/android/sample_godot_rust_app_debug.apk
+      run: godot --export-debug "Android" ./build/android/sample_godot_rust_app.apk
     - name: Upload Android game as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: sample_godot_rust_app_debug.apk
-        path: build/android/sample_godot_rust_app_debug.apk
+        name: sample_godot_rust_app_android_debug
+        path: build/android/sample_godot_rust_app.apk
 
   # This job is where we build a signed Godot game for Android,
   # using the libraries we built for ARMv7, AArch64, x86 and x86_64 architectures
@@ -326,12 +326,12 @@ jobs:
       env:
         KEYSTORE_PASS: ${{ secrets.KEYSTORE_PASS }}
     - name: Building for Android
-      run: godot --export "Android" ./build/android/sample_godot_rust_app_signed.apk
+      run: godot --export "Android" ./build/android/sample_godot_rust_app.apk
     - name: Upload Android game as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: sample_godot_rust_app_signed.apk
-        path: build/android/sample_godot_rust_app_signed.apk
+        name: sample_godot_rust_app_android_signed
+        path: build/android/sample_godot_rust_app.apk
 
   # This job is where we create an official release in Github repo,
   # using the Godot games we built in 'godot-linux', 'godot-windows', etc.
