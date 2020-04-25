@@ -303,14 +303,16 @@ The `export_presets.cfg` file keeps track of the specific export presets for eac
 
 #### Exporting for Android
 
-While the CI workflow is providing a simple way to build Rust source and a Godot game for Android by itself without worrying too much about how to properly setup Cargo and Android Studio, but there are still some additional steps to do.
+While the CI workflow is abstracting the Rust source compilation and the Godot Android export processes so we don't have to worry too much about how to properly setup Cargo and Android Studio, there are still some additional steps to do because of the way Android/Java is designed, like :
 
-The way Android/Java is designed, it requires to do some things by ourselves :
+- Explicitly setting the Java package name (`package/unique_name`)
+- Explicitly setting the screen orientation (`screen/orientation`)
+- Explicitly telling which permissions we need
+- Properly signing the app (unless releasing for debugging purposes)
+- Explicitly telling which architectures to support (`architectures/*`)
+- etc.
 
-- To explicitly tell which permissions we need
-- To properly sign the app (unless releasing for debugging purposes)
-
-Permissions are found in `export_presets.cfg` file, under Android related presets, there should be boolean fields with `permissions/*=true|false` pattern we shall edit at our convenience.
+Permissions and most of the mentioned fields are found in `export_presets.cfg` file, under Android related presets, there should be boolean `permissions/*` fields we can edit at our convenience.
 
 The hardest part is signing the app. If not properly handled, Play Protect might consider the APK as unsecured or worse, Godot Engine will fail to export our game. Usually, when exporting for Android, Godot Engine is requiring us to set up **JAR Signing and Verification Tool** (`jarsigner`) executable path, **Android Debug Bridge** (`adb`) executable path and a **Java keystore** path.
 
@@ -319,9 +321,9 @@ The hardest part is signing the app. If not properly handled, Play Protect might
 What we need to do on our side is :
 
 - Install **Android SDK**, it usually comes up with `adb`, a debug Java keystore (`debug.keystore`), and a **JRE** which comes up with `jarsigner` and a **Java Keytool** (`keytool`)
-- Register `adb` and `jarsigner` paths in _Editor > Editor Settings_ in the GUI, it can also be done while editing the `editor-settings-3.tres` file which can be located in `AppData\Roaming\Godot` (Windows) or in `~/.config/godot/` (Ubuntu)
+- Register `adb` and `jarsigner` paths in _Editor > Editor Settings_ in the GUI, this also can be done while editing the `editor-settings-3.tres` file which can be located in `AppData\Roaming\Godot` (Windows) or in `~/.config/godot/` (Ubuntu)
 
-_The following three steps are mandatory for officially signed releases and CI/CD._
+_The following three steps are mandatory for signed releases and CI/CD._
 
 - Make sure **GNU Privacy Guard** (`gpg`) is installed, it is usually available in most Linux distributions, otherwise, if using Windows, install it from [GnuPG Binary Releases](https://gnupg.org/download/)
 - Use `keytool` to create a Java keystore and choose an alias (using `-alias` option), it will ask us some questions and to enter and confirm a password for the keystore that will be located in the relative path we set as `-keystore` option value
@@ -347,9 +349,9 @@ keystore/release_user="some-alias"
 keystore/release_password="<SECRET-PASSWORD>"
 ```
 
-As mentioned before, **it is highly recommended to not commit any keystore password into VCS**. We just need to leave it as `<SECRET-PASSWORD>` and then set up a [Github secret](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets) (`$KEYSTORE_PASS`) for the keystore password so it can be passed to `export_presets.cfg` using simple `sed` commands during the CI workflow.
+As mentioned before, **it is highly recommended to not commit any keystore password into VCS**. We can just leave it as `<SECRET-PASSWORD>` and then set up a [Github secret](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets) (`$KEYSTORE_PASS`) for the keystore password so it can be passed to `export_presets.cfg` using simple `sed` commands during the CI workflow.
 
-For our interest, when we want to decrypt `my.keystore.gpg`, we would be using the following `gpg` command without forgetting to set up `--output` option value.
+For our interest, when we want to decrypt `my.keystore.gpg`, we would be using the following `gpg` command without forgetting to set up `--output` option value. This means we don't need to commit `my.keystore` into VCS.
 
 ```bash
 gpg --quiet --batch --yes --passphrase="$DECRYPTION_KEY" --output my.keystore my.keystore.gpg
