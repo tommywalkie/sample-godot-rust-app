@@ -1,10 +1,17 @@
-# Sample Godot Rust App
+<h1 align="center">Sample Godot Rust App</h1>
 
-![CI](https://github.com/tommywalkie/sample-godot-rust-app/workflows/CI/badge.svg?branch=master)
+<p align="center">
+	<a href="https://github.com/tommywalkie/sample-godot-rust-app/actions?query=workflow%3ACI"><img alt="CI" src="https://github.com/tommywalkie/sample-godot-rust-app/workflows/CI/badge.svg?branch=master" height="20"/></a>
+</p>
+<p align="center">
+  <b>Sample CI powered multi-platform Rust/GDNative based boilerplate project</b></br>
+  <sub>The main purpose of this repo is to help understanding how Rust and Godot Engine work and provide a well documented project boilerplate able to display some scenes and handle signals, using properly tested Rust based logic and automatic builds via Github Actions for multiple platforms.<sub>
+</p>
 
-The main purpose of this repo is to help understanding how Rust and Godot Engine work and provide a well documented project boilerplate able to display some scenes and handle signals, using properly tested Rust based logic and automatic multi-platform builds via Github Actions.
 
-## Summary
+![preview](https://raw.githubusercontent.com/tommywalkie/sample-godot-rust-app/master/assets/preview_sample_godot_rust_app.png)
+
+## Table of contents
 
 - [Features](https://github.com/tommywalkie/sample-godot-rust-app#features)
 - [Stack](https://github.com/tommywalkie/sample-godot-rust-app#stack)
@@ -21,19 +28,20 @@ The main purpose of this repo is to help understanding how Rust and Godot Engine
   - [Exporting for Android](https://github.com/tommywalkie/sample-godot-rust-app#exporting-for-android)
 - [Troubleshooting](https://github.com/tommywalkie/sample-godot-rust-app#troubleshooting)
 - [Roadmap](https://github.com/tommywalkie/sample-godot-rust-app#roadmap)
-- [License](https://github.com/tommywalkie/sample-godot-rust-app#license)
 
 ## Features
 
-![preview](https://raw.githubusercontent.com/tommywalkie/sample-godot-rust-app/master/assets/preview_sample_godot_rust_app.png)
-
-- Sample Godot project with two scenes
-  - Each scene has a _Button_ node with a script allowing us to switch between scenes 
+- Sample project with two Godot scenes
+  - Switch scenes, when clicking on a _Button_ node 
     - **Scene 1** ► **Scene 2** — Using GDScript ([source](https://github.com/tommywalkie/sample-godot-rust-app/blob/master/scenes/LinkToSecondScene.gd))
     - **Scene 2** ► **Scene 1** — Using Rust/GDNative ([source](https://github.com/tommywalkie/sample-godot-rust-app/blob/master/src/core/src/link_to_first_scene.rs))
-  - Each scene has a node with an attached Rust/GDNative script which programmatically add a newly created colored _Panel_ child node, acting as a full-screen background.
+  - Programmatically generate a colored _Panel_ node, as a full-screen background, using Rust/GDNative
 - Use of [Cargo workspaces](https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html) for flexibility
-- Worry-free automatic multi-platform builds via Github Actions
+- Worry-free multi-platform builds and exports via Github Actions
+
+<p align="left">
+  <sub><b>Currently supported : </b>Linux ✅ Windows ✅ Android ✅<sub>
+</p>
 
 ## Stack
 
@@ -295,9 +303,9 @@ Here is the list of all known supported and tested targets :
 | ------------------------------------------------------------ | ------- | ------------------------------------------------------------ |
 | <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="28" width="28"/> | Windows | ✅ `stable-x86_64-pc-windows-msvc`<br />✅ `x86_64-pc-windows-gnu` |
 | <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="35" width="34"/> | Linux   | ✅ `stable-x86_64-unknown-linux-gnu`                          |
-| <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28"/> | MacOS   | ❓ Not tested yet |
+| <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28"/> | MacOS   | ❓ `x86_64-apple-darwin`<br />Not tested yet ([#9](https://github.com/tommywalkie/sample-godot-rust-app/issues/9)) |
 | <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="27" width="32"/> | Android | ✅ `armv7-linux-androideabi`<br />✅ `aarch64-linux-android `<br />✅ `i686-linux-android `<br />✅ `x86_64-linux-android ` |
-| <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28"/> | iOS     | ❓ Might be possible ([godot-rust#285](https://github.com/GodotNativeTools/godot-rust/issues/285)) |
+| <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28"/> | iOS     | ❓ `aarch64-apple-ios`<br />❓ `x86_64-apple-ios`<br />❓ `armv7-apple-ios`<br />❓ `armv7s-apple-ios`<br />❓ `i386-apple-ios`<br />Might be possible, using static libraries instead of dynamic ones ([godot-rust#285](https://github.com/GodotNativeTools/godot-rust/issues/285)) |
 
 The `export_presets.cfg` file keeps track of the specific export presets for each platform. For some targets, **this file may also contain sensitive data** that must be properly handled if committed into VCS. Android is one of them.
 
@@ -307,14 +315,14 @@ While the CI workflow is abstracting the Rust source compilation and the Godot A
 
 - Explicitly setting the Java package name (`package/unique_name`)
 - Explicitly setting the screen orientation (`screen/orientation`)
-- Explicitly telling which permissions we need
-- Properly signing the app (unless releasing for debugging purposes)
+- Explicitly telling which permissions we need (`permissions/*`)
+- Properly signing the app (unless released in _debug_ mode for debugging purposes)
 - Explicitly telling which architectures to support (`architectures/*`)
 - etc.
 
 Permissions and most of the mentioned fields are found in `export_presets.cfg` file, under Android related presets, there should be boolean `permissions/*` fields we can edit at our convenience.
 
-The hardest part is signing the app. If not properly handled, Play Protect might consider the APK as unsecured or worse, Godot Engine will fail to export our game. Usually, when exporting for Android, Godot Engine is requiring us to set up **JAR Signing and Verification Tool** (`jarsigner`) executable path, **Android Debug Bridge** (`adb`) executable path and a **Java keystore** path.
+The hardest part is signing the app when releasing it in _release_ mode. If not properly handled, Play Protect might consider the APK as unsecured or worse, Godot Engine will fail to export our game. Usually, when exporting for Android, Godot Engine is requiring us to set up **JAR Signing and Verification Tool** (`jarsigner`) executable path, **Android Debug Bridge** (`adb`) executable path and a **Java keystore** path.
 
 ![](https://user-images.githubusercontent.com/16148332/79728319-0a9b5200-82ee-11ea-9c3a-dd4be1eebe35.png)
 
@@ -323,19 +331,20 @@ What we need to do on our side is :
 - Install **Android SDK**, it usually comes up with `adb`, a debug Java keystore (`debug.keystore`), and a **JRE** which comes up with `jarsigner` and a **Java Keytool** (`keytool`)
 - Register `adb` and `jarsigner` paths in _Editor > Editor Settings_ in the GUI, this also can be done while editing the `editor-settings-3.tres` file which can be located in `AppData\Roaming\Godot` (Windows) or in `~/.config/godot/` (Ubuntu)
 
-_The following three steps are mandatory for signed releases and CI/CD._
+_The following two steps are mandatory for signed releases and CI/CD._</summary>
 
-- Make sure **GNU Privacy Guard** (`gpg`) is installed, it is usually available in most Linux distributions, otherwise, if using Windows, install it from [GnuPG Binary Releases](https://gnupg.org/download/)
 - Use `keytool` to create a Java keystore and choose an alias (using `-alias` option), it will ask us some questions and to enter and confirm a password for the keystore that will be located in the relative path we set as `-keystore` option value
 
 ```bash
 keytool -genkeypair -v -keystore ./my.keystore -alias some-alias -keyalg RSA -keysize 2048 -validity 10000
 ```
 
-- To protect our keystore under symmetric encryption, use `gpg` to create a GPG key that also needs to be protected with another password we will be asked to enter and confirm, this will create a `.gpg` file
+- Currently our keystore is only protected by a password, we may consider adding another security layer, especially if we want to use the keystore for CI/CD. We can choose to use **GNU Privacy Guard** (`gpg`) to encrypt the keystore as a newly created `my.keystore.gpg` file that will be protected by another passphrase (as a decryption key) we will be asked to set up and confirm. `gpg` is available in most Linux distributions, or can be found in [GnuPG Binary Releases](https://gnupg.org/download/) for Windows users
 
 ```bash
-gpg -c .\my.keystore
+# -c, --symmetric
+#   Encrypt with symmetric cipher only. This command asks for a passphrase.
+gpg -c ./my.keystore
 ```
 
 - Finally, register the release (or debug) keystore and the alias in `export_presets.cfg` under the proper `keystore/*` fields
@@ -351,13 +360,13 @@ keystore/release_password="<SECRET-PASSWORD>"
 
 As mentioned before, **it is highly recommended to not commit any keystore password into VCS**. We can just leave it as `<SECRET-PASSWORD>` and then set up a [Github secret](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets) (`$KEYSTORE_PASS`) for the keystore password so it can be passed to `export_presets.cfg` using simple `sed` commands during the CI workflow.
 
-For our interest, when we want to decrypt `my.keystore.gpg`, we would be using the following `gpg` command without forgetting to set up `--output` option value. This means we don't need to commit `my.keystore` into VCS.
+For our interest, when we want to decrypt `my.keystore.gpg`, we would be using the following `gpg` command without forgetting to set up `--output` option value.
 
 ```bash
 gpg --quiet --batch --yes --passphrase="$DECRYPTION_KEY" --output my.keystore my.keystore.gpg
 ```
 
-This is also done during the CI workflow, so we just need to set up a second [Github secret](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets) (`$DECRYPTION_KEY`) to pass the decryption key password.
+This step is done during the CI workflow, so we just need to set up a second [Github secret](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets) (`$DECRYPTION_KEY`) to pass the decryption key passphrase.
 
 ![ci workflow for android](https://raw.githubusercontent.com/tommywalkie/sample-godot-rust-app/master/assets/rust-to-android-workflow.png)
 
@@ -371,9 +380,9 @@ This commonly happens when editing and then re-building Rust libraries while the
 
 `clang-sys` is [hardcoding LLVM paths](https://github.com/KyleMayes/clang-sys/blob/master/build/common.rs#L24) for Linux, MacOS and Windows, in case LLVM is not registered on PATH.
 
-> After we set up everything that is needed for Android exports, do we really need to keep Android SDK tools in our machine ?
+> Does any project contributor need to install Android SDK, especially if the whole CI/CD setup is ready for Android exports ?
 
-The only purpose of the CI workflow is to abstract the Rust source compilation and Android export processes. We may still use `keytool` and `gpg` for future projects, and use `adb` and **Android Virtual Device** (AVD) for quick debugging.
+The only purpose of the CI workflow is to abstract the Rust source compilation and Android export processes. For quick debugging, we would still need to use `adb` and **Android Virtual Device** (AVD). Eventually, we can use GDNative library artifacts from Github Actions to skip the Cargo setup step.
 
 ## Roadmap
 
@@ -412,7 +421,3 @@ The only purpose of the CI workflow is to abstract the Rust source compilation a
 - [ ] Release a <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="21" width="21"/> MacOS executable via Github Actions
 - [x] Release an <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="21" width="21"/> Android application via Github Actions
 - [ ] Release an <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="21" width="21"/> iOS application via Github Actions (_if possible_)
-
-## License
-
-MIT
