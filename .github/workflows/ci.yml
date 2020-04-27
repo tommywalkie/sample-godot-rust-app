@@ -70,7 +70,7 @@ jobs:
   # This job is where we compile Rust source code for Android targets
   rust-android:
     runs-on: ubuntu-latest
-    name: Building Rust source for Android x86_64
+    name: Building Rust source for Android
     steps:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
