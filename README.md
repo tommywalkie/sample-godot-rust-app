@@ -331,9 +331,9 @@ What we need to do on our side is :
 - Install **Android SDK**, it usually comes up with `adb`, a debug Java keystore (`debug.keystore`), and a **JRE** which comes up with `jarsigner` and a **Java Keytool** (`keytool`)
 - Register `adb` and `jarsigner` paths in _Editor > Editor Settings_ in the GUI, this also can be done while editing the `editor-settings-3.tres` file which can be located in `AppData\Roaming\Godot` (Windows) or in `~/.config/godot/` (Ubuntu)
 
-_The following two steps are mandatory for signed releases and CI/CD._</summary>
+_The following two steps are mandatory for signed releases and CI/CD._
 
-- Use `keytool` to create a Java keystore and choose an alias (using `-alias` option), it will ask us some questions and to enter and confirm a password for the keystore that will be located in the relative path we set as `-keystore` option value
+- Use `keytool` to create a Java keystore and choose an alias (using `-alias` option), it will ask us some questions and to enter and confirm a password for the keystore that will be located in the relative path we set as `-keystore` option value (**Known limitation** : Passwords with space characters are not supported by the CI workflow)
 
 ```bash
 keytool -genkeypair -v -keystore ./my.keystore -alias some-alias -keyalg RSA -keysize 2048 -validity 10000
