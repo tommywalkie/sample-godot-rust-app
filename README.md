@@ -331,15 +331,13 @@ What we need to do on our side is :
 - Install **Android SDK**, it usually comes up with `adb`, a debug Java keystore (`debug.keystore`), and a **JRE** which comes up with `jarsigner` and a **Java Keytool** (`keytool`)
 - Register `adb` and `jarsigner` paths in _Editor > Editor Settings_ in the GUI, this also can be done while editing the `editor-settings-3.tres` file which can be located in `AppData\Roaming\Godot` (Windows) or in `~/.config/godot/` (Ubuntu)
 
-_The following two steps are mandatory for signed releases and CI/CD._
-
-- Use `keytool` to create a Java keystore and choose an alias (using `-alias` option), it will ask us some questions and to enter and confirm a password for the keystore that will be located in the relative path we set as `-keystore` option value (**Known limitation** : Passwords with space characters are not supported by the CI workflow)
+- (_Mandatory for signed releases_) Use `keytool` to create a Java keystore and choose an alias (using `-alias` option), it will ask us some questions, the newly created keystore that will be located in the relative path we set as `-keystore` option value and must be protected by **one single password** that must be set as `-storepass` and `-keypass` options values (as related in [official docs](https://docs.godotengine.org/en/3.2/getting_started/workflow/export/exporting_for_android.html#exporting-for-google-play-store))
 
 ```bash
-keytool -genkeypair -v -keystore ./my.keystore -alias some-alias -keyalg RSA -keysize 2048 -validity 10000
+keytool -genkeypair -v -keystore ./my.keystore -alias some-alias -keyalg RSA -keysize 2048 -validity 10000 -storepass my-password -keypass my-password
 ```
 
-- Currently our keystore is only protected by a password, we may consider adding another security layer, especially if we want to use the keystore for CI/CD. We can choose to use **GNU Privacy Guard** (`gpg`) to encrypt the keystore as a newly created `my.keystore.gpg` file that will be protected by another passphrase (as a decryption key) we will be asked to set up and confirm. `gpg` is available in most Linux distributions, or can be found in [GnuPG Binary Releases](https://gnupg.org/download/) for Windows users
+- (_Mandatory for signed releases via CI/CD_) Consider adding another security layer to our release keystore. We can choose to use **GNU Privacy Guard** (`gpg`) to encrypt the keystore as a newly created `my.keystore.gpg` file that will be protected by another passphrase (as a decryption key) we will be asked to set up and confirm. `gpg` is available in most Linux distributions, or can be found in [GnuPG Binary Releases](https://gnupg.org/download/) for Windows users
 
 ```bash
 # -c, --symmetric
