@@ -147,6 +147,8 @@ jobs:
       run: ls /usr/local/opt/llvm@6/bin
     - name: Check bin directory
       run: ls /usr/local/bin/
+    - name: Creat symbolic link
+      run: ln -s /usr/local/opt/llvm@6/binllvm-config /usr/local/bin/llvm-config
     - name: Check if llvm-config exists
       run: llvm-config --version
     # - name: Install glibc-devel so GDNative can use the standard C libraries
