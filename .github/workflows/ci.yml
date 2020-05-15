@@ -173,6 +173,7 @@ jobs:
     - name: Build with Cargo for ARMv7
       run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target armv7-linux-androideabi
     - name: Build with Cargo for ARM64
+      if: always()
       run: C_INCLUDE_PATH=.:$JAVA_HOME/include/:$JAVA_HOME/include/linux/ cargo build --release --target aarch64-linux-android
 
   # This job is where we build a Godot game for Linux,
