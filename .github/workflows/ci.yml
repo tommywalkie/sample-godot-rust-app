@@ -242,7 +242,7 @@ jobs:
         name: libcore.dylib
         path: target/stable-x86_64-apple-darwin/release
     - name: Building for MacOS
-      run: godot -v --export "Mac OSX" ./build/macos/sample_godot_rust_app
+      run: godot -v --export "Mac OSX" ./build/macos/sample_godot_rust_app.zip
     - name: Upload MacOS game as artifact
       uses: actions/upload-artifact@v1
       with:
