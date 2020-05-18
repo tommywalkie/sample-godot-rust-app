@@ -40,7 +40,7 @@
 - Worry-free multi-platform builds and exports via Github Actions
 
 <p align="left">
-  <sub><b>Currently supported : </b>Linux ✅ Windows ✅ Android ✅<sub>
+  <sub><b>Currently supported : </b>Linux ✅ Windows ✅ MacOS ✅ Android ✅<sub>
 </p>
 
 ## Stack
@@ -303,7 +303,7 @@ Here is the list of all known supported and tested targets :
 | ------------------------------------------------------------ | ------- | ------------------------------------------------------------ |
 | <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="28" width="28"/> | Windows | ✅ `stable-x86_64-pc-windows-msvc`<br />✅ `x86_64-pc-windows-gnu` |
 | <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="35" width="34"/> | Linux   | ✅ `stable-x86_64-unknown-linux-gnu`                          |
-| <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28"/> | MacOS   | ❓ `x86_64-apple-darwin`<br />Not tested yet ([#9](https://github.com/tommywalkie/sample-godot-rust-app/issues/9)) |
+| <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28"/> | MacOS   | ✅ `x86_64-apple-darwin`                                      |
 | <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="27" width="32"/> | Android | ✅ `armv7-linux-androideabi`<br />✅ `aarch64-linux-android `<br />✅ `i686-linux-android `<br />✅ `x86_64-linux-android ` |
 | <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28"/> | iOS     | ❓ `aarch64-apple-ios`<br />❓ `x86_64-apple-ios`<br />❓ `armv7-apple-ios`<br />❓ `armv7s-apple-ios`<br />❓ `i386-apple-ios`<br />Might be possible, using static libraries instead of dynamic ones ([godot-rust#285](https://github.com/GodotNativeTools/godot-rust/issues/285)) |
 
@@ -408,7 +408,7 @@ The only purpose of the CI workflow is to abstract the Rust source compilation a
 
 - [x] Release a <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="21" width="21"/> Windows executable
 - [x] Release a <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="23" width="25"/> Linux executable
-- [ ] Release a <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="21" width="21"/> MacOS executable
+- [x] Release a <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="21" width="21"/> MacOS executable
 - [x] Release an <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="21" width="21"/> Android application
 - [ ] Release an <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="21" width="21"/> iOS application (_if possible_)
 
@@ -416,6 +416,6 @@ The only purpose of the CI workflow is to abstract the Rust source compilation a
 
 - [x] Release a <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="21" width="21"/> Windows executable via Github Actions
 - [x] Release a <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="23" width="25"/> Linux executable via Github Actions
-- [ ] Release a <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="21" width="21"/> MacOS executable via Github Actions
+- [x] Release a <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="21" width="21"/> MacOS executable via Github Actions
 - [x] Release an <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="21" width="21"/> Android application via Github Actions
 - [ ] Release an <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="21" width="21"/> iOS application via Github Actions (_if possible_)

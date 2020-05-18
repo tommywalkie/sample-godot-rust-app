@@ -1,7 +1,7 @@
 [entry]
 
 X11.64="res://target/stable-x86_64-unknown-linux-gnu/release/libcore.so"
-OSX.64="res://target/stable-x86_64-apple-darwin/release/core.dylib"
+OSX.64="res://target/stable-x86_64-apple-darwin/release/libcore.dylib"
 Windows.64="res://target/x86_64-pc-windows-gnu/release/core.dll"
 Android.armeabi-v7a="res://target/armv7-linux-androideabi/release/libcore.so"
 Android.arm64-v8a="res://target/aarch64-linux-android/release/libcore.so"
