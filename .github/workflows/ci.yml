@@ -9,7 +9,6 @@ on: push
 # on:
 #   push:
 #     paths:
-#     - 'dockerfiles/**'
 #     - 'assets/**'
 #     - 'scenes/**'
 #     - 'src/**'

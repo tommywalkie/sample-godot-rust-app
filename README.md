@@ -291,7 +291,7 @@ speculate! {
 
 ## Exporting
 
-Under the hood, this boilerplate is using Github Actions, Docker, [`rust-embedded/cross`](https://github.com/rust-embedded/cross) and a headless Godot Engine instance to test, build and export for multiple platforms, allowing users to focus on game development while abstracting a lot of tedious tasks, using a `export_presets.cfg` file at the root of the project.
+Under the hood, this boilerplate is using Github Actions and a headless Godot Engine instance to test, build and export for multiple platforms, allowing users to focus on game development while abstracting a lot of tedious tasks, using a `export_presets.cfg` file at the root of the project.
 
 Here is the current workflow :
 
