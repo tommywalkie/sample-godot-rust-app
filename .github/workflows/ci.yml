@@ -67,6 +67,22 @@ jobs:
         path: target
         key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
 
+  # This job is where we compile Rust source code for MacOS target
+  rust-macos:
+    runs-on: macos-latest
+    name: Building Rust source for MacOS
+    steps:
+    - uses: actions/checkout@v2
+    - name: Check Rust toolchain
+      run: rustup show
+    - name: Build
+      run: cargo build --release
+    - name: Upload GDNative library as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: libcore.a
+        path: target/x86_64-pc-windows-gnu/release/libcore.a
+
   # This job is where we compile Rust source code for Android targets
   rust-android:
     runs-on: ubuntu-latest
