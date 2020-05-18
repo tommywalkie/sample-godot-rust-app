@@ -36,11 +36,6 @@ jobs:
       with:
         name: libcore.so
         path: target/release/libcore.so
-    - name: Cache cargo build
-      uses: actions/cache@v1
-      with:
-        path: target
-        key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
 
   # This job is where we compile Rust source code for Windows target
   rust-windows:
@@ -61,11 +56,25 @@ jobs:
       with:
         name: core.dll
         path: target/x86_64-pc-windows-gnu/release/core.dll
-    - name: Cache cargo build
-      uses: actions/cache@v1
-      with:
-        path: target
-        key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+
+  # This job is where we compile Rust source code for Windows target without Cross
+  rust-windows-new:
+    runs-on: ubuntu-latest
+    name: Building Rust source for Windows without Cross
+    steps:
+    - uses: actions/checkout@v2
+    - name: Check Rust toolchain
+      run: rustup show
+    - name: Update apt-get
+      run: sudo apt-get update
+    - name: Setting up llvm-config
+      run: sudo apt-get install llvm-dev -y
+    - name: Check if llvm-config exists
+      run: llvm-config --version
+    - name: Install Rust toolchain
+      run: rustup target add x86_64-pc-windows-gnu
+    - name: Build with Cargo
+      run: cargo build --release --target x86_64-pc-windows-gnu
 
   # This job is where we compile Rust source code for Android targets
   rust-android:
