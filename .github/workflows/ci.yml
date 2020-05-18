@@ -246,7 +246,7 @@ jobs:
     - name: Upload MacOS game as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: sample_godot_rust_app.app
+        name: sample_godot_rust_app_macos
         path: build/macos
 
   # This job is where we build a Godot game for Android with debug mode,
