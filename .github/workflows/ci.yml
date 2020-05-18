@@ -77,11 +77,15 @@ jobs:
       run: rustup show
     - name: Build
       run: cargo build --release
-    - name: Upload GDNative library as artifact
-      uses: actions/upload-artifact@v1
-      with:
-        name: libcore.a
-        path: target/release/libcore.a
+    - name: Troubleshooting MacOS target directory
+      run: ls target/
+    - name: Troubleshooting MacOS release directory
+      run: ls target/release/
+    # - name: Upload GDNative library as artifact
+    #   uses: actions/upload-artifact@v1
+    #   with:
+    #     name: libcore.a
+    #     path: target/release/libcore.a
 
   # This job is where we compile Rust source code for Android targets
   rust-android:
