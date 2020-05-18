@@ -45,26 +45,6 @@ jobs:
     - uses: actions/checkout@v2
     - name: Check Rust toolchain
       run: rustup show
-    - name: Install Cross
-      run: cargo install cross
-    - name: Build custom Docker image for x86_64-pc-windows-gnu toolchain with LLVM
-      run: docker build -t my/x86_64-pc-windows-gnu:latest -f ./dockerfiles/x86_64-pc-windows-gnu.Dockerfile .
-    - name: Build with Cross
-      run: cross build --release --target x86_64-pc-windows-gnu
-    - name: Upload GDNative library as artifact
-      uses: actions/upload-artifact@v1
-      with:
-        name: core.dll
-        path: target/x86_64-pc-windows-gnu/release/core.dll
-
-  # This job is where we compile Rust source code for Windows target without Cross
-  rust-windows-new:
-    runs-on: ubuntu-latest
-    name: Building Rust source for Windows without Cross
-    steps:
-    - uses: actions/checkout@v2
-    - name: Check Rust toolchain
-      run: rustup show
     - name: Install Rust toolchain
       run: rustup target add x86_64-pc-windows-gnu
     - name: Update apt-get
@@ -76,14 +56,18 @@ jobs:
     - name: Install MinGW GCC linker
       run: sudo apt-get install gdb-mingw-w64 gcc-mingw-w64-x86-64 -y
     - name: Setup Cargo with MinGW GCC linker
-      run: |
-        ls ~/.cargo/  
+      run: | 
         touch ~/.cargo/config
         echo '[target.x86_64-pc-windows-gnu]' >> ~/.cargo/config
         echo 'linker = "/usr/bin/x86_64-w64-mingw32-gcc"' >> ~/.cargo/config
         cat ~/.cargo/config
     - name: Build with Cargo
       run: cargo build --release --target x86_64-pc-windows-gnu
+    - name: Upload GDNative library as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: core.dll
+        path: target/x86_64-pc-windows-gnu/release/core.dll
 
   # This job is where we compile Rust source code for Android targets
   rust-android:
@@ -105,7 +89,6 @@ jobs:
       run: sudo apt-get install g++-multilib gcc-multilib libc6-dev-i386 -y
     - name: Registering a NDK based Clang linker to Cargo
       run: |
-        ls ~/.cargo/  
         touch ~/.cargo/config
         echo '[target.armv7-linux-androideabi]' >> ~/.cargo/config
         echo 'linker = "/usr/local/lib/android/sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin/armv7a-linux-androideabi29-clang"' >> ~/.cargo/config
