@@ -9,7 +9,8 @@ edition = "2018"
 doctest = false
 crate-type = [
 	"cdylib", # A GDNative library for Godot Engine
-	"lib" # A regular Rust library to be included somewhere else
+	"lib", # A regular Rust library to be included somewhere else
+    "staticlib" # Static library for iOS
 ] 
 
 [dependencies]

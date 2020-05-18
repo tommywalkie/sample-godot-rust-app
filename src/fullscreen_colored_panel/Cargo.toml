@@ -8,7 +8,8 @@ edition = "2018"
 [lib]
 doctest = false
 crate-type = [
-	"lib" # A regular Rust library to be included somewhere else
+	"lib", # A regular Rust library to be included somewhere else
+    "staticlib" # Static library for iOS
 ] 
 
 [dependencies]
