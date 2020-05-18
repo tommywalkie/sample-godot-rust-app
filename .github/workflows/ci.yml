@@ -163,8 +163,11 @@ jobs:
       run: cargo lipo --release
     - name: Check aarch64-apple-ios directory if build succeeded
       run: ls target/aarch64-apple-ios/release
-    - name: Check release directory if build succeeded
-      run: ls target/x86_64-apple-ios/release
+    - name: Upload GDNative library as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: libcore.a
+        path: target/aarch64-apple-ios/release/libcore.a
 
   # This job is where we build a Godot game for Linux,
   # using the Linux-compatible library we built in 'rust-linux'
@@ -403,6 +406,40 @@ jobs:
       with:
         name: sample_godot_rust_app_android_signed
         path: build/android/sample_godot_rust_app.apk
+
+  # This job is where we build a Godot game for iOS,
+  # using the static library we built in 'rust-ios'
+  godot-ios:
+    runs-on: ubuntu-latest
+    needs: rust-ios
+    name: Building Godot game for iOS
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup environment
+      run: |
+        wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_linux_headless.64.zip
+        wget https://downloads.tuxfamily.org/godotengine/3.2.1/Godot_v3.2.1-stable_export_templates.tpz
+        mkdir ~/.cache
+        mkdir -p ~/.config/godot
+        mkdir -p ~/.local/share/godot/templates/3.2.1.stable
+        unzip Godot_v3.2.1-stable_linux_headless.64.zip
+        sudo mv Godot_v3.2.1-stable_linux_headless.64 /usr/local/bin/godot
+        unzip Godot_v3.2.1-stable_export_templates.tpz
+        sudo mv templates/* ~/.local/share/godot/templates/3.2.1.stable
+        sudo rm -f Godot_v3.2.1-stable_linux_headless.64.zip Godot_v3.2.1-stable_export_templates.tpz
+        mkdir -p ./build/ios
+    - name: Download GDNative library artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: libcore.a
+        path: target/stable-x86_64-apple-darwin/release
+    - name: Building for MacOS
+      run: godot -v --export "iOS" ./build/ios/sample_godot_rust_app.ipa
+    - name: Upload MacOS game as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: sample_godot_rust_app_ios
+        path: build/ios
 
   # This job is where we create an official release in Github repo,
   # using the Godot games we built in 'godot-linux', 'godot-windows', etc.
