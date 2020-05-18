@@ -81,7 +81,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: libcore.a
-        path: target/x86_64-pc-windows-gnu/release/libcore.a
+        path: target/release/libcore.a
 
   # This job is where we compile Rust source code for Android targets
   rust-android:
