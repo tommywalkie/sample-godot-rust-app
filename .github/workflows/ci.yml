@@ -432,7 +432,12 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: libcore.a
-        path: target/stable-x86_64-apple-darwin/release
+        path: target/aarch64-apple-ios/release
+    - name: Download GDNative library artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: libcore.a
+        path: target/armv7-apple-ios/release
     - name: Building for MacOS
       run: godot -v --export "iOS" ./build/ios/sample_godot_rust_app.ipa
     - name: Upload MacOS game as artifact
