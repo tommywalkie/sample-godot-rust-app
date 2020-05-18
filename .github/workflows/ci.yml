@@ -76,7 +76,7 @@ jobs:
     - name: Install MinGW GCC linker
       run: sudo apt-get install gdb-mingw-w64 gcc-mingw-w64-x86-64 -y
     - name: Setup Cargo with MinGW GCC linker
-      run: run: |
+      run: |
         ls ~/.cargo/  
         touch ~/.cargo/config
         echo '[target.x86_64-pc-windows-gnu]' >> ~/.cargo/config
