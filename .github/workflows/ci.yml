@@ -152,7 +152,7 @@ jobs:
     - name: Check Rust toolchain
       run: rustup show
     - name: Add Rust toolchains for iOS
-      run: rustup target add aarch64-apple-ios x86_64-apple-ios
+      run: rustup target add aarch64-apple-ios
     - name: Install cargo-lipo
       run: cargo install cargo-lipo
     - name: Create symbolic link for llvm-config
@@ -161,10 +161,10 @@ jobs:
       run: llvm-config --version
     - name: Build with cargo-lipo
       run: cargo lipo --release
-    - name: Check target directory if build succeeded
-      run: ls target
+    - name: Check aarch64-apple-ios directory if build succeeded
+      run: ls target/aarch64-apple-ios
     - name: Check release directory if build succeeded
-      run: ls target/release
+      run: ls target/release/build
 
   # This job is where we build a Godot game for Linux,
   # using the Linux-compatible library we built in 'rust-linux'
