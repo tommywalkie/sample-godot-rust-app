@@ -162,9 +162,9 @@ jobs:
     - name: Build with cargo-lipo
       run: cargo lipo --release
     - name: Check aarch64-apple-ios directory if build succeeded
-      run: ls target/aarch64-apple-ios
+      run: ls target/aarch64-apple-ios/release
     - name: Check release directory if build succeeded
-      run: ls target/release/build
+      run: ls target/x86_64-apple-ios/release
 
   # This job is where we build a Godot game for Linux,
   # using the Linux-compatible library we built in 'rust-linux'
