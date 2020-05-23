@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - Sample Godot Rust App</title>
+        <title>Setup Rust project - Sample Godot Rust App</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="features.html">Features</a></li><li class="chapter-item expanded affix "><a href="supported-platforms.html">Supported platforms</a></li><li class="chapter-item expanded affix "><a href="requirements.html">Requirements</a></li><li class="chapter-item expanded "><a href="rust-gdnative-from-scratch.html"><strong aria-hidden="true">1.</strong> Rust/GDNative from scratch</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="setup-godot-project.html"><strong aria-hidden="true">1.1.</strong> Setup Godot project</a></li><li class="chapter-item expanded "><a href="setup-rust-project.html"><strong aria-hidden="true">1.2.</strong> Setup Rust project</a></li><li class="chapter-item expanded "><a href="create-rust-gdnative-library.html"><strong aria-hidden="true">1.3.</strong> Create Rust/GDNative library</a></li><li class="chapter-item expanded "><a href="bind-library-with-godot.html"><strong aria-hidden="true">1.4.</strong> Bind library with Godot</a></li></ol></li><li class="chapter-item expanded "><a href="setup-github-actions.html"><strong aria-hidden="true">2.</strong> Setup Github Actions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="how-it-works.html"><strong aria-hidden="true">2.1.</strong> How it works ?</a></li><li class="chapter-item expanded "><a href="export-for-android.html"><strong aria-hidden="true">2.2.</strong> Export for Android</a></li><li class="chapter-item expanded "><a href="export-for-ios.html"><strong aria-hidden="true">2.3.</strong> Export for iOS</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="features.html">Features</a></li><li class="chapter-item expanded affix "><a href="supported-platforms.html">Supported platforms</a></li><li class="chapter-item expanded affix "><a href="requirements.html">Requirements</a></li><li class="chapter-item expanded "><a href="rust-gdnative-from-scratch.html"><strong aria-hidden="true">1.</strong> Rust/GDNative from scratch</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="setup-godot-project.html"><strong aria-hidden="true">1.1.</strong> Setup Godot project</a></li><li class="chapter-item expanded "><a href="setup-rust-project.html" class="active"><strong aria-hidden="true">1.2.</strong> Setup Rust project</a></li><li class="chapter-item expanded "><a href="create-rust-gdnative-library.html"><strong aria-hidden="true">1.3.</strong> Create Rust/GDNative library</a></li><li class="chapter-item expanded "><a href="bind-library-with-godot.html"><strong aria-hidden="true">1.4.</strong> Bind library with Godot</a></li></ol></li><li class="chapter-item expanded "><a href="setup-github-actions.html"><strong aria-hidden="true">2.</strong> Setup Github Actions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="how-it-works.html"><strong aria-hidden="true">2.1.</strong> How it works ?</a></li><li class="chapter-item expanded "><a href="export-for-android.html"><strong aria-hidden="true">2.2.</strong> Export for Android</a></li><li class="chapter-item expanded "><a href="export-for-ios.html"><strong aria-hidden="true">2.3.</strong> Export for iOS</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -147,18 +147,84 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
-<p><strong>Sample Godot Rust App</strong> is a community project which aims to provide a beginner-friendly Rust/GDNative boilerplate project with pre-configured multi-platform continuous integration.</p>
-<p>By introducing GDNative, Godot Engine can load third-party code which can be written in any language, using shared libraries. Thanks to the <code>gdnative</code> crate, GDNative can support Rust language, which grants performance, memory safety and concurrency.</p>
+                        <h1><a class="header" href="#setup-rust-project" id="setup-rust-project">Setup Rust project</a></h1>
+<p>Rust source can be compiled into binaries (<code>bin</code>), Rust crates/libraries (<code>lib</code>), dynamic libraries (<code>dylib</code>) and/or static libraries (<code>staticlib</code>), etc. This can defined as the <code>crate-type</code> field value in a Cargo project configuration file.</p>
+<pre><code class="language-toml">[lib]
+crate-type = [&quot;bin&quot;, &quot;lib&quot;]
+</code></pre>
+<p>The minimal goal is to create a single dynamic system Rust/GDNative library (<code>cdylib</code>) for Godot. Using a single Cargo library project is the easiest way to go.</p>
+<p>Optionally, if interested into splitting the whole codebase into multiple smaller, isolated and more readable libraries, using a <a href="https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html">Cargo workspace</a> is the way to go. This allows to have one single centralized dynamic system Rust/GDNative library which may import and use some methods from soon-to-be created Rust libraries, for math stuff for example.</p>
+<p>Choose and follow one of the two setup guides.</p>
+<h2><a class="header" href="#single-cargo-library" id="single-cargo-library">Single Cargo library</a></h2>
+<p>Use the following command to create a new Cargo library project inside the Godot project directory.</p>
+<pre><code class="language-bash">cargo init --lib
+</code></pre>
+<p>This usually generates a <code>Cargo.toml</code> Cargo project configuration file and a <code>src</code> directory with a &quot;<em>Hello World</em>&quot; program inside a <code>lib.rs</code> file.</p>
+<p>Add the <code>gdnative</code> crate dependency in the <code>Cargo.toml</code> and define the build output as a dynamic system library.</p>
+<pre><code class="language-toml">[lib]
+crate-type = [&quot;cdylib&quot;]
+
+[dependencies]
+gdnative = &quot;0.8&quot;
+</code></pre>
+<h2><a class="header" href="#cargo-workspace" id="cargo-workspace">Cargo workspace</a></h2>
+<p>Just create a <code>Cargo.toml</code> at the root of the GOdot project and reference the soon-to-be created Cargo libraries as workspace members. The value can be an array with specific library paths. For the sake of simplicity, just create a <code>src</code> directory and define any sub-directory as a workspace member.</p>
+<pre><code>[workspace]
+members = [&quot;src/*&quot;]
+</code></pre>
+<p>Then create any new Cargo project inside <code>src</code> directory by using the following command :</p>
+<pre><code class="language-bash"># Create a library called &quot;my_lib&quot;
+cargo new src/my_lib --lib
+</code></pre>
+<p>The file structure should now look like this :</p>
+<pre><code>.
+├─── src
+│   └───  my_lib
+│       ├─── src
+│       │   └   lib.rs
+│       └   Cargo.toml
+└   Cargo.toml
+</code></pre>
+<p>Inside each member's <code>Cargo.toml</code> file, set accordingly the <code>crate-type</code> value with <code>lib</code> and/or <code>cdylib</code>, and add the <code>gdnative</code> dependency where it is useful.</p>
+<pre><code class="language-toml">[lib]
+crate-type = [
+    &quot;cdylib&quot;, # For GDNative
+    &quot;lib&quot;     # For Rust
+]
+
+[dependencies]
+gdnative = &quot;0.8&quot;
+</code></pre>
+<p>To import some newly created library public methods in another crate, add the library as a crate dependency in <code>Cargo.toml</code>.</p>
+<pre><code class="language-toml">[dependencies]
+my_lib = { path = &quot;../my_lib&quot; }
+</code></pre>
+<p><br></br></p>
+<p>Finally, register the following entries in <code>.gitignore</code> and then follow the next chapter to setup the Rust/GDNative library.</p>
+<pre><code class="language-bash"># Generated by Cargo
+# will have compiled files and executables
+/target/
+
+# Remove Cargo.lock from gitignore if creating an executable, leave it for libraries
+# More information here https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html
+Cargo.lock
+
+# These are backup files generated by rustfmt
+**/*.rs.bk
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
+                            <a rel="prev" href="setup-godot-project.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
 
                         
-                            <a rel="next" href="features.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="create-rust-gdnative-library.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -170,9 +236,13 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
+                    <a rel="prev" href="setup-godot-project.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
 
                 
-                    <a rel="next" href="features.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="create-rust-gdnative-library.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - Sample Godot Rust App</title>
+        <title>Supported platforms - Sample Godot Rust App</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="features.html">Features</a></li><li class="chapter-item expanded affix "><a href="supported-platforms.html">Supported platforms</a></li><li class="chapter-item expanded affix "><a href="requirements.html">Requirements</a></li><li class="chapter-item expanded "><a href="rust-gdnative-from-scratch.html"><strong aria-hidden="true">1.</strong> Rust/GDNative from scratch</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="setup-godot-project.html"><strong aria-hidden="true">1.1.</strong> Setup Godot project</a></li><li class="chapter-item expanded "><a href="setup-rust-project.html"><strong aria-hidden="true">1.2.</strong> Setup Rust project</a></li><li class="chapter-item expanded "><a href="create-rust-gdnative-library.html"><strong aria-hidden="true">1.3.</strong> Create Rust/GDNative library</a></li><li class="chapter-item expanded "><a href="bind-library-with-godot.html"><strong aria-hidden="true">1.4.</strong> Bind library with Godot</a></li></ol></li><li class="chapter-item expanded "><a href="setup-github-actions.html"><strong aria-hidden="true">2.</strong> Setup Github Actions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="how-it-works.html"><strong aria-hidden="true">2.1.</strong> How it works ?</a></li><li class="chapter-item expanded "><a href="export-for-android.html"><strong aria-hidden="true">2.2.</strong> Export for Android</a></li><li class="chapter-item expanded "><a href="export-for-ios.html"><strong aria-hidden="true">2.3.</strong> Export for iOS</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="features.html">Features</a></li><li class="chapter-item expanded affix "><a href="supported-platforms.html" class="active">Supported platforms</a></li><li class="chapter-item expanded affix "><a href="requirements.html">Requirements</a></li><li class="chapter-item expanded "><a href="rust-gdnative-from-scratch.html"><strong aria-hidden="true">1.</strong> Rust/GDNative from scratch</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="setup-godot-project.html"><strong aria-hidden="true">1.1.</strong> Setup Godot project</a></li><li class="chapter-item expanded "><a href="setup-rust-project.html"><strong aria-hidden="true">1.2.</strong> Setup Rust project</a></li><li class="chapter-item expanded "><a href="create-rust-gdnative-library.html"><strong aria-hidden="true">1.3.</strong> Create Rust/GDNative library</a></li><li class="chapter-item expanded "><a href="bind-library-with-godot.html"><strong aria-hidden="true">1.4.</strong> Bind library with Godot</a></li></ol></li><li class="chapter-item expanded "><a href="setup-github-actions.html"><strong aria-hidden="true">2.</strong> Setup Github Actions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="how-it-works.html"><strong aria-hidden="true">2.1.</strong> How it works ?</a></li><li class="chapter-item expanded "><a href="export-for-android.html"><strong aria-hidden="true">2.2.</strong> Export for Android</a></li><li class="chapter-item expanded "><a href="export-for-ios.html"><strong aria-hidden="true">2.3.</strong> Export for iOS</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -147,18 +147,44 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
-<p><strong>Sample Godot Rust App</strong> is a community project which aims to provide a beginner-friendly Rust/GDNative boilerplate project with pre-configured multi-platform continuous integration.</p>
-<p>By introducing GDNative, Godot Engine can load third-party code which can be written in any language, using shared libraries. Thanks to the <code>gdnative</code> crate, GDNative can support Rust language, which grants performance, memory safety and concurrency.</p>
+                        <h1><a class="header" href="#supported-platforms" id="supported-platforms">Supported platforms</a></h1>
+<p>Usually, in order to succesfully build/export signed Rust/GDNative games, some steps may require to pay real money and install/use a few tools :</p>
+<ul>
+<li>Which may be subject to proprietary licenses, like <a href="https://discussions.apple.com/thread/6135949">macOS</a> and <a href="https://www.apple.com/legal/sla/docs/xcode.pdf">Xcode</a></li>
+<li>Which can be tricky to set up, like MSYS2 for Windows</li>
+<li>Which are bloated, like IntelliJ/Android Studio</li>
+</ul>
+<p>The ultimate goal of <strong>Sample Godot Rust App</strong> is to abstract a lot of tedious tasks, save money wherever possible and focus on game development, while all the extra work is done remotely via pre-configured multi-platform continuous integration, for the following platforms :</p>
+<table><thead><tr><th>OS</th><th>Build</th><th>Export</th><th>Signed</th></tr></thead><tbody>
+<tr><td><p style="display: flex;"><img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="28" width="28" style="margin-top: -2px;margin-right: 8px;"/> Windows</p></td><td>✅ <code>x86_64-pc-windows-msvc</code><br />✅ <code>x86_64-pc-windows-gnu</code></td><td>✅</td><td>❓💰<sup><strong>[1]</strong></sup></td></tr>
+<tr><td><p style="display: flex;"><img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="35" width="36" style="margin-top: -2px;margin-right: 8px;"/> Linux</p></td><td>✅ <code>x86_64-unknown-linux-gnu</code></td><td>✅</td><td>❓</td></tr>
+<tr><td><p style="display: flex;"><img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28" style="margin-top: -2px;margin-right: 8px;"/>Mac OS</p></td><td>✅ <code>x86_64-apple-darwin</code></td><td>✅</td><td>❓💰<sup><strong>[2]</strong></sup></td></tr>
+<tr><td><p style="display: flex;"><img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="32" width="32" style="margin-top: -2px;margin-right: 8px;"/>Android</p></td><td>✅ <code>aarch64-linux-android </code><br />✅ <code>x86_64-linux-android </code><br />✅ <code>armv7-linux-androideabi</code><sup><strong>[3]</strong></sup><br />✅ <code>i686-linux-android </code><sup><strong>[3]</strong></sup></td><td>✅</td><td>✅</td></tr>
+<tr><td><p style="display: flex;"><img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28" style="margin-top: -2px;margin-right: 8px;"/>iOS</p></td><td>✅ <code>aarch64-apple-ios</code><br />✅ <code>x86_64-apple-ios</code><br />❌ <code>armv7-apple-ios</code><sup><strong>[4]</strong></sup><br />❌ <code>armv7s-apple-ios</code><sup><strong>[4]</strong></sup><br />❌ <code>i386-apple-ios</code><sup><strong>[4]</strong></sup><br /></td><td>✅</td><td>❓💰<sup><strong>[2]</strong></sup></td></tr>
+</tbody></table>
+<p>✅ Supported
+💰 Paid
+❓ Untested
+❌ Not supported</p>
+<p><sup><strong>[1]</strong> → <em>Requires <a href="https://www.sslshopper.com/microsoft-authenticode-certificates.html">Windows Authenticode code signing certificate</a> (annual fees).</em></sup><br />
+<sup><strong>[2]</strong> → <em>Requires <a href="https://developer.apple.com/programs/">Apple Developer Program subscription</a> (annual fees).</em></sup><br />
+<sup><strong>[3]</strong> → <em>Google <a href="https://android-developers.googleblog.com/2019/01/get-your-apps-ready-for-64-bit.html">will drop support for 32-bit programs</a> in August 2021, Rust might stop support for any related toolchain by then.</em></sup><br />
+<sup><strong>[4]</strong> → <em>Starting from macOS 10.15 and iOS 11, Apple <a href="https://blog.rust-lang.org/2020/01/03/reducing-support-for-32-bit-apple-targets.html">dropped support for 32-bit programs</a>. Any related Rust toolchain is now unsupported.</em></sup><br /></p>
+<p><br></br></p>
+<p>See the next chapter for the requirements to use <strong>Sample Godot Rust App</strong>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
+                            <a rel="prev" href="features.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
 
                         
-                            <a rel="next" href="features.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="requirements.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -170,9 +196,13 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
+                    <a rel="prev" href="features.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
 
                 
-                    <a rel="next" href="features.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="requirements.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

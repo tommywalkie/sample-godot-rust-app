@@ -83,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">1.</strong> Chapter 1</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="features.html">Features</a></li><li class="chapter-item expanded affix "><a href="supported-platforms.html">Supported platforms</a></li><li class="chapter-item expanded affix "><a href="requirements.html">Requirements</a></li><li class="chapter-item expanded "><a href="rust-gdnative-from-scratch.html"><strong aria-hidden="true">1.</strong> Rust/GDNative from scratch</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="setup-godot-project.html"><strong aria-hidden="true">1.1.</strong> Setup Godot project</a></li><li class="chapter-item expanded "><a href="setup-rust-project.html"><strong aria-hidden="true">1.2.</strong> Setup Rust project</a></li><li class="chapter-item expanded "><a href="create-rust-gdnative-library.html"><strong aria-hidden="true">1.3.</strong> Create Rust/GDNative library</a></li><li class="chapter-item expanded "><a href="bind-library-with-godot.html"><strong aria-hidden="true">1.4.</strong> Bind library with Godot</a></li></ol></li><li class="chapter-item expanded "><a href="setup-github-actions.html"><strong aria-hidden="true">2.</strong> Setup Github Actions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="how-it-works.html"><strong aria-hidden="true">2.1.</strong> How it works ?</a></li><li class="chapter-item expanded "><a href="export-for-android.html"><strong aria-hidden="true">2.2.</strong> Export for Android</a></li><li class="chapter-item expanded "><a href="export-for-ios.html"><strong aria-hidden="true">2.3.</strong> Export for iOS</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -149,8 +149,362 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#chapter-1" id="chapter-1">Chapter 1</a></h1>
-<p>lorem ipsum</p>
+                        <h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
+<p><strong>Sample Godot Rust App</strong> is a community project which aims to provide a beginner-friendly Rust/GDNative boilerplate project with pre-configured multi-platform continuous integration.</p>
+<p>By introducing GDNative, Godot Engine can load third-party code which can be written in any language, using shared libraries. Thanks to the <code>gdnative</code> crate, GDNative can support Rust language, which grants performance, memory safety and concurrency.</p>
+<h1><a class="header" href="#features" id="features">Features</a></h1>
+<ul>
+<li>Minimalist Godot game template</li>
+<li>Beginner-friendly mdBook based Rust/GDNative guide</li>
+<li>Demonstrates how to switch between scenes
+<ul>
+<li><strong>Scene 1</strong> ► <strong>Scene 2</strong> — in GDScript (<a href="https://github.com/tommywalkie/sample-godot-rust-app/blob/master/scenes/LinkToSecondScene.gd">source</a>)</li>
+<li><strong>Scene 2</strong> ► <strong>Scene 1</strong> — in Rust/GDNative (<a href="https://github.com/tommywalkie/sample-godot-rust-app/blob/master/src/core/src/link_to_first_scene.rs">source</a>)</li>
+</ul>
+</li>
+<li>Pre-configured Github Actions CI configuration for multiple platforms</li>
+</ul>
+<p><br></br></p>
+<p>See the next chapter for the supported platforms.</p>
+<h1><a class="header" href="#supported-platforms" id="supported-platforms">Supported platforms</a></h1>
+<p>Usually, in order to succesfully build/export signed Rust/GDNative games, some steps may require to pay real money and install/use a few tools :</p>
+<ul>
+<li>Which may be subject to proprietary licenses, like <a href="https://discussions.apple.com/thread/6135949">macOS</a> and <a href="https://www.apple.com/legal/sla/docs/xcode.pdf">Xcode</a></li>
+<li>Which can be tricky to set up, like MSYS2 for Windows</li>
+<li>Which are bloated, like IntelliJ/Android Studio</li>
+</ul>
+<p>The ultimate goal of <strong>Sample Godot Rust App</strong> is to abstract a lot of tedious tasks, save money wherever possible and focus on game development, while all the extra work is done remotely via pre-configured multi-platform continuous integration, for the following platforms :</p>
+<table><thead><tr><th>OS</th><th>Build</th><th>Export</th><th>Signed</th></tr></thead><tbody>
+<tr><td><p style="display: flex;"><img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="28" width="28" style="margin-top: -2px;margin-right: 8px;"/> Windows</p></td><td>✅ <code>x86_64-pc-windows-msvc</code><br />✅ <code>x86_64-pc-windows-gnu</code></td><td>✅</td><td>❓💰<sup><strong>[1]</strong></sup></td></tr>
+<tr><td><p style="display: flex;"><img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="35" width="36" style="margin-top: -2px;margin-right: 8px;"/> Linux</p></td><td>✅ <code>x86_64-unknown-linux-gnu</code></td><td>✅</td><td>❓</td></tr>
+<tr><td><p style="display: flex;"><img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28" style="margin-top: -2px;margin-right: 8px;"/>Mac OS</p></td><td>✅ <code>x86_64-apple-darwin</code></td><td>✅</td><td>❓💰<sup><strong>[2]</strong></sup></td></tr>
+<tr><td><p style="display: flex;"><img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="32" width="32" style="margin-top: -2px;margin-right: 8px;"/>Android</p></td><td>✅ <code>aarch64-linux-android </code><br />✅ <code>x86_64-linux-android </code><br />✅ <code>armv7-linux-androideabi</code><sup><strong>[3]</strong></sup><br />✅ <code>i686-linux-android </code><sup><strong>[3]</strong></sup></td><td>✅</td><td>✅</td></tr>
+<tr><td><p style="display: flex;"><img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28" style="margin-top: -2px;margin-right: 8px;"/>iOS</p></td><td>✅ <code>aarch64-apple-ios</code><br />✅ <code>x86_64-apple-ios</code><br />❌ <code>armv7-apple-ios</code><sup><strong>[4]</strong></sup><br />❌ <code>armv7s-apple-ios</code><sup><strong>[4]</strong></sup><br />❌ <code>i386-apple-ios</code><sup><strong>[4]</strong></sup><br /></td><td>✅</td><td>❓💰<sup><strong>[2]</strong></sup></td></tr>
+</tbody></table>
+<p>✅ Supported
+💰 Paid
+❓ Untested
+❌ Not supported</p>
+<p><sup><strong>[1]</strong> → <em>Requires <a href="https://www.sslshopper.com/microsoft-authenticode-certificates.html">Windows Authenticode code signing certificate</a> (annual fees).</em></sup><br />
+<sup><strong>[2]</strong> → <em>Requires <a href="https://developer.apple.com/programs/">Apple Developer Program subscription</a> (annual fees).</em></sup><br />
+<sup><strong>[3]</strong> → <em>Google <a href="https://android-developers.googleblog.com/2019/01/get-your-apps-ready-for-64-bit.html">will drop support for 32-bit programs</a> in August 2021, Rust might stop support for any related toolchain by then.</em></sup><br />
+<sup><strong>[4]</strong> → <em>Starting from macOS 10.15 and iOS 11, Apple <a href="https://blog.rust-lang.org/2020/01/03/reducing-support-for-32-bit-apple-targets.html">dropped support for 32-bit programs</a>. Any related Rust toolchain is now unsupported.</em></sup><br /></p>
+<p><br></br></p>
+<p>See the next chapter for the requirements to use <strong>Sample Godot Rust App</strong>.</p>
+<h1><a class="header" href="#requirements" id="requirements">Requirements</a></h1>
+<p>Assuming the pre-configured multi-platform continuous integration mentionned in previous part will be used, only a few tools are required :</p>
+<ul>
+<li>Github account</li>
+<li>Godot Engine</li>
+<li>Rust</li>
+<li>LLVM, with <code>llvm-config</code> executable </li>
+<li>Apple Developer Program subscription (<strong>only if planning to target iOS</strong>)</li>
+</ul>
+<h2><a class="header" href="#godot-engine" id="godot-engine">Godot Engine</a></h2>
+<p>Download the game engine <a href="https://godotengine.org/download">from the official website</a>.</p>
+<p><strong>Optional</strong> : Register the godot executable on PATH if not done yet so Godot Engine can be used via a CLI.</p>
+<pre><code class="language-bash"># Check Godot Engine version
+godot --version
+</code></pre>
+<h2><a class="header" href="#rust" id="rust">Rust</a></h2>
+<p>Use <a href="https://www.rust-lang.org/tools/install">via the <code>rustup</code> tool</a> to install Rust and its package manager, Cargo.</p>
+<p>Then, check if each tool has been properly installed and registered on PATH.</p>
+<pre><code class="language-bash"># Check Rust toolchain installer version
+rustup -V
+# Show default Rust toolchain
+rustup show
+# Check Rust version
+rustc --version
+# Check Cargo version
+cargo -V
+</code></pre>
+<h3><a class="header" href="#for-windows-users" id="for-windows-users">For Windows users</a></h3>
+<p>If Rust was installed via the installer, <strong>MSVC</strong> (<code>x86_64-pc-windows-msvc</code>) is the default Rust toolchain. MSVC requires <strong>Visual Studio Build Tools</strong> in order to work.</p>
+<p>If Rust was installed via the shell script, <strong>GNU</strong> (<code>x86_64-pc-windows-gnu</code>) will be the default toolchain. In that case, a full GNU-compatible environment is required, this can be provided by <strong>MinGW/MSYS2</strong> (more details can be found on <em><a href="https://github.com/rust-lang/rustup#working-with-rust-on-windows">Working with Rust on Windows</a></em>).</p>
+<h2><a class="header" href="#llvm" id="llvm">LLVM</a></h2>
+<p>CLang, which is released as part of <a href="https://releases.llvm.org/">LLVM</a>, is required in order to compile <code>gdnative</code> and its <code>bindgen</code> crate dependency, use <a href="https://rust-lang.github.io/rust-bindgen/requirements.html">the following guide</a> provided by the <code>bindgen</code> crate team.</p>
+<p><code>llvm-config</code> executable is also needed, check if it is registered on PATH.</p>
+<pre><code class="language-bash"># Check if llvm-config is registered
+llvm-config --version
+# Check CLang version
+clang -v
+</code></pre>
+<p><code>llvm-config</code> is usually provided by default on Windows-based LLVM installers, but can be missing in Debian-based distributions, it can be provided by the <code>llvm-dev</code> package :</p>
+<pre><code class="language-bash"># Install llvm-dev via apt-get or apt
+apt-get install llvm-dev
+</code></pre>
+<h2><a class="header" href="#apple-developer-program" id="apple-developer-program">Apple Developer Program</a></h2>
+<p>If targetting iOS, the application must be signed with an Apple Team ID which is provided when subscribing to Apple Developer Program which costs <strong>99 USD/yr</strong> and requires to enable two-factor authentication (when logging for the first time), which actually <strong>requires to register an Apple device</strong> as a trusted device.</p>
+<p><br></br></p>
+<p>Follow the next chapter for a detailled Rust/GDNative project setup from scratch, or clone <strong>Sample Godot Rust App</strong> and start using it as a template and jump directly on <a href="setup-github-actions.html">setting up Github Actions</a> if already knowing how to work with Rust/GDNative.</p>
+<h1><a class="header" href="#rustgdnative-from-scratch" id="rustgdnative-from-scratch">Rust/GDNative from scratch</a></h1>
+<p>The following tutorial is intended to help any newcomer in Godot / Rust to re-create this boilerplate project from scratch and understand how things are connected without going too much into details.</p>
+<p>Assuming every mentionned required tools is properly installed, start setting up the project workspace, by following the next chapters.</p>
+<h1><a class="header" href="#setup-godot-project" id="setup-godot-project">Setup Godot project</a></h1>
+<p>Open Godot Engine and start creating a new project by using any empty directory, the current file structure should now contain a <code>project.godot</code> file which is the main Godot project file.</p>
+<pre><code>.
+├─── .import
+├   default_env.tres
+├   icon.png
+├   icon.png.import
+└   project.godot
+</code></pre>
+<p>Open and edit the <code>.gitignore</code> file and add <code>.import</code> directory and assets with <code>*.import</code> file extension, these are just some Godot Engine generated cache files, no need to commit them.</p>
+<pre><code class="language-bash"># Godot Engine assets cache
+.import/
+*.import
+</code></pre>
+<p>Create a first Godot scene via the editor, this should create a <code>.tscn</code> scene file with this content :</p>
+<pre><code>[gd_scene load_steps=4 format=2]
+</code></pre>
+<p>Make sure it is recognized by Godot Engine as the entrypoint, by editing the <code>run/main_scene</code> field value on the <code>project.godot</code> file. Note <code>res://</code> is the project root path.</p>
+<pre><code>[application]
+run/main_scene=&quot;res://path/to/my/scene.tscn&quot;
+</code></pre>
+<p>Godot scenes can contain nodes, and properties and can have attached scripts. Scripts can be written in GDScript (<code>.gd</code>) or can be GDNative libraries (<code>.gdnlib</code>). Follow the next chapter to learn to create a Rust/GDNative library.</p>
+<h1><a class="header" href="#setup-rust-project" id="setup-rust-project">Setup Rust project</a></h1>
+<p>Rust source can be compiled into binaries (<code>bin</code>), Rust crates/libraries (<code>lib</code>), dynamic libraries (<code>dylib</code>) and/or static libraries (<code>staticlib</code>), etc. This can defined as the <code>crate-type</code> field value in a Cargo project configuration file.</p>
+<pre><code class="language-toml">[lib]
+crate-type = [&quot;bin&quot;, &quot;lib&quot;]
+</code></pre>
+<p>The minimal goal is to create a single dynamic system Rust/GDNative library (<code>cdylib</code>) for Godot. Using a single Cargo library project is the easiest way to go.</p>
+<p>Optionally, if interested into splitting the whole codebase into multiple smaller, isolated and more readable libraries, using a <a href="https://doc.rust-lang.org/book/ch14-03-cargo-workspaces.html">Cargo workspace</a> is the way to go. This allows to have one single centralized dynamic system Rust/GDNative library which may import and use some methods from soon-to-be created Rust libraries, for math stuff for example.</p>
+<p>Choose and follow one of the two setup guides.</p>
+<h2><a class="header" href="#single-cargo-library" id="single-cargo-library">Single Cargo library</a></h2>
+<p>Use the following command to create a new Cargo library project inside the Godot project directory.</p>
+<pre><code class="language-bash">cargo init --lib
+</code></pre>
+<p>This usually generates a <code>Cargo.toml</code> Cargo project configuration file and a <code>src</code> directory with a &quot;<em>Hello World</em>&quot; program inside a <code>lib.rs</code> file.</p>
+<p>Add the <code>gdnative</code> crate dependency in the <code>Cargo.toml</code> and define the build output as a dynamic system library.</p>
+<pre><code class="language-toml">[lib]
+crate-type = [&quot;cdylib&quot;]
+
+[dependencies]
+gdnative = &quot;0.8&quot;
+</code></pre>
+<h2><a class="header" href="#cargo-workspace" id="cargo-workspace">Cargo workspace</a></h2>
+<p>Just create a <code>Cargo.toml</code> at the root of the GOdot project and reference the soon-to-be created Cargo libraries as workspace members. The value can be an array with specific library paths. For the sake of simplicity, just create a <code>src</code> directory and define any sub-directory as a workspace member.</p>
+<pre><code>[workspace]
+members = [&quot;src/*&quot;]
+</code></pre>
+<p>Then create any new Cargo project inside <code>src</code> directory by using the following command :</p>
+<pre><code class="language-bash"># Create a library called &quot;my_lib&quot;
+cargo new src/my_lib --lib
+</code></pre>
+<p>The file structure should now look like this :</p>
+<pre><code>.
+├─── src
+│   └───  my_lib
+│       ├─── src
+│       │   └   lib.rs
+│       └   Cargo.toml
+└   Cargo.toml
+</code></pre>
+<p>Inside each member's <code>Cargo.toml</code> file, set accordingly the <code>crate-type</code> value with <code>lib</code> and/or <code>cdylib</code>, and add the <code>gdnative</code> dependency where it is useful.</p>
+<pre><code class="language-toml">[lib]
+crate-type = [
+    &quot;cdylib&quot;, # For GDNative
+    &quot;lib&quot;     # For Rust
+]
+
+[dependencies]
+gdnative = &quot;0.8&quot;
+</code></pre>
+<p>To import some newly created library public methods in another crate, add the library as a crate dependency in <code>Cargo.toml</code>.</p>
+<pre><code class="language-toml">[dependencies]
+my_lib = { path = &quot;../my_lib&quot; }
+</code></pre>
+<p><br></br></p>
+<p>Finally, register the following entries in <code>.gitignore</code> and then follow the next chapter to setup the Rust/GDNative library.</p>
+<pre><code class="language-bash"># Generated by Cargo
+# will have compiled files and executables
+/target/
+
+# Remove Cargo.lock from gitignore if creating an executable, leave it for libraries
+# More information here https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html
+Cargo.lock
+
+# These are backup files generated by rustfmt
+**/*.rs.bk
+</code></pre>
+<h1><a class="header" href="#create-rustgdnative-library" id="create-rustgdnative-library">Create Rust/GDNative library</a></h1>
+<p>To create the one Rust/GDNative library that will be used by Godot, open and edit <code>lib.rs</code> file with the following content :</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>use gdnative::*;
+
+// Function that registers all exposed classes to Godot
+fn init(handle: gdnative::init::InitHandle) {
+    
+}
+
+// macros that create the entry-points of the dynamic library.
+godot_gdnative_init!();
+godot_nativescript_init!(init);
+godot_gdnative_terminate!();
+<span class="boring">}
+</span></code></pre></pre>
+<p>This is the minimal Rust/GDNative setup. It does nothing at the moment but it is still possible to register some custom node classes in the <code>init</code> function.</p>
+<p>Let's create a custom node class. Before the <code>init</code> function delaration, create a new class that may be called <code>MyClassA</code>. This can inherit methods from any Godot native class like <code>Node</code>, <code>Button</code>, etc.</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>/// The MyClassA &quot;class&quot;
+#[derive(NativeClass)]
+#[inherit(Node)]
+pub struct MyClassA;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Then, implement the newly created <code>MyClassA</code> class and define method callbacks :</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>// __One__ `impl` block can have the `#[methods]` attribute, which will generate
+// code to automatically bind any exported methods to Godot.
+#[methods]
+impl MyClassA {
+
+    /// The &quot;constructor&quot; of the class.
+    fn _init(_owner: Node) -&gt; Self {
+        MyClassA
+    }
+
+    #[export]
+    fn _ready(&amp;self, _owner: Node) {
+        godot_print!(&quot;Hello world from MyClassA.&quot;);
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Finally register the new class in the <code>init</code> function.</p>
+<pre><code class="language-diff">fn init(handle: gdnative::init::InitHandle) {
++    handle.add_class::&lt;MyClassA&gt;();
+}
+</code></pre>
+<p>This can be repeated, since it is possible to register multiple classes at once. The final file content should look like this :</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>use gdnative::*;
+
+#[derive(NativeClass)]
+#[inherit(Node)]
+pub struct MyClassA;
+
+#[derive(NativeClass)]
+#[inherit(Node)]
+pub struct MyClassB;
+
+#[methods]
+impl MyClassA {
+    fn _init(_owner: Node) -&gt; Self {
+        MyClassA
+    }
+    #[export]
+    fn _ready(&amp;self, _owner: Node) {
+        godot_print!(&quot;Hello world from MyClassA.&quot;);
+    }
+}
+
+#[methods]
+impl MyClassB {
+    fn _init(_owner: Node) -&gt; Self {
+        MyClassB
+    }
+    #[export]
+    fn _ready(&amp;self, _owner: Node) {
+        godot_print!(&quot;Hello world from MyClassB.&quot;);
+    }
+}
+
+fn init(handle: gdnative::init::InitHandle) {
+    handle.add_class::&lt;MyClassA&gt;();
+    handle.add_class::&lt;MyClassB&gt;();
+}
+
+godot_gdnative_init!();
+godot_nativescript_init!(init);
+godot_gdnative_terminate!();
+<span class="boring">}
+</span></code></pre></pre>
+<p>Finally, build the Rust/GDNative library with Cargo.</p>
+<pre><code class="language-bash">cargo build --release
+</code></pre>
+<p>The build result should appear in <code>/target/release</code>. Depending of the active Rust toolchain and the settings on Cargo configuration files, there will be Rust libraries (<code>*.rlib</code>) and/or dynamic libraries (<code>*.dll</code> on Windows, <code>*.so</code> on Linux, or <code>*.dylib</code> on Mac).</p>
+<p>The next part will be about making Godot aware of the newly generated Rust/GDNative libraries.</p>
+<h1><a class="header" href="#bind-library-with-godot" id="bind-library-with-godot">Bind library with Godot</a></h1>
+<p>To bind the library to a Godot node, Godot Engine needs a GDNative library file (<code>*.gdnlib</code>) with the Rust/GDNative library paths. Create a new GDNative library file with the following minimal content :</p>
+<pre><code class="language-toml">[entry]
+
+X11.64=&quot;&quot;
+OSX.64=&quot;&quot;
+Windows.64=&quot;&quot;
+Android.armeabi-v7a=&quot;&quot;
+Android.arm64-v8a=&quot;&quot;
+Android.x86=&quot;&quot;
+Android.x86_64=&quot;&quot;
+iOS.armv7=&quot;&quot;
+iOS.arm64=&quot;&quot;
+
+[dependencies]
+
+X11.64=[  ]
+OSX.64=[  ]
+Android.armeabi-v7a=[  ]
+Android.arm64-v8a=[  ]
+Android.x86=[  ]
+Android.x86_64=[  ]
+iOS.armv7=[  ]
+iOS.arm64=[  ]
+
+[general]
+
+singleton=false
+load_once=true
+symbol_prefix=&quot;godot_&quot;
+reloadable=true
+</code></pre>
+<p>Each entry in <code>[entry]</code> and <code>[dependencies]</code> is a different target.</p>
+<table><thead><tr><th>entry</th><th>OS</th><th>Architecture</th></tr></thead><tbody>
+<tr><td><code>X11.64</code></td><td>Linux</td><td>x86-64 (64-bit)</td></tr>
+<tr><td><code>OSX.64</code></td><td>Mac</td><td>x86-64 (64-bit)</td></tr>
+<tr><td><code>Windows.64</code></td><td>Windows</td><td>x86-64 (64-bit)</td></tr>
+<tr><td><code>Android.armeabi-v7a</code></td><td>Android</td><td>ARMv7 (32-bit)</td></tr>
+<tr><td><code>Android.arm64-v8a</code></td><td>Android</td><td>ARM64 (64-bit)</td></tr>
+<tr><td><code>Android.x86</code></td><td>Android</td><td>x86 (32-bit)</td></tr>
+<tr><td><code>Android.x86_64</code></td><td>Android</td><td>x86-64 (64-bit)</td></tr>
+<tr><td><code>iOS.armv7</code></td><td>iOS</td><td>ARMv7 (32-bit)</td></tr>
+<tr><td><code>iOS.arm64</code></td><td>iOS</td><td>ARM64 (64-bit)</td></tr>
+</tbody></table>
+<p>For example, assuming a 64-bit Windows-compatible Rust/GDNative library has been generated using <code>cargo build --release --target x86_64-pc-windows-msvc</code>, the 64-bit Windows-related entry can be changed into :</p>
+<pre><code class="language-diff">[entry]
+
+X11.64=&quot;&quot;
+OSX.64=&quot;&quot;
+- Windows.64=&quot;&quot;
++ Windows.64=&quot;res://target/x86_64-pc-windows-msvc/release/my_lib.dll&quot;
+</code></pre>
+<p>Open and edit the Godot scene file (<code>*.tscn</code>) where the GDNative library will be used, load it as an external resource (<code>ext_resource</code>) with an unique identifier.</p>
+<pre><code class="language-toml">[ext_resource path=&quot;res://path/to/my_lib.gdnlib&quot; type=&quot;GDNativeLibrary&quot; id=1]
+</code></pre>
+<p>Then, create a <em>sub-resource</em> with an unique identifier, link the newly created external resource with its <code>id</code> and pick a specific custom native class among the ones that were registered in the Rust/GDNative library, like <code>MyClassA</code> in the previous example.</p>
+<pre><code class="language-toml">[sub_resource type=&quot;NativeScript&quot; id=1]
+resource_name = &quot;MyClassA&quot;
+class_name = &quot;MyClassA&quot;
+library = ExtResource( 1 )
+</code></pre>
+<p>Finally, attach the <em>sub-resource</em> to a specific existing node in the scene, using its <code>id</code> :</p>
+<pre><code class="language-toml">[node name=&quot;RootNode&quot; type=&quot;Node&quot;]
+script = SubResource( 1 )
+</code></pre>
+<p>Once everything is binded, press <kbd>F5</kbd> on keyboard or <img src="https://img.icons8.com/ios/2x/play.png" alt="drawing" height="17"/> &quot;<em>Play</em>&quot; button at the top-right of Godot Engine UI to run the app preview.</p>
+<p>Here is a summary, provided as a diagram.</p>
+<p><img src="./excalidraw/gdnative-to-godot-scene.png" alt="diagram" /></p>
+<h1><a class="header" href="#setup-github-actions" id="setup-github-actions">Setup Github Actions</a></h1>
+<h1><a class="header" href="#how-it-works-" id="how-it-works-">How it works ?</a></h1>
+<h1><a class="header" href="#export-for-android" id="export-for-android">Export for Android</a></h1>
+<h1><a class="header" href="#export-for-ios" id="export-for-ios">Export for iOS</a></h1>
 
                     </main>
 

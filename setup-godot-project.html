@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - Sample Godot Rust App</title>
+        <title>Setup Godot project - Sample Godot Rust App</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="features.html">Features</a></li><li class="chapter-item expanded affix "><a href="supported-platforms.html">Supported platforms</a></li><li class="chapter-item expanded affix "><a href="requirements.html">Requirements</a></li><li class="chapter-item expanded "><a href="rust-gdnative-from-scratch.html"><strong aria-hidden="true">1.</strong> Rust/GDNative from scratch</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="setup-godot-project.html"><strong aria-hidden="true">1.1.</strong> Setup Godot project</a></li><li class="chapter-item expanded "><a href="setup-rust-project.html"><strong aria-hidden="true">1.2.</strong> Setup Rust project</a></li><li class="chapter-item expanded "><a href="create-rust-gdnative-library.html"><strong aria-hidden="true">1.3.</strong> Create Rust/GDNative library</a></li><li class="chapter-item expanded "><a href="bind-library-with-godot.html"><strong aria-hidden="true">1.4.</strong> Bind library with Godot</a></li></ol></li><li class="chapter-item expanded "><a href="setup-github-actions.html"><strong aria-hidden="true">2.</strong> Setup Github Actions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="how-it-works.html"><strong aria-hidden="true">2.1.</strong> How it works ?</a></li><li class="chapter-item expanded "><a href="export-for-android.html"><strong aria-hidden="true">2.2.</strong> Export for Android</a></li><li class="chapter-item expanded "><a href="export-for-ios.html"><strong aria-hidden="true">2.3.</strong> Export for iOS</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="features.html">Features</a></li><li class="chapter-item expanded affix "><a href="supported-platforms.html">Supported platforms</a></li><li class="chapter-item expanded affix "><a href="requirements.html">Requirements</a></li><li class="chapter-item expanded "><a href="rust-gdnative-from-scratch.html"><strong aria-hidden="true">1.</strong> Rust/GDNative from scratch</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="setup-godot-project.html" class="active"><strong aria-hidden="true">1.1.</strong> Setup Godot project</a></li><li class="chapter-item expanded "><a href="setup-rust-project.html"><strong aria-hidden="true">1.2.</strong> Setup Rust project</a></li><li class="chapter-item expanded "><a href="create-rust-gdnative-library.html"><strong aria-hidden="true">1.3.</strong> Create Rust/GDNative library</a></li><li class="chapter-item expanded "><a href="bind-library-with-godot.html"><strong aria-hidden="true">1.4.</strong> Bind library with Godot</a></li></ol></li><li class="chapter-item expanded "><a href="setup-github-actions.html"><strong aria-hidden="true">2.</strong> Setup Github Actions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="how-it-works.html"><strong aria-hidden="true">2.1.</strong> How it works ?</a></li><li class="chapter-item expanded "><a href="export-for-android.html"><strong aria-hidden="true">2.2.</strong> Export for Android</a></li><li class="chapter-item expanded "><a href="export-for-ios.html"><strong aria-hidden="true">2.3.</strong> Export for iOS</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -147,18 +147,41 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
-<p><strong>Sample Godot Rust App</strong> is a community project which aims to provide a beginner-friendly Rust/GDNative boilerplate project with pre-configured multi-platform continuous integration.</p>
-<p>By introducing GDNative, Godot Engine can load third-party code which can be written in any language, using shared libraries. Thanks to the <code>gdnative</code> crate, GDNative can support Rust language, which grants performance, memory safety and concurrency.</p>
+                        <h1><a class="header" href="#setup-godot-project" id="setup-godot-project">Setup Godot project</a></h1>
+<p>Open Godot Engine and start creating a new project by using any empty directory, the current file structure should now contain a <code>project.godot</code> file which is the main Godot project file.</p>
+<pre><code>.
+├─── .import
+├   default_env.tres
+├   icon.png
+├   icon.png.import
+└   project.godot
+</code></pre>
+<p>Open and edit the <code>.gitignore</code> file and add <code>.import</code> directory and assets with <code>*.import</code> file extension, these are just some Godot Engine generated cache files, no need to commit them.</p>
+<pre><code class="language-bash"># Godot Engine assets cache
+.import/
+*.import
+</code></pre>
+<p>Create a first Godot scene via the editor, this should create a <code>.tscn</code> scene file with this content :</p>
+<pre><code>[gd_scene load_steps=4 format=2]
+</code></pre>
+<p>Make sure it is recognized by Godot Engine as the entrypoint, by editing the <code>run/main_scene</code> field value on the <code>project.godot</code> file. Note <code>res://</code> is the project root path.</p>
+<pre><code>[application]
+run/main_scene=&quot;res://path/to/my/scene.tscn&quot;
+</code></pre>
+<p>Godot scenes can contain nodes, and properties and can have attached scripts. Scripts can be written in GDScript (<code>.gd</code>) or can be GDNative libraries (<code>.gdnlib</code>). Follow the next chapter to learn to create a Rust/GDNative library.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
+                            <a rel="prev" href="rust-gdnative-from-scratch.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
 
                         
-                            <a rel="next" href="features.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="setup-rust-project.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -170,9 +193,13 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
+                    <a rel="prev" href="rust-gdnative-from-scratch.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
 
                 
-                    <a rel="next" href="features.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="setup-rust-project.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

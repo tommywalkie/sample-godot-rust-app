@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction - Sample Godot Rust App</title>
+        <title>Create Rust/GDNative library - Sample Godot Rust App</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="features.html">Features</a></li><li class="chapter-item expanded affix "><a href="supported-platforms.html">Supported platforms</a></li><li class="chapter-item expanded affix "><a href="requirements.html">Requirements</a></li><li class="chapter-item expanded "><a href="rust-gdnative-from-scratch.html"><strong aria-hidden="true">1.</strong> Rust/GDNative from scratch</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="setup-godot-project.html"><strong aria-hidden="true">1.1.</strong> Setup Godot project</a></li><li class="chapter-item expanded "><a href="setup-rust-project.html"><strong aria-hidden="true">1.2.</strong> Setup Rust project</a></li><li class="chapter-item expanded "><a href="create-rust-gdnative-library.html"><strong aria-hidden="true">1.3.</strong> Create Rust/GDNative library</a></li><li class="chapter-item expanded "><a href="bind-library-with-godot.html"><strong aria-hidden="true">1.4.</strong> Bind library with Godot</a></li></ol></li><li class="chapter-item expanded "><a href="setup-github-actions.html"><strong aria-hidden="true">2.</strong> Setup Github Actions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="how-it-works.html"><strong aria-hidden="true">2.1.</strong> How it works ?</a></li><li class="chapter-item expanded "><a href="export-for-android.html"><strong aria-hidden="true">2.2.</strong> Export for Android</a></li><li class="chapter-item expanded "><a href="export-for-ios.html"><strong aria-hidden="true">2.3.</strong> Export for iOS</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded affix "><a href="features.html">Features</a></li><li class="chapter-item expanded affix "><a href="supported-platforms.html">Supported platforms</a></li><li class="chapter-item expanded affix "><a href="requirements.html">Requirements</a></li><li class="chapter-item expanded "><a href="rust-gdnative-from-scratch.html"><strong aria-hidden="true">1.</strong> Rust/GDNative from scratch</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="setup-godot-project.html"><strong aria-hidden="true">1.1.</strong> Setup Godot project</a></li><li class="chapter-item expanded "><a href="setup-rust-project.html"><strong aria-hidden="true">1.2.</strong> Setup Rust project</a></li><li class="chapter-item expanded "><a href="create-rust-gdnative-library.html" class="active"><strong aria-hidden="true">1.3.</strong> Create Rust/GDNative library</a></li><li class="chapter-item expanded "><a href="bind-library-with-godot.html"><strong aria-hidden="true">1.4.</strong> Bind library with Godot</a></li></ol></li><li class="chapter-item expanded "><a href="setup-github-actions.html"><strong aria-hidden="true">2.</strong> Setup Github Actions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="how-it-works.html"><strong aria-hidden="true">2.1.</strong> How it works ?</a></li><li class="chapter-item expanded "><a href="export-for-android.html"><strong aria-hidden="true">2.2.</strong> Export for Android</a></li><li class="chapter-item expanded "><a href="export-for-ios.html"><strong aria-hidden="true">2.3.</strong> Export for iOS</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -147,18 +147,125 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
-<p><strong>Sample Godot Rust App</strong> is a community project which aims to provide a beginner-friendly Rust/GDNative boilerplate project with pre-configured multi-platform continuous integration.</p>
-<p>By introducing GDNative, Godot Engine can load third-party code which can be written in any language, using shared libraries. Thanks to the <code>gdnative</code> crate, GDNative can support Rust language, which grants performance, memory safety and concurrency.</p>
+                        <h1><a class="header" href="#create-rustgdnative-library" id="create-rustgdnative-library">Create Rust/GDNative library</a></h1>
+<p>To create the one Rust/GDNative library that will be used by Godot, open and edit <code>lib.rs</code> file with the following content :</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>use gdnative::*;
+
+// Function that registers all exposed classes to Godot
+fn init(handle: gdnative::init::InitHandle) {
+    
+}
+
+// macros that create the entry-points of the dynamic library.
+godot_gdnative_init!();
+godot_nativescript_init!(init);
+godot_gdnative_terminate!();
+<span class="boring">}
+</span></code></pre></pre>
+<p>This is the minimal Rust/GDNative setup. It does nothing at the moment but it is still possible to register some custom node classes in the <code>init</code> function.</p>
+<p>Let's create a custom node class. Before the <code>init</code> function delaration, create a new class that may be called <code>MyClassA</code>. This can inherit methods from any Godot native class like <code>Node</code>, <code>Button</code>, etc.</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>/// The MyClassA &quot;class&quot;
+#[derive(NativeClass)]
+#[inherit(Node)]
+pub struct MyClassA;
+<span class="boring">}
+</span></code></pre></pre>
+<p>Then, implement the newly created <code>MyClassA</code> class and define method callbacks :</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>// __One__ `impl` block can have the `#[methods]` attribute, which will generate
+// code to automatically bind any exported methods to Godot.
+#[methods]
+impl MyClassA {
+
+    /// The &quot;constructor&quot; of the class.
+    fn _init(_owner: Node) -&gt; Self {
+        MyClassA
+    }
+
+    #[export]
+    fn _ready(&amp;self, _owner: Node) {
+        godot_print!(&quot;Hello world from MyClassA.&quot;);
+    }
+}
+<span class="boring">}
+</span></code></pre></pre>
+<p>Finally register the new class in the <code>init</code> function.</p>
+<pre><code class="language-diff">fn init(handle: gdnative::init::InitHandle) {
++    handle.add_class::&lt;MyClassA&gt;();
+}
+</code></pre>
+<p>This can be repeated, since it is possible to register multiple classes at once. The final file content should look like this :</p>
+<pre><pre class="playpen"><code class="language-rust">
+<span class="boring">#![allow(unused_variables)]
+</span><span class="boring">fn main() {
+</span>use gdnative::*;
+
+#[derive(NativeClass)]
+#[inherit(Node)]
+pub struct MyClassA;
+
+#[derive(NativeClass)]
+#[inherit(Node)]
+pub struct MyClassB;
+
+#[methods]
+impl MyClassA {
+    fn _init(_owner: Node) -&gt; Self {
+        MyClassA
+    }
+    #[export]
+    fn _ready(&amp;self, _owner: Node) {
+        godot_print!(&quot;Hello world from MyClassA.&quot;);
+    }
+}
+
+#[methods]
+impl MyClassB {
+    fn _init(_owner: Node) -&gt; Self {
+        MyClassB
+    }
+    #[export]
+    fn _ready(&amp;self, _owner: Node) {
+        godot_print!(&quot;Hello world from MyClassB.&quot;);
+    }
+}
+
+fn init(handle: gdnative::init::InitHandle) {
+    handle.add_class::&lt;MyClassA&gt;();
+    handle.add_class::&lt;MyClassB&gt;();
+}
+
+godot_gdnative_init!();
+godot_nativescript_init!(init);
+godot_gdnative_terminate!();
+<span class="boring">}
+</span></code></pre></pre>
+<p>Finally, build the Rust/GDNative library with Cargo.</p>
+<pre><code class="language-bash">cargo build --release
+</code></pre>
+<p>The build result should appear in <code>/target/release</code>. Depending of the active Rust toolchain and the settings on Cargo configuration files, there will be Rust libraries (<code>*.rlib</code>) and/or dynamic libraries (<code>*.dll</code> on Windows, <code>*.so</code> on Linux, or <code>*.dylib</code> on Mac).</p>
+<p>The next part will be about making Godot aware of the newly generated Rust/GDNative libraries.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
+                            <a rel="prev" href="setup-rust-project.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
 
                         
-                            <a rel="next" href="features.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="bind-library-with-godot.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -170,9 +277,13 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
+                    <a rel="prev" href="setup-rust-project.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
 
                 
-                    <a rel="next" href="features.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="bind-library-with-godot.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
