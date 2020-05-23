@@ -299,13 +299,13 @@ Here is the current workflow :
 
 Here is the list of all known supported and tested targets :
 
-| OS | Build | Export | Signed |
-| -- | ----- | ------ | ------ |
-| <p style="display: flex;"><img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="28" width="28" style="margin-top: -2px;margin-right: 8px;"/> Windows</p> | ✅ `x86_64-pc-windows-msvc`<br />✅ `x86_64-pc-windows-gnu` | ✅ | ❓💰<sup>**[1]**</sup> |
-| <p style="display: flex;"><img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="35" width="36" style="margin-top: -2px;margin-right: 8px;"/> Linux</p> | ✅ `x86_64-unknown-linux-gnu` | ✅ | ❓ |
-| <p style="display: flex;"><img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28" style="margin-top: -2px;margin-right: 8px;"/>Mac OS</p> | ✅ `x86_64-apple-darwin` | ✅ | ❓💰<sup>**[2]**</sup> |
-| <p style="display: flex;"><img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="32" width="32" style="margin-top: -2px;margin-right: 8px;"/>Android</p> | ✅ `aarch64-linux-android `<br />✅ `x86_64-linux-android `<br />✅ `armv7-linux-androideabi`<sup>**[3]**</sup><br />✅ `i686-linux-android `<sup>**[3]**</sup> | ✅ | ✅ |
-| <p style="display: flex;"><img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28" style="margin-top: -2px;margin-right: 8px;"/>iOS</p> | ✅ `aarch64-apple-ios`<br />✅ `x86_64-apple-ios`<br />❌ `armv7-apple-ios`<sup>**[4]**</sup><br />❌ `armv7s-apple-ios`<sup>**[4]**</sup><br />❌ `i386-apple-ios`<sup>**[4]**</sup><br /> | ✅ | ❓💰<sup>**[2]**</sup> |
+|    | OS | Build | Export | Signed |
+| -- | -- | ----- | ------ | ------ |
+| <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="28" width="28"/> | Windows | ✅ `x86_64-pc-windows-msvc`<br />✅ `x86_64-pc-windows-gnu` | ✅ | ❓💰<sup>**[1]**</sup> |
+| <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="35" width="36"/> | Linux | ✅ `x86_64-unknown-linux-gnu` | ✅ | ❓ |
+| <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28"/> | Mac OS | ✅ `x86_64-apple-darwin` | ✅ | ❓💰<sup>**[2]**</sup> |
+| <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="32" width="32" /> | Android | ✅ `aarch64-linux-android `<br />✅ `x86_64-linux-android `<br />✅ `armv7-linux-androideabi`<sup>**[3]**</sup><br />✅ `i686-linux-android `<sup>**[3]**</sup> | ✅ | ✅ |
+| <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28"/> | iOS | ✅ `aarch64-apple-ios`<br />✅ `x86_64-apple-ios`<br />❌ `armv7-apple-ios`<sup>**[4]**</sup><br />❌ `armv7s-apple-ios`<sup>**[4]**</sup><br />❌ `i386-apple-ios`<sup>**[4]**</sup><br /> | ✅ | ❓💰<sup>**[2]**</sup> |
 
 ✅ Supported
 💰 Paid
