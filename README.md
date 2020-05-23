@@ -299,13 +299,23 @@ Here is the current workflow :
 
 Here is the list of all known supported and tested targets :
 
-|                                                              | OS      | Supported toolchain(s)                                       |
-| ------------------------------------------------------------ | ------- | ------------------------------------------------------------ |
-| <img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="28" width="28"/> | Windows | ✅ `stable-x86_64-pc-windows-msvc`<br />✅ `x86_64-pc-windows-gnu` |
-| <img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="35" width="34"/> | Linux   | ✅ `stable-x86_64-unknown-linux-gnu`                          |
-| <img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28"/> | MacOS   | ✅ `x86_64-apple-darwin`                                      |
-| <img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="27" width="32"/> | Android | ✅ `armv7-linux-androideabi`<br />✅ `aarch64-linux-android `<br />✅ `i686-linux-android `<br />✅ `x86_64-linux-android ` |
-| <img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28"/> | iOS     | ❓ `aarch64-apple-ios`<br />❓ `x86_64-apple-ios`<br />❓ `armv7-apple-ios`<br />❓ `armv7s-apple-ios`<br />❓ `i386-apple-ios`<br />Might be possible, using static libraries instead of dynamic ones ([godot-rust#285](https://github.com/GodotNativeTools/godot-rust/issues/285)) |
+| OS | Build | Export | Signed |
+| -- | ----- | ------ | ------ |
+| <p style="display: flex;"><img src="https://img.icons8.com/color/2x/windows-10.png" alt="drawing" height="28" width="28" style="margin-top: -2px;margin-right: 8px;"/> Windows</p> | ✅ `x86_64-pc-windows-msvc`<br />✅ `x86_64-pc-windows-gnu` | ✅ | ❓💰<sup>**[1]**</sup> |
+| <p style="display: flex;"><img src="https://img.icons8.com/color/2x/linux.png" alt="drawing" height="35" width="36" style="margin-top: -2px;margin-right: 8px;"/> Linux</p> | ✅ `x86_64-unknown-linux-gnu` | ✅ | ❓ |
+| <p style="display: flex;"><img src="https://img.icons8.com/office/2x/mac-os.png" alt="drawing" height="28" width="28" style="margin-top: -2px;margin-right: 8px;"/>Mac OS</p> | ✅ `x86_64-apple-darwin` | ✅ | ❓💰<sup>**[2]**</sup> |
+| <p style="display: flex;"><img src="https://img.icons8.com/color/2x/android-os.png" alt="drawing" height="32" width="32" style="margin-top: -2px;margin-right: 8px;"/>Android</p> | ✅ `aarch64-linux-android `<br />✅ `x86_64-linux-android `<br />✅ `armv7-linux-androideabi`<sup>**[3]**</sup><br />✅ `i686-linux-android `<sup>**[3]**</sup> | ✅ | ✅ |
+| <p style="display: flex;"><img src="https://img.icons8.com/ios-filled/2x/ios-logo.png" alt="drawing" height="28" width="28" style="margin-top: -2px;margin-right: 8px;"/>iOS</p> | ✅ `aarch64-apple-ios`<br />✅ `x86_64-apple-ios`<br />❌ `armv7-apple-ios`<sup>**[4]**</sup><br />❌ `armv7s-apple-ios`<sup>**[4]**</sup><br />❌ `i386-apple-ios`<sup>**[4]**</sup><br /> | ✅ | ❓💰<sup>**[2]**</sup> |
+
+✅ Supported
+💰 Paid
+❓ Untested
+❌ Not supported
+
+<sup>**[1]** → _Requires [Windows Authenticode code signing certificate](https://www.sslshopper.com/microsoft-authenticode-certificates.html) (annual fees)._</sup><br />
+<sup>**[2]** → _Requires [Apple Developer Program subscription](https://developer.apple.com/programs/) (annual fees)._</sup><br />
+<sup>**[3]** → _Google [will drop support for 32-bit programs](https://android-developers.googleblog.com/2019/01/get-your-apps-ready-for-64-bit.html) in August 2021, Rust might stop support for any related toolchain by then._</sup><br />
+<sup>**[4]** → _Starting from macOS 10.15 and iOS 11, Apple [dropped support for 32-bit programs](https://blog.rust-lang.org/2020/01/03/reducing-support-for-32-bit-apple-targets.html). Any related Rust toolchain is now unsupported._</sup><br />
 
 The `export_presets.cfg` file keeps track of the specific export presets for each platform. For some targets, **this file may also contain sensitive data** that must be properly handled if committed into VCS. Android is one of them.
 

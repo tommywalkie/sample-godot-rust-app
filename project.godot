@@ -26,7 +26,7 @@ window/size/height=500
 
 [logging]
 
-file_logging/enable_file_logging=true
+file_logging/enable_file_logging=false
 file_logging/log_path="res://output.log"
 
 [rendering]
