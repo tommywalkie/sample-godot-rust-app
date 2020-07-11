@@ -1,5 +1,5 @@
 > ## :warning: Important !
-> **This boilerplate project is currently based on `godot-rust 0.8.x`, it will be upgrading to** `godot-rust 0.9.x` **, [introducing several API changes](https://github.com/godot-rust/godot-rust/pull/500). As a result, a bunch of tests and refactoring needs to be done. Here are the newly planned changes :**
+> **This boilerplate project is currently based on** `godot-rust 0.8.x`, **it will be upgrading to** `godot-rust 0.9.x` **, [introducing several API changes](https://github.com/godot-rust/godot-rust/pull/500). As a result, a bunch of tests and refactoring needs to be done. Here are the newly planned changes :**
 >
 > - :collision: **BREAKING CHANGE** : Move to a single crate project model outside Godot project, which is [recommended](https://godot-rust.github.io/book/getting-started/hello-world.html#organization-of-rust-code) by `godot-rust` maintainers
 > - Update the guide to `godot-rust 0.9.x`, provide a book because the README is getting big now
